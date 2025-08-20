@@ -9,6 +9,8 @@ import asyncio
 import json
 import logging
 import os
+import random
+import time
 import uuid
 from datetime import datetime, timezone
 from typing import List, Optional, Dict, Any
@@ -36,6 +38,9 @@ API_PORT = int(os.getenv("API_PORT", "8000"))
 DEBUG = os.getenv("DEBUG", "true").lower() == "true"
 
 # Pydantic схемы
+
+# === Схемы для телеметрии агентов (существующий формат) ===
+
 class HostInfo(BaseModel):
     host_id: str = Field(..., description="Уникальный идентификатор хоста")
     hostname: str = Field(..., description="Имя хоста")
@@ -115,6 +120,42 @@ class IngestResponse(BaseModel):
     status: str = Field(..., description="Статус обработки")
     message: Optional[str] = Field(None, description="Дополнительное сообщение")
     processing_time_ms: Optional[int] = Field(None, description="Время обработки в мс")
+
+# === Схемы для событий безопасности (новый формат) ===
+
+class SecurityEvent(BaseModel):
+    """Схема для событий безопасности от внешних источников"""
+    event_id: Optional[str] = Field(None, description="Уникальный ID события")
+    timestamp: str = Field(..., description="Время события ISO 8601")
+    source: str = Field(..., description="Источник события")
+    threat_type: str = Field(..., description="Тип угрозы")
+    description: str = Field(..., description="Описание события")
+    severity: str = Field(..., description="Уровень критичности")
+    
+    # Опциональные поля для дополнительной информации
+    cve_id: Optional[str] = Field(None, description="Идентификатор CVE")
+    cvss_score: Optional[float] = Field(None, description="Оценка CVSS")
+    malware_family: Optional[str] = Field(None, description="Семейство вредоносного ПО")
+    file_hash: Optional[str] = Field(None, description="Хеш файла")
+    source_ip: Optional[str] = Field(None, description="IP источника")
+    target_port: Optional[int] = Field(None, description="Целевой порт")
+    metadata: Optional[Dict[str, Any]] = Field(None, description="Дополнительные метаданные")
+    
+    @validator('threat_type')
+    def validate_threat_type(cls, v):
+        valid_types = [
+            'exploit', 'malware', 'phishing', 'vulnerability', 'intrusion',
+            'ransomware', 'trojan', 'backdoor', 'rootkit', 'botnet'
+        ]
+        if v not in valid_types:
+            raise ValueError(f'threat_type должен быть одним из: {valid_types}')
+        return v
+    
+    @validator('severity')
+    def validate_severity(cls, v):
+        if v not in ['critical', 'high', 'medium', 'low', 'info']:
+            raise ValueError('severity должен быть critical, high, medium, low или info')
+        return v
 
 class EventsResponse(BaseModel):
     events: List[Dict[str, Any]] = Field(..., description="Список событий")
@@ -246,7 +287,17 @@ async def index_event(opensearch: AsyncOpenSearch, index: str, event_id: str, ev
 async def publish_to_stream(redis: aioredis.Redis, stream: str, event_data: dict) -> bool:
     """Публикация события в Redis Stream"""
     try:
-        await redis.xadd(stream, event_data)
+        # Подготавливаем данные для Redis Stream
+        cleaned_data = {}
+        for k, v in event_data.items():
+            if v is not None:
+                # Для сложных объектов сериализуем в JSON
+                if isinstance(v, (dict, list)):
+                    cleaned_data[k] = json.dumps(v, ensure_ascii=False, default=str)
+                else:
+                    cleaned_data[k] = str(v)
+        
+        await redis.xadd(stream, cleaned_data)
         return True
     except Exception as e:
         logger.error(f"Ошибка публикации в Redis Stream {stream}: {e}")
@@ -298,12 +349,12 @@ async def ingest_event(
     redis: aioredis.Redis = Depends(get_redis)
 ) -> IngestResponse:
     """
-    Прием события телеметрии от агента или UI.
+    Прием события телеметрии от агента или UI (старый формат).
     
     Обеспечивает:
-    - Валидацию события по схеме
+    - Валидацию события по схеме AgentTelemetryEvent
     - Идемпотентность через event_id
-    - Сохранение в OpenSearch
+    - Сохранение в OpenSearch (индекс agent-events)
     - Публикацию в Redis Stream
     """
     start_time = datetime.now()
@@ -365,6 +416,118 @@ async def ingest_event(
         raise HTTPException(
             status_code=500,
             detail=f"Внутренняя ошибка обработки события"
+        )
+
+@app.post("/ingest/security", response_model=IngestResponse)
+async def ingest_security_event(
+    event: SecurityEvent,
+    request: Request,
+    background_tasks: BackgroundTasks,
+    opensearch: AsyncOpenSearch = Depends(get_opensearch),
+    redis: aioredis.Redis = Depends(get_redis)
+) -> IngestResponse:
+    """
+    Прием события безопасности от внешних источников.
+    
+    Поддерживает новый формат событий для угроз безопасности:
+    - Валидация по схеме SecurityEvent
+    - Автоматическая генерация event_id если не указан
+    - Сохранение в индекс security-events
+    - Публикация в Redis Stream для обработки
+    """
+    start_time = datetime.now()
+    
+    try:
+        # Генерация event_id если не указан
+        if not event.event_id:
+            event.event_id = f"sec-{int(time.time())}-{random.randint(1000, 9999)}"
+        
+        # Получение дополнительных заголовков
+        source_system = request.headers.get("X-Source-System", "unknown")
+        user_agent = request.headers.get("User-Agent", "")
+        
+        logger.info(f"Получено событие безопасности {event.event_id} от источника {source_system}")
+        
+        # Определение индекса для событий безопасности
+        try:
+            dt = datetime.fromisoformat(event.timestamp.replace('Z', '+00:00'))
+            index_name = f"security-events-{dt.strftime('%Y.%m.%d')}"
+        except Exception:
+            # Fallback на текущую дату
+            index_name = f"security-events-{datetime.now().strftime('%Y.%m.%d')}"
+        
+        # Проверка идемпотентности
+        exists = await check_event_exists(opensearch, index_name, event.event_id)
+        if exists:
+            logger.info(f"Событие безопасности {event.event_id} уже существует")
+            processing_time = int((datetime.now() - start_time).total_seconds() * 1000)
+            return IngestResponse(
+                event_id=event.event_id,
+                status="duplicate",
+                message="Событие уже было обработано",
+                processing_time_ms=processing_time
+            )
+        
+        # Подготовка данных для сохранения
+        event_data = event.dict()
+        event_data['received_at'] = datetime.now(timezone.utc).isoformat()
+        event_data['source_system'] = source_system
+        event_data['user_agent'] = user_agent
+        event_data['event_format'] = 'security_v1'
+        
+        # Добавление русских названий для Dashboard
+        severity_translations = {
+            'critical': 'критический',
+            'high': 'высокий', 
+            'medium': 'средний',
+            'low': 'низкий',
+            'info': 'информационный'
+        }
+        event_data['severity_ru'] = severity_translations.get(event.severity, event.severity)
+        
+        threat_type_translations = {
+            'exploit': 'эксплойт',
+            'malware': 'вредоносное ПО',
+            'phishing': 'фишинг',
+            'vulnerability': 'уязвимость',
+            'intrusion': 'вторжение',
+            'ransomware': 'вымогатель',
+            'trojan': 'троян',
+            'backdoor': 'бэкдор',
+            'rootkit': 'руткит',
+            'botnet': 'ботнет'
+        }
+        event_data['threat_type_ru'] = threat_type_translations.get(event.threat_type, event.threat_type)
+        
+        # Сохранение в OpenSearch
+        indexed = await index_event(opensearch, index_name, event.event_id, event_data)
+        if not indexed:
+            raise HTTPException(status_code=500, detail="Ошибка сохранения события безопасности")
+        
+        # Публикация в Redis Stream для дальнейшей обработки
+        published = await publish_to_stream(redis, "events:security", event_data)
+        if not published:
+            logger.warning(f"Событие безопасности {event.event_id} сохранено в OpenSearch, но не опубликовано в Redis")
+        
+        processing_time = int((datetime.now() - start_time).total_seconds() * 1000)
+        
+        logger.info(f"Событие безопасности {event.event_id} успешно обработано за {processing_time}ms")
+        
+        return IngestResponse(
+            event_id=event.event_id,
+            status="accepted",
+            message="Событие безопасности успешно обработано",
+            processing_time_ms=processing_time
+        )
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        processing_time = int((datetime.now() - start_time).total_seconds() * 1000)
+        logger.error(f"Ошибка обработки события безопасности {event.event_id if hasattr(event, 'event_id') else 'unknown'}: {e}")
+        raise HTTPException(
+            status_code=500,
+            detail=f"Внутренняя ошибка обработки события безопасности: {str(e)}"
         )
 
 @app.get("/events", response_model=EventsResponse)

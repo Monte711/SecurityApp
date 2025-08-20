@@ -1,0 +1,277 @@
+{
+  "version": "8.9.0",
+  "objects": [
+    {
+      "id": "security-dashboard-main",
+      "type": "dashboard",
+      "attributes": {
+        "title": "Кибербезопасность - Мониторинг угроз",
+        "description": "Основная панель мониторинга событий безопасности",
+        "panelsJSON": "[]",
+        "timeRestore": true,
+        "timeTo": "now",
+        "timeFrom": "now-24h",
+        "refreshInterval": {
+          "pause": false,
+          "value": 60000
+        }
+      }
+    },
+    {
+      "id": "threat-types-pie",
+      "type": "visualization",
+      "attributes": {
+        "title": "Распределение типов угроз",
+        "description": "Круговая диаграмма распределения угроз по типам",
+        "visState": {
+          "title": "Распределение типов угроз",
+          "type": "pie",
+          "params": {
+            "addTooltip": true,
+            "addLegend": true,
+            "legendPosition": "right",
+            "isDonut": false
+          },
+          "aggs": [
+            {
+              "id": "1",
+              "enabled": true,
+              "type": "count",
+              "schema": "metric",
+              "params": {}
+            },
+            {
+              "id": "2",
+              "enabled": true,
+              "type": "terms",
+              "schema": "segment",
+              "params": {
+                "field": "threat_type_ru.keyword",
+                "size": 10,
+                "order": "desc",
+                "orderBy": "1"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "severity-histogram",
+      "type": "visualization", 
+      "attributes": {
+        "title": "События по критичности во времени",
+        "description": "Гистограмма событий с группировкой по критичности",
+        "visState": {
+          "title": "События по критичности во времени",
+          "type": "histogram",
+          "params": {
+            "grid": {
+              "categoryLines": false,
+              "style": {
+                "color": "#eee"
+              }
+            },
+            "categoryAxes": [
+              {
+                "id": "CategoryAxis-1",
+                "type": "category",
+                "position": "bottom",
+                "show": true,
+                "style": {},
+                "scale": {
+                  "type": "linear"
+                },
+                "labels": {
+                  "show": true,
+                  "truncate": 100
+                },
+                "title": {}
+              }
+            ],
+            "valueAxes": [
+              {
+                "id": "ValueAxis-1",
+                "name": "LeftAxis-1",
+                "type": "value",
+                "position": "left",
+                "show": true,
+                "style": {},
+                "scale": {
+                  "type": "linear",
+                  "mode": "normal"
+                },
+                "labels": {
+                  "show": true,
+                  "rotate": 0,
+                  "filter": false,
+                  "truncate": 100
+                },
+                "title": {
+                  "text": "Количество событий"
+                }
+              }
+            ],
+            "seriesParams": [
+              {
+                "show": true,
+                "type": "histogram",
+                "mode": "stacked",
+                "data": {
+                  "label": "Количество событий",
+                  "id": "1"
+                },
+                "valueAxis": "ValueAxis-1",
+                "drawLinesBetweenPoints": true,
+                "showCircles": true
+              }
+            ],
+            "addTooltip": true,
+            "addLegend": true,
+            "legendPosition": "right",
+            "times": [],
+            "addTimeMarker": false
+          },
+          "aggs": [
+            {
+              "id": "1",
+              "enabled": true,
+              "type": "count",
+              "schema": "metric",
+              "params": {}
+            },
+            {
+              "id": "2",
+              "enabled": true,
+              "type": "date_histogram",
+              "schema": "segment",
+              "params": {
+                "field": "timestamp",
+                "interval": "auto",
+                "customInterval": "2h",
+                "min_doc_count": 1,
+                "extended_bounds": {}
+              }
+            },
+            {
+              "id": "3",
+              "enabled": true,
+              "type": "terms",
+              "schema": "group",
+              "params": {
+                "field": "severity_ru.keyword",
+                "size": 5,
+                "order": "desc",
+                "orderBy": "1"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "top-sources-table",
+      "type": "visualization",
+      "attributes": {
+        "title": "Топ источников обнаружения",
+        "description": "Таблица источников с количеством обнаруженных угроз",
+        "visState": {
+          "title": "Топ источников обнаружения",
+          "type": "table",
+          "params": {
+            "perPage": 10,
+            "showPartialRows": false,
+            "showMeticsAtAllLevels": false,
+            "sort": {
+              "columnIndex": null,
+              "direction": null
+            },
+            "showTotal": false,
+            "totalFunc": "sum"
+          },
+          "aggs": [
+            {
+              "id": "1",
+              "enabled": true,
+              "type": "count",
+              "schema": "metric",
+              "params": {}
+            },
+            {
+              "id": "2",
+              "enabled": true,
+              "type": "terms",
+              "schema": "bucket",
+              "params": {
+                "field": "source.keyword",
+                "size": 10,
+                "order": "desc",
+                "orderBy": "1"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "total-events-metric",
+      "type": "visualization",
+      "attributes": {
+        "title": "Всего событий за период",
+        "description": "Общее количество событий безопасности",
+        "visState": {
+          "title": "Всего событий за период",
+          "type": "metric",
+          "params": {
+            "addTooltip": true,
+            "addLegend": false,
+            "type": "metric",
+            "metric": {
+              "colorSchema": "Green to Red",
+              "colorsRange": [
+                {
+                  "from": 0,
+                  "to": 50
+                },
+                {
+                  "from": 50,
+                  "to": 75
+                },
+                {
+                  "from": 75,
+                  "to": 100
+                }
+              ],
+              "invertColors": false,
+              "labels": {
+                "show": true
+              },
+              "scale": {
+                "color": "#333",
+                "labels": false,
+                "show": false
+              },
+              "style": {
+                "bgColor": false,
+                "bgFill": "#eee",
+                "fontSize": 60,
+                "labelColor": false,
+                "subText": ""
+              },
+              "type": "metric"
+            }
+          },
+          "aggs": [
+            {
+              "id": "1",
+              "enabled": true,
+              "type": "count",
+              "schema": "metric",
+              "params": {}
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

@@ -102,6 +102,34 @@ services:
       start_period: 30s
     restart: unless-stopped
 
+  # Redis to OpenSearch Worker - обработчик событий
+  redis_worker:
+    build:
+      context: ../scripts
+      dockerfile: Dockerfile
+    container_name: cybersec_redis_worker
+    environment:
+      - REDIS_URL=redis://redis:6379
+      - OPENSEARCH_URL=http://opensearch:9200
+      - WORKER_NAME=redis-opensearch-worker
+      - BATCH_SIZE=10
+      - BATCH_TIMEOUT=5
+      - RETRY_ATTEMPTS=3
+      - RETRY_DELAY=5
+      - HEALTH_CHECK_INTERVAL=30
+    networks:
+      - cybersec_network
+    depends_on:
+      opensearch:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      ingest_api:
+        condition: service_healthy
+    restart: unless-stopped
+    profiles:
+      - dev
+
   # UI Dashboard - фронтенд интерфейс (опционально для разработки)
   ui:
     build:
