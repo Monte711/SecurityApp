@@ -1,0 +1,286 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Cybersecurity Platform Telemetry Schema",
+  "description": "Complete telemetry event schemas for the cybersecurity platform",
+  "definitions": {
+    "EventType": {
+      "type": "string",
+      "enum": ["process", "file", "network", "authentication", "vuln_scan_result", "threat_intel", "alert"]
+    },
+    "SeverityLevel": {
+      "type": "string",
+      "enum": ["low", "medium", "high", "critical"]
+    },
+    "BaseEvent": {
+      "type": "object",
+      "required": ["event_id", "timestamp", "event_type", "source_host", "source_agent"],
+      "properties": {
+        "event_id": {
+          "type": "string",
+          "description": "Unique event identifier"
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Event timestamp in ISO 8601 format"
+        },
+        "event_type": {
+          "$ref": "#/definitions/EventType",
+          "description": "Type of event"
+        },
+        "source_host": {
+          "type": "string",
+          "description": "Source hostname"
+        },
+        "source_agent": {
+          "type": "string", 
+          "description": "Agent identifier"
+        },
+        "severity": {
+          "$ref": "#/definitions/SeverityLevel",
+          "default": "low"
+        },
+        "metadata": {
+          "type": "object",
+          "additionalProperties": true,
+          "description": "Additional event metadata"
+        }
+      }
+    },
+    "ProcessEvent": {
+      "allOf": [
+        {"$ref": "#/definitions/BaseEvent"},
+        {
+          "type": "object",
+          "required": ["process_id", "process_name"],
+          "properties": {
+            "event_type": {"const": "process"},
+            "process_id": {
+              "type": "integer",
+              "description": "Process ID"
+            },
+            "parent_process_id": {
+              "type": "integer",
+              "description": "Parent process ID"
+            },
+            "process_name": {
+              "type": "string",
+              "description": "Process executable name"
+            },
+            "command_line": {
+              "type": "string",
+              "description": "Command line arguments"
+            },
+            "user": {
+              "type": "string",
+              "description": "User executing process"
+            },
+            "file_hash": {
+              "type": "string",
+              "pattern": "^[a-fA-F0-9]{64}$",
+              "description": "SHA256 hash of executable"
+            }
+          }
+        }
+      ]
+    },
+    "FileEvent": {
+      "allOf": [
+        {"$ref": "#/definitions/BaseEvent"},
+        {
+          "type": "object",
+          "required": ["file_path", "operation"],
+          "properties": {
+            "event_type": {"const": "file"},
+            "file_path": {
+              "type": "string",
+              "description": "Full file path"
+            },
+            "file_hash": {
+              "type": "string",
+              "pattern": "^[a-fA-F0-9]{64}$",
+              "description": "SHA256 hash"
+            },
+            "file_size": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "File size in bytes"
+            },
+            "operation": {
+              "type": "string",
+              "enum": ["create", "modify", "delete", "read"],
+              "description": "File operation"
+            },
+            "process_id": {
+              "type": "integer",
+              "description": "Process that performed operation"
+            }
+          }
+        }
+      ]
+    },
+    "NetworkEvent": {
+      "allOf": [
+        {"$ref": "#/definitions/BaseEvent"},
+        {
+          "type": "object",
+          "required": ["source_ip", "dest_ip", "protocol"],
+          "properties": {
+            "event_type": {"const": "network"},
+            "source_ip": {
+              "type": "string",
+              "format": "ipv4",
+              "description": "Source IP address"
+            },
+            "dest_ip": {
+              "type": "string", 
+              "format": "ipv4",
+              "description": "Destination IP address"
+            },
+            "source_port": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 65535,
+              "description": "Source port"
+            },
+            "dest_port": {
+              "type": "integer",
+              "minimum": 1, 
+              "maximum": 65535,
+              "description": "Destination port"
+            },
+            "protocol": {
+              "type": "string",
+              "enum": ["TCP", "UDP", "ICMP"],
+              "description": "Network protocol"
+            },
+            "bytes_sent": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "Bytes transmitted"
+            },
+            "bytes_received": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "Bytes received"
+            }
+          }
+        }
+      ]
+    },
+    "AuthEvent": {
+      "allOf": [
+        {"$ref": "#/definitions/BaseEvent"},
+        {
+          "type": "object",
+          "required": ["user", "auth_type", "success"],
+          "properties": {
+            "event_type": {"const": "authentication"},
+            "user": {
+              "type": "string",
+              "description": "Username"
+            },
+            "auth_type": {
+              "type": "string",
+              "enum": ["login", "logout", "password_change", "privilege_escalation"],
+              "description": "Authentication type"
+            },
+            "success": {
+              "type": "boolean",
+              "description": "Authentication success"
+            },
+            "source_ip": {
+              "type": "string",
+              "format": "ipv4",
+              "description": "Source IP address"
+            },
+            "session_id": {
+              "type": "string",
+              "description": "Session identifier"
+            }
+          }
+        }
+      ]
+    },
+    "VulnScanResult": {
+      "allOf": [
+        {"$ref": "#/definitions/BaseEvent"},
+        {
+          "type": "object",
+          "required": ["target", "vulnerability_id", "vulnerability_name"],
+          "properties": {
+            "event_type": {"const": "vuln_scan_result"},
+            "target": {
+              "type": "string",
+              "description": "Scan target (IP/hostname)"
+            },
+            "vulnerability_id": {
+              "type": "string",
+              "description": "CVE or vulnerability ID"
+            },
+            "vulnerability_name": {
+              "type": "string",
+              "description": "Vulnerability name"
+            },
+            "cvss_score": {
+              "type": "number",
+              "minimum": 0.0,
+              "maximum": 10.0,
+              "description": "CVSS score"
+            },
+            "description": {
+              "type": "string",
+              "description": "Vulnerability description"
+            },
+            "solution": {
+              "type": "string",
+              "description": "Remediation solution"
+            }
+          }
+        }
+      ]
+    },
+    "Alert": {
+      "allOf": [
+        {"$ref": "#/definitions/BaseEvent"},
+        {
+          "type": "object",
+          "required": ["alert_name", "description"],
+          "properties": {
+            "event_type": {"const": "alert"},
+            "alert_name": {
+              "type": "string",
+              "description": "Alert name/title"
+            },
+            "description": {
+              "type": "string",
+              "description": "Alert description"
+            },
+            "rule_id": {
+              "type": "string",
+              "description": "Detection rule ID"
+            },
+            "related_events": {
+              "type": "array",
+              "items": {"type": "string"},
+              "description": "Related event IDs"
+            },
+            "recommended_actions": {
+              "type": "array",
+              "items": {"type": "string"},
+              "description": "Suggested responses"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "oneOf": [
+    {"$ref": "#/definitions/ProcessEvent"},
+    {"$ref": "#/definitions/FileEvent"},
+    {"$ref": "#/definitions/NetworkEvent"},
+    {"$ref": "#/definitions/AuthEvent"},
+    {"$ref": "#/definitions/VulnScanResult"},
+    {"$ref": "#/definitions/Alert"}
+  ]
+}
