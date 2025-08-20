@@ -1,0 +1,133 @@
+version: '3.8'
+
+services:
+  # OpenSearch for data storage and search
+  opensearch:
+    image: opensearchproject/opensearch:2.11.0
+    container_name: cybersec-opensearch
+    environment:
+      - cluster.name=cybersec-cluster
+      - node.name=cybersec-node
+      - discovery.type=single-node
+      - bootstrap.memory_lock=true
+      - "OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m"
+      - "DISABLE_INSTALL_DEMO_CONFIG=true"
+      - "DISABLE_SECURITY_PLUGIN=true"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    volumes:
+      - opensearch-data:/usr/share/opensearch/data
+    ports:
+      - "9200:9200"
+      - "9600:9600"
+    networks:
+      - cybersec-network
+
+  # OpenSearch Dashboards for visualization
+  opensearch-dashboards:
+    image: opensearchproject/opensearch-dashboards:2.11.0
+    container_name: cybersec-dashboards
+    environment:
+      - 'OPENSEARCH_HOSTS=["http://opensearch:9200"]'
+      - "DISABLE_SECURITY_DASHBOARDS_PLUGIN=true"
+    ports:
+      - "5601:5601"
+    depends_on:
+      - opensearch
+    networks:
+      - cybersec-network
+
+  # Redis for message queues and caching
+  redis:
+    image: redis:7-alpine
+    container_name: cybersec-redis
+    command: redis-server --appendonly yes
+    volumes:
+      - redis-data:/data
+    ports:
+      - "6379:6379"
+    networks:
+      - cybersec-network
+
+  # MISP for threat intelligence
+  misp:
+    image: coolacid/misp-docker:core-latest
+    container_name: cybersec-misp
+    environment:
+      - HOSTNAME=misp
+      - REDIS_FQDN=redis
+      - INIT=true
+      - CRON_USER_ID=1
+      - MYSQL_HOST=misp-db
+      - MYSQL_DATABASE=misp
+      - MYSQL_USER=misp
+      - MYSQL_PASSWORD=misp_password
+    volumes:
+      - misp-data:/var/www/MISP
+    ports:
+      - "8080:80"
+      - "8443:443"
+    depends_on:
+      - misp-db
+      - redis
+    networks:
+      - cybersec-network
+
+  # MySQL for MISP
+  misp-db:
+    image: mysql:8.0
+    container_name: cybersec-misp-db
+    environment:
+      - MYSQL_ROOT_PASSWORD=root_password
+      - MYSQL_DATABASE=misp
+      - MYSQL_USER=misp
+      - MYSQL_PASSWORD=misp_password
+    volumes:
+      - misp-db-data:/var/lib/mysql
+    networks:
+      - cybersec-network
+
+  # OpenVAS vulnerability scanner
+  openvas:
+    image: greenbone/openvas-scanner:stable
+    container_name: cybersec-openvas
+    environment:
+      - COMMUNITY_ENABLE=true
+    volumes:
+      - openvas-data:/var/lib/openvas
+      - openvas-logs:/var/log/gvm
+    ports:
+      - "9392:9392"
+    networks:
+      - cybersec-network
+
+  # ClamAV antivirus
+  clamav:
+    image: clamav/clamav:latest
+    container_name: cybersec-clamav
+    volumes:
+      - clamav-data:/var/lib/clamav
+    ports:
+      - "3310:3310"
+    environment:
+      - CLAMAV_NO_FRESHCLAMD=false
+    networks:
+      - cybersec-network
+
+volumes:
+  opensearch-data:
+  redis-data:
+  misp-data:
+  misp-db-data:
+  openvas-data:
+  openvas-logs:
+  clamav-data:
+
+networks:
+  cybersec-network:
+    driver: bridge

@@ -1,0 +1,159 @@
+{
+  "modules": [
+    {
+      "module_name": "ingest-api",
+      "short_description": "Central telemetry ingestion service (FastAPI)",
+      "status": "not started",
+      "branch": "main",
+      "latest_commit": "unknown",
+      "artifacts": ["/ingest-api/README.md"],
+      "blockers": [],
+      "next_steps": [
+        "Create FastAPI app structure",
+        "Implement JSON Schema validation", 
+        "Add OpenSearch integration"
+      ]
+    },
+    {
+      "module_name": "agent-windows",
+      "short_description": "Windows endpoint monitoring agent",
+      "status": "not started",
+      "branch": "main", 
+      "latest_commit": "unknown",
+      "artifacts": ["/agent-windows/README.md"],
+      "blockers": [],
+      "next_steps": [
+        "Create Python agent skeleton",
+        "Implement process monitoring",
+        "Add secure HTTP client"
+      ]
+    },
+    {
+      "module_name": "edr-av-integration",
+      "short_description": "ClamAV + YARA malware detection",
+      "status": "not started",
+      "branch": "main",
+      "latest_commit": "unknown", 
+      "artifacts": ["/edr-av-integration/README.md"],
+      "blockers": [],
+      "next_steps": [
+        "Setup ClamAV client integration",
+        "Implement YARA rule engine",
+        "Create hash reputation service"
+      ]
+    },
+    {
+      "module_name": "vuln-scanner", 
+      "short_description": "OpenVAS vulnerability scanning integration",
+      "status": "not started",
+      "branch": "main",
+      "latest_commit": "unknown",
+      "artifacts": ["/vuln-scanner/README.md"],
+      "blockers": [],
+      "next_steps": [
+        "Setup OpenVAS Docker integration",
+        "Implement scan management API", 
+        "Add result processing pipeline"
+      ]
+    },
+    {
+      "module_name": "tip-misp",
+      "short_description": "MISP threat intelligence platform", 
+      "status": "not started",
+      "branch": "main",
+      "latest_commit": "unknown",
+      "artifacts": ["/tip-misp/README.md"],
+      "blockers": [],
+      "next_steps": [
+        "Configure MISP Docker deployment",
+        "Create IOC import/export API",
+        "Integrate with ingest pipeline"
+      ]
+    },
+    {
+      "module_name": "soar-engine",
+      "short_description": "Security orchestration and response",
+      "status": "not started", 
+      "branch": "main",
+      "latest_commit": "unknown",
+      "artifacts": ["/soar-engine/README.md"],
+      "blockers": [],
+      "next_steps": [
+        "Design playbook execution engine",
+        "Implement basic playbooks",
+        "Add approval workflow"
+      ]
+    },
+    {
+      "module_name": "ui-dashboard",
+      "short_description": "React-based web interface",
+      "status": "not started",
+      "branch": "main", 
+      "latest_commit": "unknown",
+      "artifacts": ["/ui-dashboard/README.md"],
+      "blockers": [],
+      "next_steps": [
+        "Setup React application",
+        "Create incident dashboard",
+        "Add playbook execution UI"
+      ]
+    },
+    {
+      "module_name": "ml-module",
+      "short_description": "Machine learning behavioral analytics",
+      "status": "not started",
+      "branch": "main",
+      "latest_commit": "unknown", 
+      "artifacts": ["/ml-module/README.md"],
+      "blockers": [],
+      "next_steps": [
+        "Design anomaly detection models",
+        "Create training pipeline", 
+        "Implement REST API service"
+      ]
+    },
+    {
+      "module_name": "shared",
+      "short_description": "Common utilities and schemas",
+      "status": "in progress",
+      "branch": "main",
+      "latest_commit": "unknown",
+      "artifacts": [
+        "/shared/schemas.py",
+        "/shared/utils.py", 
+        "/shared/__init__.py"
+      ],
+      "blockers": [],
+      "next_steps": [
+        "Add comprehensive unit tests",
+        "Enhance error handling",
+        "Add configuration management"
+      ]
+    },
+    {
+      "module_name": "docker",
+      "short_description": "Infrastructure services configuration", 
+      "status": "in progress",
+      "branch": "main",
+      "latest_commit": "unknown",
+      "artifacts": [
+        "/docker/infrastructure.yml",
+        "/docker/README.md"
+      ],
+      "blockers": [],
+      "next_steps": [
+        "Test all service deployments",
+        "Add health checks",
+        "Optimize resource allocation"
+      ]
+    }
+  ],
+  "snapshot_date": "2025-08-20T12:00:00Z",
+  "total_modules": 10,
+  "status_summary": {
+    "not_started": 8,
+    "in_progress": 2, 
+    "done": 0,
+    "blocked": 0
+  }
+}

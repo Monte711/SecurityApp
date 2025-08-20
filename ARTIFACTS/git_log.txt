@@ -1,0 +1,2 @@
+﻿0b7551c Monte Wed Aug 20 09:31:42 2025 +0300 docs(recovery): complete recovery documentation suite
+4c21174 Monte Wed Aug 20 09:09:03 2025 +0300 docs(recovery): project snapshot for transfer
