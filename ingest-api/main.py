@@ -1,0 +1,541 @@
+"""
+Cybersecurity Ingest API - Main Application
+Unified Enterprise Cybersecurity Platform
+
+FastAPI service для приема телеметрии от агентов и веб-интерфейса.
+"""
+
+import asyncio
+import json
+import logging
+import os
+import uuid
+from datetime import datetime, timezone
+from typing import List, Optional, Dict, Any
+
+import redis.asyncio as aioredis
+from fastapi import FastAPI, HTTPException, Depends, Request, BackgroundTasks
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
+from opensearchpy import AsyncOpenSearch, RequestError
+from pydantic import BaseModel, Field, validator
+import uvicorn
+
+# Настройка логирования
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger(__name__)
+
+# Конфигурация
+OPENSEARCH_URL = os.getenv("OPENSEARCH_URL", "http://localhost:9200")
+REDIS_URL = os.getenv("REDIS_URL", "redis://localhost:6379")
+API_HOST = os.getenv("API_HOST", "0.0.0.0")
+API_PORT = int(os.getenv("API_PORT", "8000"))
+DEBUG = os.getenv("DEBUG", "true").lower() == "true"
+
+# Pydantic схемы
+class HostInfo(BaseModel):
+    host_id: str = Field(..., description="Уникальный идентификатор хоста")
+    hostname: str = Field(..., description="Имя хоста")
+    domain: Optional[str] = Field(None, description="Домен хоста")
+    os_version: Optional[str] = Field(None, description="Версия ОС")
+    ip_addresses: Optional[List[str]] = Field(default_factory=list, description="IP адреса")
+
+class AgentInfo(BaseModel):
+    agent_version: str = Field(..., description="Версия агента")
+    collect_level: str = Field(default="standard", description="Уровень сбора данных")
+    
+    @validator('collect_level')
+    def validate_collect_level(cls, v):
+        if v not in ['minimal', 'standard', 'detailed']:
+            raise ValueError('collect_level должен быть minimal, standard или detailed')
+        return v
+
+class ProcessInfo(BaseModel):
+    pid: Optional[int] = Field(None, description="PID процесса")
+    ppid: Optional[int] = Field(None, description="PPID родительского процесса")
+    name: Optional[str] = Field(None, description="Имя процесса")
+    path: Optional[str] = Field(None, description="Путь к исполняемому файлу")
+    command_line: Optional[str] = Field(None, description="Командная строка")
+    user: Optional[str] = Field(None, description="Пользователь")
+
+class FileInfo(BaseModel):
+    path: Optional[str] = Field(None, description="Путь к файлу")
+    name: Optional[str] = Field(None, description="Имя файла")
+    size: Optional[int] = Field(None, description="Размер файла")
+    created: Optional[str] = Field(None, description="Время создания")
+    modified: Optional[str] = Field(None, description="Время модификации")
+
+class NetworkInfo(BaseModel):
+    protocol: Optional[str] = Field(None, description="Протокол")
+    source_ip: Optional[str] = Field(None, description="IP источника")
+    source_port: Optional[int] = Field(None, description="Порт источника")
+    destination_ip: Optional[str] = Field(None, description="IP назначения")
+    destination_port: Optional[int] = Field(None, description="Порт назначения")
+    bytes_sent: Optional[int] = Field(None, description="Байт отправлено")
+    bytes_received: Optional[int] = Field(None, description="Байт получено")
+
+class AgentTelemetryEvent(BaseModel):
+    event_id: str = Field(..., description="Уникальный ID события")
+    event_type: str = Field(..., description="Тип события")
+    timestamp: str = Field(..., description="Время события ISO 8601")
+    severity: str = Field(default="info", description="Уровень критичности")
+    host: HostInfo = Field(..., description="Информация о хосте")
+    agent: AgentInfo = Field(..., description="Информация об агенте")
+    
+    # Опциональные поля в зависимости от типа события
+    process: Optional[ProcessInfo] = Field(None, description="Информация о процессе")
+    file: Optional[FileInfo] = Field(None, description="Информация о файле")
+    network: Optional[NetworkInfo] = Field(None, description="Сетевая информация")
+    raw_data: Optional[Dict[str, Any]] = Field(None, description="Дополнительные данные")
+    tags: Optional[List[str]] = Field(default_factory=list, description="Теги")
+    
+    @validator('event_type')
+    def validate_event_type(cls, v):
+        valid_types = [
+            'process_start', 'process_end', 'file_create', 'file_modify', 
+            'file_delete', 'network_connection', 'registry_modify',
+            'service_start', 'service_stop', 'user_login', 'user_logout',
+            'security_alert', 'system_info'
+        ]
+        if v not in valid_types:
+            raise ValueError(f'event_type должен быть одним из: {valid_types}')
+        return v
+    
+    @validator('severity')
+    def validate_severity(cls, v):
+        if v not in ['info', 'low', 'medium', 'high', 'critical']:
+            raise ValueError('severity должен быть info, low, medium, high или critical')
+        return v
+
+class IngestResponse(BaseModel):
+    event_id: str = Field(..., description="ID обработанного события")
+    status: str = Field(..., description="Статус обработки")
+    message: Optional[str] = Field(None, description="Дополнительное сообщение")
+    processing_time_ms: Optional[int] = Field(None, description="Время обработки в мс")
+
+class EventsResponse(BaseModel):
+    events: List[Dict[str, Any]] = Field(..., description="Список событий")
+    total: int = Field(..., description="Общее количество")
+    page: int = Field(..., description="Номер страницы")
+    size: int = Field(..., description="Размер страницы")
+
+# Глобальные подключения
+opensearch_client: Optional[AsyncOpenSearch] = None
+redis_client: Optional[aioredis.Redis] = None
+
+# Инициализация FastAPI
+app = FastAPI(
+    title="Cybersecurity Ingest API",
+    description="API для приема телеметрии от агентов безопасности",
+    version="1.0.0",
+    docs_url="/docs" if DEBUG else None,
+    redoc_url="/redoc" if DEBUG else None
+)
+
+# CORS middleware для развития
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000", "http://127.0.0.1:3000"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# Lifecycle events
+@app.on_event("startup")
+async def startup_event():
+    """Инициализация соединений при запуске"""
+    global opensearch_client, redis_client
+    
+    logger.info("Запуск Ingest API...")
+    
+    # Инициализация OpenSearch
+    try:
+        opensearch_client = AsyncOpenSearch([OPENSEARCH_URL])
+        # Проверка соединения
+        await opensearch_client.ping()
+        logger.info(f"OpenSearch подключен: {OPENSEARCH_URL}")
+    except Exception as e:
+        logger.error(f"Ошибка подключения к OpenSearch: {e}")
+        opensearch_client = None
+    
+    # Инициализация Redis
+    try:
+        redis_client = aioredis.from_url(REDIS_URL)
+        # Проверка соединения
+        await redis_client.ping()
+        logger.info(f"Redis подключен: {REDIS_URL}")
+    except Exception as e:
+        logger.error(f"Ошибка подключения к Redis: {e}")
+        redis_client = None
+    
+    logger.info("Ingest API готов к работе")
+
+@app.on_event("shutdown")
+async def shutdown_event():
+    """Закрытие соединений при остановке"""
+    global opensearch_client, redis_client
+    
+    logger.info("Остановка Ingest API...")
+    
+    if opensearch_client:
+        await opensearch_client.close()
+    
+    if redis_client:
+        redis_client.close()
+        await redis_client.wait_closed()
+    
+    logger.info("Ingest API остановлен")
+
+# Dependency functions
+async def get_opensearch() -> AsyncOpenSearch:
+    """Получение OpenSearch клиента"""
+    if not opensearch_client:
+        raise HTTPException(status_code=503, detail="OpenSearch недоступен")
+    return opensearch_client
+
+async def get_redis() -> aioredis.Redis:
+    """Получение Redis клиента"""
+    if not redis_client:
+        raise HTTPException(status_code=503, detail="Redis недоступен")
+    return redis_client
+
+# Helper functions
+def get_index_name(timestamp: str) -> str:
+    """Генерация имени индекса на основе даты"""
+    try:
+        dt = datetime.fromisoformat(timestamp.replace('Z', '+00:00'))
+        return f"agent-events-{dt.strftime('%Y.%m.%d')}"
+    except Exception:
+        # Fallback на текущую дату
+        return f"agent-events-{datetime.now().strftime('%Y.%m.%d')}"
+
+async def check_event_exists(opensearch: AsyncOpenSearch, index: str, event_id: str) -> bool:
+    """Проверка существования события (для идемпотентности)"""
+    try:
+        response = await opensearch.exists(index=index, id=event_id)
+        return response
+    except Exception as e:
+        logger.warning(f"Ошибка проверки существования события {event_id}: {e}")
+        return False
+
+async def index_event(opensearch: AsyncOpenSearch, index: str, event_id: str, event_data: dict) -> bool:
+    """Индексация события в OpenSearch"""
+    try:
+        # Добавляем метаданные обработки
+        event_data['indexed_at'] = datetime.now(timezone.utc).isoformat()
+        event_data['index_name'] = index
+        
+        await opensearch.index(
+            index=index,
+            id=event_id,
+            body=event_data,
+            refresh=True  # Для немедленной доступности в поиске
+        )
+        return True
+    except RequestError as e:
+        logger.error(f"OpenSearch ошибка индексации события {event_id}: {e}")
+        return False
+    except Exception as e:
+        logger.error(f"Ошибка индексации события {event_id}: {e}")
+        return False
+
+async def publish_to_stream(redis: aioredis.Redis, stream: str, event_data: dict) -> bool:
+    """Публикация события в Redis Stream"""
+    try:
+        await redis.xadd(stream, event_data)
+        return True
+    except Exception as e:
+        logger.error(f"Ошибка публикации в Redis Stream {stream}: {e}")
+        return False
+
+# API Endpoints
+
+@app.get("/health")
+async def health_check():
+    """Health check endpoint"""
+    status = {
+        "status": "healthy",
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "services": {}
+    }
+    
+    # Проверка OpenSearch
+    if opensearch_client:
+        try:
+            await opensearch_client.ping()
+            status["services"]["opensearch"] = "healthy"
+        except:
+            status["services"]["opensearch"] = "unhealthy"
+            status["status"] = "degraded"
+    else:
+        status["services"]["opensearch"] = "unavailable"
+        status["status"] = "degraded"
+    
+    # Проверка Redis
+    if redis_client:
+        try:
+            await redis_client.ping()
+            status["services"]["redis"] = "healthy"
+        except:
+            status["services"]["redis"] = "unhealthy"
+            status["status"] = "degraded"
+    else:
+        status["services"]["redis"] = "unavailable"
+        status["status"] = "degraded"
+    
+    return status
+
+@app.post("/ingest", response_model=IngestResponse)
+async def ingest_event(
+    event: AgentTelemetryEvent,
+    request: Request,
+    background_tasks: BackgroundTasks,
+    opensearch: AsyncOpenSearch = Depends(get_opensearch),
+    redis: aioredis.Redis = Depends(get_redis)
+) -> IngestResponse:
+    """
+    Прием события телеметрии от агента или UI.
+    
+    Обеспечивает:
+    - Валидацию события по схеме
+    - Идемпотентность через event_id
+    - Сохранение в OpenSearch
+    - Публикацию в Redis Stream
+    """
+    start_time = datetime.now()
+    
+    try:
+        # Получение дополнительных заголовков
+        agent_id = request.headers.get("X-Agent-ID", "unknown")
+        user_agent = request.headers.get("User-Agent", "")
+        
+        logger.info(f"Получено событие {event.event_id} от агента {agent_id}")
+        
+        # Определение индекса
+        index_name = get_index_name(event.timestamp)
+        
+        # Проверка идемпотентности
+        exists = await check_event_exists(opensearch, index_name, event.event_id)
+        if exists:
+            logger.info(f"Событие {event.event_id} уже существует")
+            processing_time = int((datetime.now() - start_time).total_seconds() * 1000)
+            return IngestResponse(
+                event_id=event.event_id,
+                status="duplicate",
+                message="Событие уже было обработано",
+                processing_time_ms=processing_time
+            )
+        
+        # Подготовка данных для сохранения
+        event_data = event.dict()
+        event_data['received_at'] = datetime.now(timezone.utc).isoformat()
+        event_data['agent_id'] = agent_id
+        event_data['user_agent'] = user_agent
+        
+        # Сохранение в OpenSearch
+        indexed = await index_event(opensearch, index_name, event.event_id, event_data)
+        if not indexed:
+            raise HTTPException(status_code=500, detail="Ошибка сохранения события")
+        
+        # Публикация в Redis Stream для дальнейшей обработки
+        published = await publish_to_stream(redis, "events:ingestion", event_data)
+        if not published:
+            logger.warning(f"Событие {event.event_id} сохранено в OpenSearch, но не опубликовано в Redis")
+        
+        processing_time = int((datetime.now() - start_time).total_seconds() * 1000)
+        
+        logger.info(f"Событие {event.event_id} успешно обработано за {processing_time}ms")
+        
+        return IngestResponse(
+            event_id=event.event_id,
+            status="accepted",
+            message="Событие успешно обработано",
+            processing_time_ms=processing_time
+        )
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        processing_time = int((datetime.now() - start_time).total_seconds() * 1000)
+        logger.error(f"Ошибка обработки события {event.event_id}: {e}")
+        raise HTTPException(
+            status_code=500,
+            detail=f"Внутренняя ошибка обработки события"
+        )
+
+@app.get("/events", response_model=EventsResponse)
+async def get_events(
+    limit: int = 100,
+    page: int = 1,
+    event_type: Optional[str] = None,
+    severity: Optional[str] = None,
+    host_id: Optional[str] = None,
+    opensearch: AsyncOpenSearch = Depends(get_opensearch)
+) -> EventsResponse:
+    """
+    Получение списка событий с фильтрацией и пагинацией.
+    
+    Параметры:
+    - limit: количество событий на странице (макс 1000)
+    - page: номер страницы (начиная с 1)
+    - event_type: фильтр по типу события
+    - severity: фильтр по уровню критичности
+    - host_id: фильтр по ID хоста
+    """
+    try:
+        # Валидация параметров
+        if limit > 1000:
+            limit = 1000
+        if page < 1:
+            page = 1
+        
+        offset = (page - 1) * limit
+        
+        # Построение запроса
+        query = {"match_all": {}}
+        
+        # Добавление фильтров
+        filters = []
+        if event_type:
+            filters.append({"term": {"event_type": event_type}})
+        if severity:
+            filters.append({"term": {"severity": severity}})
+        if host_id:
+            filters.append({"term": {"host.host_id": host_id}})
+        
+        if filters:
+            query = {"bool": {"filter": filters}}
+        
+        # Выполнение поискового запроса
+        search_body = {
+            "query": query,
+            "sort": [{"timestamp": {"order": "desc"}}],
+            "from": offset,
+            "size": limit
+        }
+        
+        response = await opensearch.search(
+            index="agent-events-*",
+            body=search_body
+        )
+        
+        # Получение общего количества
+        total = response['hits']['total']['value']
+        
+        # Извлечение событий
+        events = []
+        for hit in response['hits']['hits']:
+            event_data = hit['_source']
+            event_data['_id'] = hit['_id']
+            event_data['_index'] = hit['_index']
+            events.append(event_data)
+        
+        logger.info(f"Получено {len(events)} событий (страница {page}, всего {total})")
+        
+        return EventsResponse(
+            events=events,
+            total=total,
+            page=page,
+            size=len(events)
+        )
+        
+    except Exception as e:
+        logger.error(f"Ошибка получения событий: {e}")
+        raise HTTPException(status_code=500, detail="Ошибка получения событий")
+
+@app.get("/events/{event_id}")
+async def get_event_by_id(
+    event_id: str,
+    opensearch: AsyncOpenSearch = Depends(get_opensearch)
+):
+    """Получение конкретного события по ID"""
+    try:
+        # Поиск по всем индексам
+        search_body = {
+            "query": {"term": {"event_id": event_id}},
+            "size": 1
+        }
+        
+        response = await opensearch.search(
+            index="agent-events-*",
+            body=search_body
+        )
+        
+        if response['hits']['total']['value'] == 0:
+            raise HTTPException(status_code=404, detail="Событие не найдено")
+        
+        hit = response['hits']['hits'][0]
+        event_data = hit['_source']
+        event_data['_id'] = hit['_id']
+        event_data['_index'] = hit['_index']
+        
+        return event_data
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Ошибка получения события {event_id}: {e}")
+        raise HTTPException(status_code=500, detail="Ошибка получения события")
+
+@app.get("/stats")
+async def get_stats(
+    opensearch: AsyncOpenSearch = Depends(get_opensearch)
+):
+    """Получение статистики системы"""
+    try:
+        # Агрегации для статистики
+        search_body = {
+            "query": {"match_all": {}},
+            "size": 0,
+            "aggs": {
+                "event_types": {
+                    "terms": {"field": "event_type", "size": 20}
+                },
+                "severity_levels": {
+                    "terms": {"field": "severity", "size": 10}
+                },
+                "hosts": {
+                    "cardinality": {"field": "host.host_id"}
+                },
+                "events_per_hour": {
+                    "date_histogram": {
+                        "field": "timestamp",
+                        "calendar_interval": "1h",
+                        "min_doc_count": 0
+                    }
+                }
+            }
+        }
+        
+        response = await opensearch.search(
+            index="agent-events-*",
+            body=search_body
+        )
+        
+        stats = {
+            "total_events": response['hits']['total']['value'],
+            "unique_hosts": response['aggregations']['hosts']['value'],
+            "event_types": response['aggregations']['event_types']['buckets'],
+            "severity_levels": response['aggregations']['severity_levels']['buckets'],
+            "events_per_hour": response['aggregations']['events_per_hour']['buckets']
+        }
+        
+        return stats
+        
+    except Exception as e:
+        logger.error(f"Ошибка получения статистики: {e}")
+        raise HTTPException(status_code=500, detail="Ошибка получения статистики")
+
+# Точка входа для запуска
+if __name__ == "__main__":
+    uvicorn.run(
+        "main:app",
+        host=API_HOST,
+        port=API_PORT,
+        reload=DEBUG,
+        log_level="info"
+    )

@@ -1,0 +1,70 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+#root {
+  max-width: 100%;
+  width: 100%;
+  margin: 0 auto;
+  text-align: left;
+}
+
+/* Custom severity colors */
+.severity-low {
+  @apply text-green-600 bg-green-50;
+}
+
+.severity-medium {
+  @apply text-yellow-600 bg-yellow-50;
+}
+
+.severity-high {
+  @apply text-orange-600 bg-orange-50;
+}
+
+.severity-critical {
+  @apply text-red-600 bg-red-50;
+}
+
+/* Dark mode overrides */
+@media (prefers-color-scheme: dark) {
+  .severity-low {
+    @apply text-green-400 bg-green-900/20;
+  }
+  
+  .severity-medium {
+    @apply text-yellow-400 bg-yellow-900/20;
+  }
+  
+  .severity-high {
+    @apply text-orange-400 bg-orange-900/20;
+  }
+  
+  .severity-critical {
+    @apply text-red-400 bg-red-900/20;
+  }
+}

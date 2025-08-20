@@ -1,0 +1,326 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AgentTelemetryEvent",
+  "description": "Схема событий телеметрии от Windows агентов",
+  "type": "object",
+  "required": [
+    "event_id",
+    "event_type", 
+    "timestamp",
+    "host",
+    "agent"
+  ],
+  "properties": {
+    "event_id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Уникальный идентификатор события"
+    },
+    "event_type": {
+      "type": "string",
+      "enum": [
+        "process_start",
+        "process_end", 
+        "file_create",
+        "file_modify",
+        "file_delete",
+        "network_connection",
+        "registry_modify",
+        "service_start",
+        "service_stop",
+        "user_login",
+        "user_logout",
+        "security_alert",
+        "system_info"
+      ],
+      "description": "Тип события"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Время события в ISO 8601 UTC"
+    },
+    "severity": {
+      "type": "string", 
+      "enum": ["info", "low", "medium", "high", "critical"],
+      "default": "info",
+      "description": "Уровень критичности события"
+    },
+    "host": {
+      "type": "object",
+      "required": ["host_id", "hostname"],
+      "properties": {
+        "host_id": {
+          "type": "string",
+          "description": "Уникальный идентификатор хоста"
+        },
+        "hostname": {
+          "type": "string",
+          "description": "Имя хоста"
+        },
+        "domain": {
+          "type": "string",
+          "description": "Домен хоста"
+        },
+        "os_version": {
+          "type": "string",
+          "description": "Версия операционной системы"
+        },
+        "ip_addresses": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "ipv4"
+          },
+          "description": "IP адреса хоста"
+        }
+      }
+    },
+    "agent": {
+      "type": "object", 
+      "required": ["agent_version"],
+      "properties": {
+        "agent_version": {
+          "type": "string",
+          "description": "Версия агента"
+        },
+        "collect_level": {
+          "type": "string",
+          "enum": ["minimal", "standard", "detailed"],
+          "default": "standard",
+          "description": "Уровень сбора данных"
+        }
+      }
+    },
+    "process": {
+      "type": "object",
+      "description": "Информация о процессе (для process_* событий)",
+      "properties": {
+        "pid": {
+          "type": "integer",
+          "description": "Идентификатор процесса"
+        },
+        "ppid": {
+          "type": "integer", 
+          "description": "Идентификатор родительского процесса"
+        },
+        "name": {
+          "type": "string",
+          "description": "Имя процесса"
+        },
+        "path": {
+          "type": "string",
+          "description": "Полный путь к исполняемому файлу"
+        },
+        "command_line": {
+          "type": "string",
+          "description": "Командная строка"
+        },
+        "user": {
+          "type": "string", 
+          "description": "Пользователь, запустивший процесс"
+        },
+        "hashes": {
+          "type": "object",
+          "description": "Хеши исполняемого файла",
+          "properties": {
+            "md5": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{32}$"
+            },
+            "sha1": {
+              "type": "string", 
+              "pattern": "^[a-f0-9]{40}$"
+            },
+            "sha256": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            }
+          }
+        }
+      }
+    },
+    "file": {
+      "type": "object",
+      "description": "Информация о файле (для file_* событий)",
+      "properties": {
+        "path": {
+          "type": "string",
+          "description": "Полный путь к файлу"
+        },
+        "name": {
+          "type": "string",
+          "description": "Имя файла"
+        },
+        "size": {
+          "type": "integer",
+          "description": "Размер файла в байтах"
+        },
+        "created": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Время создания файла"
+        },
+        "modified": {
+          "type": "string",
+          "format": "date-time", 
+          "description": "Время последней модификации"
+        },
+        "hashes": {
+          "type": "object",
+          "description": "Хеши файла",
+          "properties": {
+            "md5": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{32}$"
+            },
+            "sha1": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{40}$"
+            },
+            "sha256": {
+              "type": "string", 
+              "pattern": "^[a-f0-9]{64}$"
+            }
+          }
+        }
+      }
+    },
+    "network": {
+      "type": "object",
+      "description": "Информация о сетевом соединении",
+      "properties": {
+        "protocol": {
+          "type": "string",
+          "enum": ["tcp", "udp", "icmp"]
+        },
+        "source_ip": {
+          "type": "string",
+          "format": "ipv4"
+        },
+        "source_port": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 65535
+        },
+        "destination_ip": {
+          "type": "string",
+          "format": "ipv4"
+        },
+        "destination_port": {
+          "type": "integer",
+          "minimum": 1, 
+          "maximum": 65535
+        },
+        "bytes_sent": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "bytes_received": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "registry": {
+      "type": "object",
+      "description": "Информация о изменении реестра",
+      "properties": {
+        "key": {
+          "type": "string",
+          "description": "Путь к ключу реестра"
+        },
+        "value_name": {
+          "type": "string",
+          "description": "Имя значения"
+        },
+        "value_data": {
+          "type": "string",
+          "description": "Данные значения"
+        },
+        "value_type": {
+          "type": "string",
+          "enum": ["REG_SZ", "REG_DWORD", "REG_BINARY", "REG_MULTI_SZ"]
+        }
+      }
+    },
+    "user": {
+      "type": "object",
+      "description": "Информация о пользователе",
+      "properties": {
+        "username": {
+          "type": "string",
+          "description": "Имя пользователя"
+        },
+        "domain": {
+          "type": "string", 
+          "description": "Домен пользователя"
+        },
+        "session_id": {
+          "type": "string",
+          "description": "Идентификатор сессии"
+        },
+        "logon_type": {
+          "type": "integer",
+          "description": "Тип входа в систему"
+        }
+      }
+    },
+    "service": {
+      "type": "object",
+      "description": "Информация о сервисе",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Имя сервиса"
+        },
+        "display_name": {
+          "type": "string",
+          "description": "Отображаемое имя сервиса"
+        },
+        "state": {
+          "type": "string",
+          "enum": ["stopped", "start_pending", "stop_pending", "running", "continue_pending", "pause_pending", "paused"]
+        }
+      }
+    },
+    "raw_data": {
+      "type": "object",
+      "description": "Дополнительные данные события",
+      "additionalProperties": true
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Теги для категоризации события"
+    },
+    "collected_at": {
+      "type": "string",
+      "format": "date-time", 
+      "description": "Время сбора события агентом"
+    },
+    "privacy_settings": {
+      "type": "object",
+      "description": "Настройки приватности данных",
+      "properties": {
+        "collect_hashes": {
+          "type": "boolean",
+          "default": true,
+          "description": "Собирать ли хеши файлов"
+        },
+        "upload_binaries": {
+          "type": "boolean", 
+          "default": false,
+          "description": "Загружать ли бинарные файлы"
+        },
+        "collect_command_lines": {
+          "type": "boolean",
+          "default": true,
+          "description": "Собирать ли командные строки"
+        }
+      }
+    }
+  }
+}

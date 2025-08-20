@@ -1,0 +1,30 @@
+{
+  "event_id": "test-event-001",
+  "event_type": "process_start",
+  "timestamp": "2025-08-20T11:30:00Z",
+  "severity": "info",
+  "host": {
+    "host_id": "windows-workstation-001",
+    "hostname": "WS-001",
+    "domain": "corporate.local",
+    "os_version": "Windows 11 Pro 22H2",
+    "ip_addresses": ["192.168.1.100", "10.0.0.100"]
+  },
+  "agent": {
+    "agent_version": "1.0.0",
+    "collect_level": "standard"
+  },
+  "process": {
+    "pid": 1234,
+    "ppid": 567,
+    "name": "notepad.exe",
+    "path": "C:\\Windows\\System32\\notepad.exe",
+    "command_line": "notepad.exe C:\\temp\\test.txt",
+    "user": "corporate\\john.doe"
+  },
+  "tags": ["process", "user_activity"],
+  "raw_data": {
+    "process_creation_time": "2025-08-20T11:29:58Z",
+    "session_id": 1
+  }
+}

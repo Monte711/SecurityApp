@@ -1,0 +1,141 @@
+services:
+  # OpenSearch - основное хранилище данных
+  opensearch:
+    image: opensearchproject/opensearch:2.9.0
+    container_name: cybersec_opensearch
+    environment:
+      - cluster.name=cybersec-cluster
+      - node.name=cybersec-node
+      - discovery.type=single-node
+      - bootstrap.memory_lock=true
+      - "OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m"
+      - "DISABLE_INSTALL_DEMO_CONFIG=true"
+      - "DISABLE_SECURITY_PLUGIN=true"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    volumes:
+      - opensearch_data:/usr/share/opensearch/data
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    networks:
+      - cybersec_network
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:9200/_cluster/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+
+  # OpenSearch Dashboards - веб-интерфейс для OpenSearch
+  opensearch_dashboards:
+    image: opensearchproject/opensearch-dashboards:2.9.0
+    container_name: cybersec_dashboards
+    ports:
+      - "5601:5601"
+    expose:
+      - "5601"
+    environment:
+      OPENSEARCH_HOSTS: '["http://opensearch:9200"]'
+      DISABLE_SECURITY_DASHBOARDS_PLUGIN: "true"
+    networks:
+      - cybersec_network
+    depends_on:
+      opensearch:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:5601/api/status || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+
+  # Redis - кеш и очередь сообщений
+  redis:
+    image: redis:7-alpine
+    container_name: cybersec_redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - cybersec_network
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  # Ingest API - основной бэкенд сервис
+  ingest_api:
+    build:
+      context: ../ingest-api
+      dockerfile: Dockerfile
+    container_name: cybersec_ingest_api
+    ports:
+      - "8000:8000"
+    environment:
+      - OPENSEARCH_URL=http://opensearch:9200
+      - REDIS_URL=redis://redis:6379
+      - API_HOST=0.0.0.0
+      - API_PORT=8000
+      - LOG_LEVEL=INFO
+    networks:
+      - cybersec_network
+    depends_on:
+      opensearch:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8000/health || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    restart: unless-stopped
+
+  # UI Dashboard - фронтенд интерфейс (опционально для разработки)
+  ui:
+    build:
+      context: ../ui
+      dockerfile: Dockerfile
+      args:
+        - VITE_API_BASE_URL=http://localhost:8000
+        - VITE_USE_MOCK_DATA=false
+    container_name: cybersec_ui
+    ports:
+      - "3000:3000"
+    environment:
+      - VITE_API_BASE_URL=http://localhost:8000
+      - VITE_USE_MOCK_DATA=false
+    networks:
+      - cybersec_network
+    depends_on:
+      ingest_api:
+        condition: service_healthy
+    profiles:
+      - dev
+    restart: unless-stopped
+
+# Volumes для персистентного хранения данных
+volumes:
+  opensearch_data:
+    driver: local
+  redis_data:
+    driver: local
+
+# Сеть для внутреннего взаимодействия сервисов
+networks:
+  cybersec_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
