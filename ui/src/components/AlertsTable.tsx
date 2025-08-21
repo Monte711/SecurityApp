@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { apiClient } from '../api/client';
 import { TelemetryEvent } from '../api/types';
-import { Search, Filter, Download, Upload, X } from 'lucide-react';
+import { Search, Filter, Download, Upload, X, Trash2 } from 'lucide-react';
 
 export const AlertsTable: React.FC = () => {
   const [events, setEvents] = useState<TelemetryEvent[]>([]);
@@ -24,13 +24,17 @@ export const AlertsTable: React.FC = () => {
           setEvents([]);
         }
       } catch (error) {
-        console.error('Failed to fetch events:', error);
+        console.error('Ошибка загрузки событий:', error);
       } finally {
         setLoading(false);
       }
     };
 
     fetchEvents();
+    
+    // Обновляем каждые 30 секунд
+    const interval = setInterval(fetchEvents, 30000);
+    return () => clearInterval(interval);
   }, []);
 
   const filteredEvents = events.filter(event => {
@@ -51,6 +55,17 @@ export const AlertsTable: React.FC = () => {
     }
   };
 
+  const getSeverityLabel = (severity: string) => {
+    switch (severity) {
+      case 'critical': return 'Критический';
+      case 'high': return 'Высокий';
+      case 'medium': return 'Средний';
+      case 'low': return 'Низкий';
+      case 'info': return 'Информационный';
+      default: return severity;
+    }
+  };
+
   const getStatusColor = (status?: string) => {
     switch (status) {
       case 'new': return 'text-red-600 bg-red-50';
@@ -58,6 +73,29 @@ export const AlertsTable: React.FC = () => {
       case 'action_requested': return 'text-orange-600 bg-orange-50';
       case 'resolved': return 'text-green-600 bg-green-50';
       default: return 'text-gray-600 bg-gray-50';
+    }
+  };
+
+  const getStatusLabel = (status?: string) => {
+    switch (status) {
+      case 'new': return 'Новое';
+      case 'investigating': return 'Расследуется';
+      case 'action_requested': return 'Требует действий';
+      case 'resolved': return 'Решено';
+      default: return status || 'Неизвестно';
+    }
+  };
+
+  const handleDeleteEvent = async (eventId: string) => {
+    if (window.confirm('Вы уверены, что хотите удалить это событие?')) {
+      try {
+        await apiClient.deleteEvent(eventId);
+        setEvents(prev => prev.filter(event => event.event_id !== eventId));
+        setSelectedEvent(null);
+      } catch (error) {
+        console.error('Ошибка удаления события:', error);
+        alert('Ошибка при удалении события');
+      }
     }
   };
 
@@ -78,7 +116,7 @@ export const AlertsTable: React.FC = () => {
           setEvents(prev => [newEvent, ...prev]);
           setShowImport(false);
         } catch (error) {
-          alert('Invalid JSON file format');
+          alert('Неверный формат JSON файла');
         }
       };
       reader.readAsText(file);
@@ -89,6 +127,7 @@ export const AlertsTable: React.FC = () => {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+        <span className="ml-3 text-gray-600">Загрузка событий...</span>
       </div>
     );
   }
@@ -97,8 +136,8 @@ export const AlertsTable: React.FC = () => {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Security Events</h2>
-          <p className="text-gray-600 dark:text-gray-400">Monitor and investigate security alerts</p>
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">События безопасности</h2>
+          <p className="text-gray-600 dark:text-gray-400">Мониторинг и расследование инцидентов безопасности</p>
         </div>
         <div className="flex gap-2">
           <button
@@ -106,11 +145,11 @@ export const AlertsTable: React.FC = () => {
             className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
           >
             <Upload className="h-4 w-4 mr-2" />
-            Import Event
+            Импорт
           </button>
           <button className="inline-flex items-center px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700">
             <Download className="h-4 w-4 mr-2" />
-            Export
+            Экспорт
           </button>
         </div>
       </div>
@@ -120,7 +159,7 @@ export const AlertsTable: React.FC = () => {
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
           <input
             type="text"
-            placeholder="Search events..."
+            placeholder="Поиск событий..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="pl-10 pr-4 py-2 w-full border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white"
@@ -133,12 +172,12 @@ export const AlertsTable: React.FC = () => {
             onChange={(e) => setFilterSeverity(e.target.value)}
             className="pl-10 pr-8 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white"
           >
-            <option value="all">All Severities</option>
-            <option value="critical">Critical</option>
-            <option value="high">High</option>
-            <option value="medium">Medium</option>
-            <option value="low">Low</option>
-            <option value="info">Info</option>
+            <option value="all">Все уровни</option>
+            <option value="critical">Критический</option>
+            <option value="high">Высокий</option>
+            <option value="medium">Средний</option>
+            <option value="low">Низкий</option>
+            <option value="info">Информационный</option>
           </select>
         </div>
       </div>
@@ -149,25 +188,25 @@ export const AlertsTable: React.FC = () => {
             <thead className="bg-gray-50 dark:bg-gray-700">
               <tr>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                  Event ID
+                  ID события
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                  Host ID
+                  Хост
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                  Event Type
+                  Тип события
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                  Timestamp
+                  Время
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                  Severity
+                  Критичность
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                  Status
+                  Статус
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                  Actions
+                  Действия
                 </th>
               </tr>
             </thead>
@@ -175,7 +214,7 @@ export const AlertsTable: React.FC = () => {
               {filteredEvents.map((event) => (
                 <tr key={event.event_id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-mono text-gray-900 dark:text-white">
-                    {event.event_id}
+                    {event.event_id.substring(0, 12)}...
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
                     {event.host.hostname}
@@ -184,25 +223,33 @@ export const AlertsTable: React.FC = () => {
                     {event.event_type}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
-                    {new Date(event.timestamp).toLocaleString()}
+                    {new Date(event.timestamp).toLocaleString('ru-RU')}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getSeverityColor(event.severity)}`}>
-                      {event.severity}
+                      {getSeverityLabel(event.severity)}
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(event.status)}`}>
-                      {event.status}
+                      {getStatusLabel(event.status)}
                     </span>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
-                    <button
-                      onClick={() => setSelectedEvent(event)}
-                      className="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300"
-                    >
-                      View Details
-                    </button>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm">
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => setSelectedEvent(event)}
+                        className="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300"
+                      >
+                        Подробно
+                      </button>
+                      <button
+                        onClick={() => handleDeleteEvent(event.event_id)}
+                        className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}
@@ -213,7 +260,7 @@ export const AlertsTable: React.FC = () => {
 
       {filteredEvents.length === 0 && (
         <div className="text-center py-12">
-          <p className="text-gray-500 dark:text-gray-400">No events found matching your criteria.</p>
+          <p className="text-gray-500 dark:text-gray-400">События не найдены.</p>
         </div>
       )}
 
@@ -222,7 +269,7 @@ export const AlertsTable: React.FC = () => {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Import Event</h3>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Импорт события</h3>
               <button
                 onClick={() => setShowImport(false)}
                 className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
@@ -232,7 +279,7 @@ export const AlertsTable: React.FC = () => {
             </div>
             <div className="space-y-4">
               <p className="text-sm text-gray-600 dark:text-gray-400">
-                Select a JSON file containing event data to import.
+                Выберите JSON файл с данными события для импорта.
               </p>
               <input
                 type="file"
@@ -248,43 +295,81 @@ export const AlertsTable: React.FC = () => {
       {/* Event Details Modal */}
       {selectedEvent && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-2xl max-h-[80vh] overflow-y-auto">
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-4xl max-h-[80vh] overflow-y-auto">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Event Details</h3>
-              <button
-                onClick={() => setSelectedEvent(null)}
-                className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
-              >
-                <X className="h-5 w-5" />
-              </button>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Детали события</h3>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => handleDeleteEvent(selectedEvent.event_id)}
+                  className="inline-flex items-center px-3 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+                >
+                  <Trash2 className="h-4 w-4 mr-2" />
+                  Удалить
+                </button>
+                <button
+                  onClick={() => setSelectedEvent(null)}
+                  className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                >
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
             </div>
-            <div className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-6">
+              <div className="grid grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Event ID</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">ID события</label>
                   <p className="mt-1 text-sm text-gray-900 dark:text-white font-mono">{selectedEvent.event_id}</p>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Source Host</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Хост источник</label>
                   <p className="mt-1 text-sm text-gray-900 dark:text-white">{selectedEvent.host.hostname}</p>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Event Type</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Тип события</label>
                   <p className="mt-1 text-sm text-gray-900 dark:text-white">{selectedEvent.event_type}</p>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Severity</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Критичность</label>
                   <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getSeverityColor(selectedEvent.severity)}`}>
-                    {selectedEvent.severity}
+                    {getSeverityLabel(selectedEvent.severity)}
+                  </span>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Время</label>
+                  <p className="mt-1 text-sm text-gray-900 dark:text-white">{new Date(selectedEvent.timestamp).toLocaleString('ru-RU')}</p>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Статус</label>
+                  <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(selectedEvent.status)}`}>
+                    {getStatusLabel(selectedEvent.status)}
                   </span>
                 </div>
               </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Event Data</label>
-                <pre className="mt-1 p-3 bg-gray-100 dark:bg-gray-700 rounded-lg text-xs overflow-x-auto">
-                  {JSON.stringify(selectedEvent.raw_data || selectedEvent, null, 2)}
-                </pre>
-              </div>
+              
+              {/* Display formatted details if available */}
+              {selectedEvent.details && (
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Детали события</label>
+                  <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 space-y-2">
+                    {Object.entries(selectedEvent.details).map(([key, value]) => (
+                      <div key={key} className="flex justify-between items-center border-b border-gray-200 dark:border-gray-600 pb-2">
+                        <span className="text-sm font-medium text-gray-600 dark:text-gray-400">{key}:</span>
+                        <span className="text-sm text-gray-900 dark:text-white">{String(value)}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+              
+              {/* Fallback to raw data if no formatted details */}
+              {!selectedEvent.details && (
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Данные события</label>
+                  <pre className="mt-1 p-3 bg-gray-100 dark:bg-gray-700 rounded-lg text-xs overflow-x-auto">
+                    {JSON.stringify(selectedEvent.raw_data || selectedEvent, null, 2)}
+                  </pre>
+                </div>
+              )}
             </div>
           </div>
         </div>

@@ -21,7 +21,7 @@ export function ConfigPanel({ className = '', onModeChange }: ConfigPanelProps) 
   });
 
   const testConnection = async () => {
-    setConnectionStatus({ testing: true, success: null, message: 'Testing connection...' });
+    setConnectionStatus({ testing: true, success: null, message: 'Проверка соединения...' });
     
     try {
       const result = await apiClient.testConnection();
@@ -34,7 +34,7 @@ export function ConfigPanel({ className = '', onModeChange }: ConfigPanelProps) 
       setConnectionStatus({
         testing: false,
         success: false,
-        message: `Test failed: ${error instanceof Error ? error.message : 'Unknown error'}`
+        message: `Ошибка тестирования: ${error instanceof Error ? error.message : 'Неизвестная ошибка'}`
       });
     }
   };
@@ -70,11 +70,11 @@ export function ConfigPanel({ className = '', onModeChange }: ConfigPanelProps) 
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="flex items-center gap-2 px-3 py-2 text-sm bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
-        title="API Configuration"
+        title="Конфигурация API"
       >
         <Settings className="w-4 h-4" />
         <span className="hidden sm:inline">
-          {config.useMock ? 'Mock Mode' : 'Live API'}
+          {config.useMock ? 'Тестовый режим' : 'Живой API'}
         </span>
         {!config.useMock && (
           <div className="flex items-center">
@@ -89,7 +89,7 @@ export function ConfigPanel({ className = '', onModeChange }: ConfigPanelProps) 
 
       {isOpen && (
         <div className="absolute right-0 top-full mt-2 w-80 bg-white border border-gray-200 rounded-lg shadow-lg p-4 z-50">
-          <h3 className="font-semibold text-gray-900 mb-3">API Configuration</h3>
+          <h3 className="font-semibold text-gray-900 mb-3">Конфигурация API</h3>
           
           <div className="space-y-4">
             {/* Mode Toggle */}
@@ -101,12 +101,12 @@ export function ConfigPanel({ className = '', onModeChange }: ConfigPanelProps) 
                   onChange={toggleMockMode}
                   className="rounded border-gray-300"
                 />
-                <span className="text-sm font-medium">Use Mock Data</span>
+                <span className="text-sm font-medium">Использовать тестовые данные</span>
               </label>
               <p className="text-xs text-gray-500 mt-1">
                 {config.useMock 
-                  ? 'Using simulated data for development'
-                  : 'Connecting to live Ingest API'
+                  ? 'Использование симулированных данных для разработки'
+                  : 'Подключение к живому API'
                 }
               </p>
             </div>
@@ -114,7 +114,7 @@ export function ConfigPanel({ className = '', onModeChange }: ConfigPanelProps) 
             {/* API URL */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                API Base URL
+                Базовый URL API
               </label>
               <input
                 type="url"
@@ -130,13 +130,13 @@ export function ConfigPanel({ className = '', onModeChange }: ConfigPanelProps) 
             {!config.useMock && (
               <div>
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-medium text-gray-700">Connection Status</span>
+                  <span className="text-sm font-medium text-gray-700">Статус соединения</span>
                   <button
                     onClick={testConnection}
                     disabled={connectionStatus.testing}
                     className="px-2 py-1 text-xs bg-blue-100 hover:bg-blue-200 text-blue-700 rounded disabled:opacity-50"
                   >
-                    {connectionStatus.testing ? 'Testing...' : 'Test'}
+                    {connectionStatus.testing ? 'Проверка...' : 'Тест'}
                   </button>
                 </div>
                 
@@ -153,7 +153,7 @@ export function ConfigPanel({ className = '', onModeChange }: ConfigPanelProps) 
                     )}
                     {connectionStatus.success === true && <Wifi className="w-3 h-3" />}
                     {connectionStatus.success === false && <WifiOff className="w-3 h-3" />}
-                    <span>{connectionStatus.message || 'Not tested'}</span>
+                    <span>{connectionStatus.message || 'Не протестировано'}</span>
                   </div>
                 </div>
               </div>
@@ -161,11 +161,11 @@ export function ConfigPanel({ className = '', onModeChange }: ConfigPanelProps) 
 
             {/* Environment Info */}
             <div className="pt-2 border-t border-gray-200">
-              <h4 className="text-xs font-medium text-gray-700 mb-2">Environment</h4>
+              <h4 className="text-xs font-medium text-gray-700 mb-2">Окружение</h4>
               <div className="space-y-1 text-xs text-gray-500">
-                <div>Mode: Development</div>
-                <div>Build: {import.meta.env.VITE_DEBUG_MODE === 'true' ? 'Debug' : 'Release'}</div>
-                <div>API: {config.useMock ? 'Mock' : 'Live'}</div>
+                <div>Режим: Разработка</div>
+                <div>Сборка: {import.meta.env.VITE_DEBUG_MODE === 'true' ? 'Отладка' : 'Релиз'}</div>
+                <div>API: {config.useMock ? 'Тест' : 'Живой'}</div>
               </div>
             </div>
           </div>

@@ -64,6 +64,9 @@ export interface TelemetryEvent {
   
   // Status for UI - optional field
   status?: 'new' | 'investigating' | 'action_requested' | 'resolved';
+  
+  // Formatted details for better UI display
+  details?: Record<string, any>;
 }
 
 export interface EventsResponse {

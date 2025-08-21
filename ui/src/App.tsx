@@ -11,10 +11,10 @@ const App: React.FC = () => {
   );
 
   const navigation = [
-    { id: 'dashboard', name: 'Dashboard', icon: Home },
-    { id: 'events', name: 'Events', icon: Bell },
-    { id: 'analytics', name: 'Analytics', icon: Activity },
-    { id: 'settings', name: 'Settings', icon: Settings },
+    { id: 'dashboard', name: 'Панель управления', icon: Home },
+    { id: 'events', name: 'События', icon: Bell },
+    { id: 'analytics', name: 'Аналитика', icon: Activity },
+    { id: 'settings', name: 'Настройки', icon: Settings },
   ];
 
   const renderContent = () => {
@@ -27,8 +27,8 @@ const App: React.FC = () => {
         return (
           <div className="text-center py-12">
             <Activity className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 dark:text-white">Analytics</h3>
-            <p className="text-gray-500 dark:text-gray-400">Advanced analytics coming soon...</p>
+            <h3 className="text-lg font-medium text-gray-900 dark:text-white">Аналитика</h3>
+            <p className="text-gray-500 dark:text-gray-400">Расширенная аналитика скоро появится...</p>
           </div>
         );
       case 'settings':
@@ -46,7 +46,7 @@ const App: React.FC = () => {
           <div className="flex justify-between h-16">
             <div className="flex">
               <div className="flex-shrink-0 flex items-center">
-                <h1 className="text-xl font-bold text-gray-900 dark:text-white">CyberSec Platform</h1>
+                <h1 className="text-xl font-bold text-gray-900 dark:text-white">Платформа Кибербезопасности</h1>
               </div>
               <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
                 {navigation.map((item) => {
@@ -70,7 +70,7 @@ const App: React.FC = () => {
             </div>
             <div className="flex items-center">
               <div className="text-sm text-gray-500 dark:text-gray-400">
-                {apiMode === 'mock' ? 'Mock Mode Active' : 'Live API Mode'}
+                {apiMode === 'mock' ? 'Тестовый режим' : 'Режим реального API'}
               </div>
             </div>
           </div>
