@@ -196,11 +196,12 @@ class ApiClient {
       
       if (filters?.limit) params.append('limit', filters.limit.toString());
       if (filters?.page) params.append('page', filters.page.toString());
-      if (filters?.event_type) params.append('event_type', filters.event_type);
+      if (filters?.event_type) params.append('threat_type', filters.event_type); // Map to threat_type
       if (filters?.severity) params.append('severity', filters.severity);
-      if (filters?.host_id) params.append('host_id', filters.host_id);
+      if (filters?.host_id) params.append('source', filters.host_id); // Map to source
 
-      const response = await fetch(`${this.baseUrl}/events?${params.toString()}`, {
+      // Use security-events endpoint for real data
+      const response = await fetch(`${this.baseUrl}/security-events?${params.toString()}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json'
@@ -273,10 +274,11 @@ class ApiClient {
 
       const result = await response.json();
       
+      // Map the security-events response to our DashboardStats format
       return {
         total_events: result.total_events || 0,
-        unique_hosts: result.unique_hosts || 0,
-        event_types: result.event_types || [],
+        unique_hosts: result.unique_sources || 0, // Map sources to hosts
+        event_types: result.threat_types || [], // Map threat_types to event_types
         severity_levels: result.severity_levels || [],
         events_per_hour: result.events_per_hour || []
       };

@@ -610,6 +610,86 @@ async def get_events(
         logger.error(f"Ошибка получения событий: {e}")
         raise HTTPException(status_code=500, detail="Ошибка получения событий")
 
+@app.get("/security-events", response_model=EventsResponse)
+async def get_security_events(
+    limit: int = 100,
+    page: int = 1,
+    threat_type: Optional[str] = None,
+    severity: Optional[str] = None,
+    source: Optional[str] = None,
+    opensearch: AsyncOpenSearch = Depends(get_opensearch)
+) -> EventsResponse:
+    """
+    Получение списка событий безопасности с фильтрацией и пагинацией.
+    
+    Параметры:
+    - limit: количество событий на странице (макс 1000)
+    - page: номер страницы (начиная с 1)
+    - threat_type: фильтр по типу угрозы
+    - severity: фильтр по уровню критичности
+    - source: фильтр по источнику
+    """
+    try:
+        # Валидация параметров
+        if limit > 1000:
+            limit = 1000
+        if page < 1:
+            page = 1
+        
+        offset = (page - 1) * limit
+        
+        # Построение запроса
+        query = {"match_all": {}}
+        
+        # Добавление фильтров
+        filters = []
+        if threat_type:
+            filters.append({"term": {"threat_type.keyword": threat_type}})
+        if severity:
+            filters.append({"term": {"severity.keyword": severity}})
+        if source:
+            filters.append({"term": {"source.keyword": source}})
+        
+        if filters:
+            query = {"bool": {"filter": filters}}
+        
+        # Выполнение поискового запроса
+        search_body = {
+            "query": query,
+            "sort": [{"timestamp": {"order": "desc"}}],
+            "from": offset,
+            "size": limit
+        }
+        
+        response = await opensearch.search(
+            index="security-events-*",
+            body=search_body
+        )
+        
+        # Получение общего количества
+        total = response['hits']['total']['value']
+        
+        # Извлечение событий
+        events = []
+        for hit in response['hits']['hits']:
+            event_data = hit['_source']
+            event_data['_id'] = hit['_id']
+            event_data['_index'] = hit['_index']
+            events.append(event_data)
+        
+        logger.info(f"Получено {len(events)} событий безопасности (страница {page}, всего {total})")
+        
+        return EventsResponse(
+            events=events,
+            total=total,
+            page=page,
+            size=len(events)
+        )
+        
+    except Exception as e:
+        logger.error(f"Ошибка получения событий безопасности: {e}")
+        raise HTTPException(status_code=500, detail="Ошибка получения событий безопасности")
+
 @app.get("/events/{event_id}")
 async def get_event_by_id(
     event_id: str,
@@ -650,19 +730,21 @@ async def get_stats(
 ):
     """Получение статистики системы"""
     try:
-        # Агрегации для статистики
+        logger.info("Запрос статистики для security-events")
+        
+        # Агрегации для статистики из security-events
         search_body = {
             "query": {"match_all": {}},
             "size": 0,
             "aggs": {
-                "event_types": {
-                    "terms": {"field": "event_type", "size": 20}
+                "threat_types": {
+                    "terms": {"field": "threat_type.keyword", "size": 20}
                 },
                 "severity_levels": {
-                    "terms": {"field": "severity", "size": 10}
+                    "terms": {"field": "severity.keyword", "size": 10}
                 },
-                "hosts": {
-                    "cardinality": {"field": "host.host_id"}
+                "sources": {
+                    "cardinality": {"field": "source.keyword"}
                 },
                 "events_per_hour": {
                     "date_histogram": {
@@ -674,24 +756,26 @@ async def get_stats(
             }
         }
         
+        logger.info(f"Поиск в индексе: security-events-*")
         response = await opensearch.search(
-            index="agent-events-*",
+            index="security-events-*",
             body=search_body
         )
         
         stats = {
             "total_events": response['hits']['total']['value'],
-            "unique_hosts": response['aggregations']['hosts']['value'],
-            "event_types": response['aggregations']['event_types']['buckets'],
+            "unique_sources": response['aggregations']['sources']['value'],
+            "threat_types": response['aggregations']['threat_types']['buckets'],
             "severity_levels": response['aggregations']['severity_levels']['buckets'],
             "events_per_hour": response['aggregations']['events_per_hour']['buckets']
         }
         
+        logger.info(f"Статистика получена: {stats['total_events']} событий")
         return stats
         
     except Exception as e:
         logger.error(f"Ошибка получения статистики: {e}")
-        raise HTTPException(status_code=500, detail="Ошибка получения статистики")
+        raise HTTPException(status_code=500, detail=f"Ошибка получения статистики: {str(e)}")
 
 # Точка входа для запуска
 if __name__ == "__main__":

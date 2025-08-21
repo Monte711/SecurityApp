@@ -18,6 +18,7 @@ class EventType(str, Enum):
     VULN_SCAN = "vuln_scan_result"
     THREAT_INTEL = "threat_intel"
     ALERT = "alert"
+    HOST_POSTURE = "host_posture"  # Новый тип события для оценки состояния хоста
 
 
 class SeverityLevel(str, Enum):
@@ -111,6 +112,94 @@ class Alert(BaseEvent):
     rule_id: Optional[str] = Field(None, description="Detection rule ID")
     related_events: List[str] = Field(default_factory=list, description="Related event IDs")
     recommended_actions: List[str] = Field(default_factory=list, description="Suggested responses")
+
+
+# Новые схемы для Host Posture Assessment
+class SecurityFinding(BaseModel):
+    """Результат анализа безопасности"""
+    rule_id: str = Field(..., description="ID правила безопасности")
+    title: str = Field(..., description="Заголовок проблемы")
+    description: str = Field(..., description="Описание проблемы")
+    severity: SeverityLevel = Field(..., description="Уровень критичности")
+    recommendation: str = Field(..., description="Рекомендация по устранению")
+    evidence: Dict[str, Any] = Field(default_factory=dict, description="Доказательства")
+    affected_items: List[str] = Field(default_factory=list, description="Затронутые элементы")
+
+
+class ProcessInfo(BaseModel):
+    """Информация о процессе для Host Posture"""
+    pid: int = Field(..., description="ID процесса")
+    name: str = Field(..., description="Имя процесса")
+    exe: Optional[str] = Field(None, description="Путь к исполняемому файлу")
+    cmdline: Optional[str] = Field(None, description="Командная строка")
+    username: Optional[str] = Field(None, description="Пользователь")
+    memory_info: Optional[Dict[str, int]] = Field(None, description="Информация о памяти")
+    cpu_percent: Optional[float] = Field(None, description="Использование CPU")
+    create_time: Optional[datetime] = Field(None, description="Время создания")
+    is_suspicious_path: bool = Field(False, description="Подозрительный путь")
+    signature_status: Optional[str] = Field(None, description="Статус цифровой подписи")
+    file_hash: Optional[str] = Field(None, description="SHA256 хеш файла")
+
+
+class AutorunEntry(BaseModel):
+    """Запись автозапуска"""
+    name: str = Field(..., description="Имя записи")
+    command: str = Field(..., description="Команда запуска")
+    location: str = Field(..., description="Расположение (реестр/папка)")
+    file_exists: bool = Field(True, description="Существует ли файл")
+    is_signed: bool = Field(False, description="Подписан ли файл")
+    signature_valid: bool = Field(False, description="Валидна ли подпись")
+    file_hash: Optional[str] = Field(None, description="SHA256 хеш файла")
+
+
+class AutorunData(BaseModel):
+    """Данные автозапусков"""
+    registry: List[AutorunEntry] = Field(default_factory=list, description="Записи реестра")
+    startup_folders: List[AutorunEntry] = Field(default_factory=list, description="Папки автозапуска")
+    services: List[Dict[str, Any]] = Field(default_factory=list, description="Автоматические службы")
+    scheduled_tasks: List[Dict[str, Any]] = Field(default_factory=list, description="Запланированные задачи")
+
+
+class SecuritySettings(BaseModel):
+    """Настройки безопасности Windows"""
+    defender: Optional[Dict[str, Any]] = Field(None, description="Настройки Windows Defender")
+    firewall: Optional[Dict[str, Any]] = Field(None, description="Настройки Windows Firewall")
+    uac: Optional[Dict[str, Any]] = Field(None, description="Настройки UAC")
+    rdp: Optional[Dict[str, Any]] = Field(None, description="Настройки RDP")
+    bitlocker: Optional[Dict[str, Any]] = Field(None, description="Статус BitLocker")
+    smb1: Optional[Dict[str, Any]] = Field(None, description="Статус SMB1")
+
+
+class InventoryData(BaseModel):
+    """Данные инвентаризации"""
+    processes: List[ProcessInfo] = Field(default_factory=list, description="Список процессов")
+    autoruns: AutorunData = Field(default_factory=AutorunData, description="Данные автозапусков")
+
+
+class HostInfo(BaseModel):
+    """Информация о хосте"""
+    host_id: str = Field(..., description="Уникальный ID хоста")
+    hostname: str = Field(..., description="Имя хоста")
+    os_version: str = Field(..., description="Версия ОС")
+    uptime_seconds: int = Field(..., description="Время работы в секундах")
+    timezone: str = Field(..., description="Временная зона")
+
+
+class AgentInfo(BaseModel):
+    """Информация об агенте"""
+    agent_id: str = Field(..., description="ID агента")
+    agent_version: str = Field(..., description="Версия агента")
+    hostname: str = Field(..., description="Имя хоста агента")
+
+
+class HostPostureEvent(BaseEvent):
+    """Событие оценки состояния хоста"""
+    event_type: EventType = Field(default=EventType.HOST_POSTURE, const=True)
+    agent: AgentInfo = Field(..., description="Информация об агенте")
+    host: HostInfo = Field(..., description="Информация о хосте")
+    inventory: InventoryData = Field(..., description="Данные инвентаризации")
+    security: SecuritySettings = Field(..., description="Настройки безопасности")
+    findings: List[SecurityFinding] = Field(default_factory=list, description="Результаты анализа безопасности")
 
 
 class IngestResponse(BaseModel):
