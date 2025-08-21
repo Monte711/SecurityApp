@@ -179,7 +179,7 @@ app = FastAPI(
 # CORS middleware для развития
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://127.0.0.1:3000"],
+    allow_origins=["http://localhost:3000", "http://127.0.0.1:3000", "http://172.20.0.1:3000"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -543,6 +543,7 @@ async def get_events(
     Получение списка событий с фильтрацией и пагинацией.
     Объединяет события агентов и события безопасности.
     """
+    logger.info(f"DEBUG: get_events called with limit={limit}, page={page}")
     try:
         # Валидация параметров
         if limit > 1000:
@@ -552,40 +553,96 @@ async def get_events(
         
         offset = (page - 1) * limit
         
-        # Получаем события агентов
-        agent_events = await get_agent_events(opensearch, limit, offset, event_type, severity, host_id)
+        # Простой запрос для получения всех событий агентов
+        query = {"match_all": {}}
         
-        # Получаем события безопасности
-        security_events = await get_security_events_data(opensearch, limit, offset, event_type, severity, host_id)
+        # Добавление фильтров если есть
+        filters = []
+        if event_type:
+            filters.append({"term": {"event_type.keyword": event_type}})
+        if severity:
+            filters.append({"term": {"severity.keyword": severity}})
+        if host_id:
+            filters.append({"term": {"host.hostname.keyword": host_id}})
         
-        # Объединяем и сортируем
-        all_events = agent_events + security_events
-        all_events.sort(key=lambda x: x.get('timestamp', ''), reverse=True)
+        if filters:
+            query = {"bool": {"filter": filters}}
         
-        # Применяем пагинацию к объединенному списку
-        paginated_events = all_events[offset:offset + limit]
+        search_body = {
+            "query": query,
+            "sort": [{"timestamp": {"order": "desc"}}],
+            "from": offset,
+            "size": limit
+        }
         
-        logger.info(f"Получено {len(paginated_events)} событий (страница {page})")
+        logger.info(f"Search query: {search_body}")
+        logger.info(f"Searching index: agent-events-*")
+        
+        response = await opensearch.search(
+            index="agent-events-*",
+            body=search_body
+        )
+        
+        logger.info(f"OpenSearch response: hits total = {response['hits']['total']}, got {len(response['hits']['hits'])} hits")
+        
+        total = response['hits']['total']['value']
+        events = []
+        
+        for hit in response['hits']['hits']:
+            event_data = hit['_source']
+            
+            # Определяем тип события для отображения
+            event_type_display = {
+                'system_info': 'System Information',
+                'process_start': 'Process Start',
+                'process_end': 'Process End',
+                'file_create': 'File Created',
+                'file_modify': 'File Modified',
+                'file_delete': 'File Deleted',
+                'network_connection': 'Network Connection',
+                'user_login': 'User Login',
+                'user_logout': 'User Logout',
+                'security_alert': 'Security Alert'
+            }.get(event_data.get('event_type'), event_data.get('event_type', 'Unknown'))
+            
+            formatted_event = {
+                "_id": hit['_id'],
+                "_index": hit['_index'],
+                "event_id": event_data.get('event_id'),
+                "event_type": event_type_display,
+                "timestamp": event_data.get('timestamp'),
+                "severity": event_data.get('severity', 'info'),
+                "host": event_data.get('host', {}).get('hostname', 'unknown'),
+                "agent": event_data.get('agent', {}).get('agent_id', 'unknown'),
+                "description": f"Event from agent {event_data.get('agent', {}).get('agent_id', 'unknown')}",
+                "data": event_data.get('data', {}),
+                "raw_data": event_data
+            }
+            events.append(formatted_event)
+        
+        logger.info(f"Returned {len(events)} events from total {total} (page {page})")
         
         return EventsResponse(
-            events=paginated_events,
-            total=len(all_events),
+            events=events,
+            total=total,
             page=page,
-            size=len(paginated_events)
+            size=len(events)
         )
         
     except Exception as e:
-        logger.error(f"Ошибка получения событий: {e}")
-        raise HTTPException(status_code=500, detail="Ошибка получения событий")
+        logger.error(f"Error getting events: {e}")
+        raise HTTPException(status_code=500, detail=f"Error getting events: {str(e)}")
 
 async def get_agent_events(opensearch: AsyncOpenSearch, limit: int, offset: int, event_type: Optional[str], severity: Optional[str], host_id: Optional[str]):
     """Получение событий от агентов"""
     query = {"match_all": {}}
     
     # Добавление фильтров
-    filters = [{"term": {"event_type": "system_info"}}]
+    filters = []
+    if event_type:
+        filters.append({"term": {"event_type.keyword": event_type}})
     if severity:
-        filters.append({"term": {"severity": severity}})
+        filters.append({"term": {"severity.keyword": severity}})
     if host_id:
         filters.append({"term": {"host.hostname.keyword": host_id}})
     
@@ -609,32 +666,60 @@ async def get_agent_events(opensearch: AsyncOpenSearch, limit: int, offset: int,
         for hit in response['hits']['hits']:
             event_data = hit['_source']
             
+            # Определяем тип события для отображения
+            event_type_display = {
+                'system_info': 'Системная информация',
+                'process_start': 'Запуск процесса',
+                'process_end': 'Завершение процесса',
+                'file_create': 'Создание файла',
+                'file_modify': 'Изменение файла',
+                'file_delete': 'Удаление файла',
+                'network_connection': 'Сетевое соединение',
+                'user_login': 'Вход пользователя',
+                'user_logout': 'Выход пользователя',
+                'security_alert': 'Алерт безопасности'
+            }.get(event_data.get('event_type'), event_data.get('event_type', 'Неизвестно'))
+            
             # Преобразуем в удобный формат для UI
             formatted_event = {
                 "_id": hit['_id'],
                 "_index": hit['_index'],
                 "event_id": event_data.get('event_id'),
-                "event_type": "Системная информация",
+                "event_type": event_type_display,
                 "timestamp": event_data.get('timestamp'),
                 "severity": event_data.get('severity', 'info'),
                 "severity_ru": {"info": "Информация", "low": "Низкий", "medium": "Средний", "high": "Высокий", "critical": "Критический"}.get(event_data.get('severity', 'info'), 'Информация'),
-                "source": "Агент " + event_data.get('agent', {}).get('agent_version', ''),
-                "description": f"Системные данные от хоста {event_data.get('host', {}).get('hostname', 'неизвестно')}",
+                "source": "Агент " + event_data.get('agent', {}).get('agent_version', '1.0.0'),
+                "description": event_data.get('description', f"Событие от агента {event_data.get('agent', {}).get('agent_id', 'unknown')}"),
                 "details": {
                     "Хост": event_data.get('host', {}).get('hostname', 'неизвестно'),
-                    "ОС": event_data.get('host', {}).get('os_version', 'неизвестно'),
-                    "Процессы": event_data.get('raw_data', {}).get('processes_count', 0),
-                    "Автозагрузка": event_data.get('raw_data', {}).get('autoruns_count', 0),
-                    "Обнаружения": event_data.get('raw_data', {}).get('findings_count', 0),
-                    "Время работы": f"{event_data.get('raw_data', {}).get('uptime_seconds', 0)} сек"
+                    "ОС": event_data.get('host', {}).get('os', 'неизвестно'),
+                    "Агент ID": event_data.get('agent', {}).get('agent_id', 'неизвестно'),
+                    "Версия агента": event_data.get('agent', {}).get('agent_version', 'неизвестно')
                 },
-                "raw_data": event_data.get('raw_data', {}),
+                "raw_data": event_data.get('data', {}),
                 "tags": event_data.get('tags', [])
             }
+            
+            # Добавляем специфичные для типа события поля
+            if event_data.get('process'):
+                formatted_event["details"]["PID"] = event_data['process'].get('pid', 'неизвестно')
+                formatted_event["details"]["Процесс"] = event_data['process'].get('name', 'неизвестно')
+            
+            if event_data.get('file'):
+                formatted_event["details"]["Файл"] = event_data['file'].get('path', 'неизвестно')
+                formatted_event["details"]["Размер"] = event_data['file'].get('size', 'неизвестно')
+            
+            if event_data.get('network'):
+                formatted_event["details"]["Протокол"] = event_data['network'].get('protocol', 'неизвестно')
+                formatted_event["details"]["Источник"] = f"{event_data['network'].get('source_ip', '')}:{event_data['network'].get('source_port', '')}"
+                formatted_event["details"]["Назначение"] = f"{event_data['network'].get('destination_ip', '')}:{event_data['network'].get('destination_port', '')}"
+            
             events.append(formatted_event)
         
         return events
-    except:
+    except Exception as e:
+        logger.error(f"Ошибка получения событий агентов: {e}")
         return []
 
 async def get_security_events_data(opensearch: AsyncOpenSearch, limit: int, offset: int, event_type: Optional[str], severity: Optional[str], host_id: Optional[str]):
@@ -917,18 +1002,38 @@ async def get_agent_stats_data(opensearch: AsyncOpenSearch):
         }
     }
     
-    response = await opensearch.search(
-        index="agent-events-*",
-        body=search_body
-    )
-    
-    total_events = response['hits']['total']['value']
-    return {
-        "total_events": total_events,
-        "unique_hosts": response['aggregations']['unique_hosts']['value'],
-        "event_types": [{"key": "system_info", "doc_count": total_events}],
-        "events_per_hour": response['aggregations']['events_per_hour']['buckets']
-    }
+    try:
+        response = await opensearch.search(
+            index="agent-events-*",
+            body=search_body
+        )
+        
+        total_events = response['hits']['total']['value']
+        
+        # Обработка случая когда нет данных (aggregations может отсутствовать)
+        if 'aggregations' in response and total_events > 0:
+            return {
+                "total_events": total_events,
+                "unique_hosts": response['aggregations']['unique_hosts']['value'],
+                "event_types": [{"key": "system_info", "doc_count": total_events}],
+                "events_per_hour": response['aggregations']['events_per_hour']['buckets']
+            }
+        else:
+            # Нет данных - возвращаем пустую статистику
+            return {
+                "total_events": 0,
+                "unique_hosts": 0,
+                "event_types": [],
+                "events_per_hour": []
+            }
+    except Exception as e:
+        logger.warning(f"Ошибка при получении статистики агентов: {e}")
+        return {
+            "total_events": 0,
+            "unique_hosts": 0,
+            "event_types": [],
+            "events_per_hour": []
+        }
 
 async def get_security_stats_data(opensearch: AsyncOpenSearch):
     """Получение статистики событий безопасности"""
@@ -958,13 +1063,32 @@ async def get_security_stats_data(opensearch: AsyncOpenSearch):
             body=search_body
         )
         
+        total_events = response['hits']['total']['value']
+        
+        # Обработка случая когда нет данных (aggregations может отсутствовать)
+        if 'aggregations' in response and total_events > 0:
+            return {
+                "total_events": total_events,
+                "threat_types": response['aggregations']['threat_types']['buckets'],
+                "severity_levels": response['aggregations']['severity_levels']['buckets'],
+                "events_per_hour": response['aggregations']['events_per_hour']['buckets']
+            }
+        else:
+            # Нет данных - возвращаем пустую статистику
+            return {
+                "total_events": 0,
+                "threat_types": [],
+                "severity_levels": [],
+                "events_per_hour": []
+            }
+    except Exception as e:
+        logger.warning(f"Ошибка при получении статистики безопасности: {e}")
         return {
-            "total_events": response['hits']['total']['value'],
-            "threat_types": response['aggregations']['threat_types']['buckets'],
-            "severity_levels": response['aggregations']['severity_levels']['buckets'],
-            "events_per_hour": response['aggregations']['events_per_hour']['buckets']
+            "total_events": 0,
+            "threat_types": [],
+            "severity_levels": [],
+            "events_per_hour": []
         }
-    except:
         # Если нет индекса security-events, возвращаем пустые данные
         return {
             "total_events": 0,
@@ -972,6 +1096,25 @@ async def get_security_stats_data(opensearch: AsyncOpenSearch):
             "severity_levels": [],
             "events_per_hour": []
         }
+
+@app.get("/admin/clear")
+async def simple_clear():
+    """Простая очистка данных"""
+    try:
+        if opensearch_client:
+            # Удаляем индексы событий
+            try:
+                await opensearch_client.indices.delete(index="agent-events-*")
+            except:
+                pass
+            try:
+                await opensearch_client.indices.delete(index="security-events-*")
+            except:
+                pass
+        
+        return {"status": "cleared", "message": "Data cleared successfully"}
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
 
 # Точка входа для запуска
 if __name__ == "__main__":

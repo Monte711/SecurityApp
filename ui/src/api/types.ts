@@ -40,11 +40,16 @@ export interface NetworkInfo {
 
 export interface TelemetryEvent {
   event_id: string;
-  event_type: 'process_start' | 'process_end' | 'file_create' | 'file_modify' | 'file_delete' | 'network_connection' | 'registry_modify' | 'service_start' | 'service_stop' | 'user_login' | 'user_logout' | 'security_alert' | 'system_info';
+  event_type: string; // Изменено с enum на string для поддержки событий безопасности
   timestamp: string;
   severity: 'info' | 'low' | 'medium' | 'high' | 'critical';
-  host: HostInfo;
-  agent: AgentInfo;
+  severity_ru?: string; // Добавлено для русской локализации
+  host?: HostInfo; // Изменено на optional для событий безопасности
+  agent?: AgentInfo; // Изменено на optional для событий безопасности
+  
+  // Поля для событий безопасности
+  source?: string; // Источник события безопасности
+  description?: string; // Описание события
   
   // Optional fields based on event type
   process?: ProcessInfo;

@@ -156,7 +156,8 @@ class ApiClient {
       }
       if (filters?.host_id) {
         filteredEvents = filteredEvents.filter(e => 
-          e.host.hostname.toLowerCase().includes(filters.host_id!.toLowerCase())
+          e.host?.hostname?.toLowerCase().includes(filters.host_id!.toLowerCase()) || 
+          e.source?.toLowerCase().includes(filters.host_id!.toLowerCase())
         );
       }
       if (filters?.severity) {
@@ -200,19 +201,29 @@ class ApiClient {
       if (filters?.severity) params.append('severity', filters.severity);
       if (filters?.host_id) params.append('host_id', filters.host_id);
 
+      const url = `${this.baseUrl}/events?${params.toString()}`;
+      console.log('=== API CLIENT DEBUG ===');
+      console.log('Base URL:', this.baseUrl);
+      console.log('Full URL:', url);
+      console.log('Use Mock:', this.useMock);
+
       // Use events endpoint for real data
-      const response = await fetch(`${this.baseUrl}/events?${params.toString()}`, {
+      const response = await fetch(url, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json'
         }
       });
 
+      console.log('Response status:', response.status);
+      console.log('Response ok:', response.ok);
+
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
       }
 
       const result = await response.json();
+      console.log('API Response:', result);
       
       // Return the API response directly since it matches our EventsResponse type
       return {
@@ -223,7 +234,7 @@ class ApiClient {
       };
 
     } catch (error) {
-      console.error('Failed to fetch events:', error);
+      console.error('=== API CLIENT ERROR ===', error);
       return { 
         events: [], 
         total: 0, 
@@ -293,7 +304,7 @@ class ApiClient {
     if (this.useMock) {
       // Update event status if target specified
       if (execution.target_host) {
-        const event = this.events.find(e => e.host.hostname === execution.target_host);
+        const event = this.events.find(e => e.host?.hostname === execution.target_host);
         if (event) {
           event.status = 'action_requested';
         }

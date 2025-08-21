@@ -69,7 +69,7 @@ export function ConfigPanel({ className = '', onModeChange }: ConfigPanelProps) 
     <div className={`relative ${className}`}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 px-3 py-2 text-sm bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
+        className="flex items-center gap-2 px-3 py-2 text-sm bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-lg transition-colors"
         title="Конфигурация API"
       >
         <Settings className="w-4 h-4" />
@@ -88,8 +88,8 @@ export function ConfigPanel({ className = '', onModeChange }: ConfigPanelProps) 
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 top-full mt-2 w-80 bg-white border border-gray-200 rounded-lg shadow-lg p-4 z-50">
-          <h3 className="font-semibold text-gray-900 mb-3">Конфигурация API</h3>
+        <div className="absolute right-0 top-full mt-2 w-80 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg shadow-lg p-4 z-50">
+          <h3 className="font-semibold text-gray-900 dark:text-white mb-3">Конфигурация API</h3>
           
           <div className="space-y-4">
             {/* Mode Toggle */}
@@ -101,9 +101,9 @@ export function ConfigPanel({ className = '', onModeChange }: ConfigPanelProps) 
                   onChange={toggleMockMode}
                   className="rounded border-gray-300"
                 />
-                <span className="text-sm font-medium">Использовать тестовые данные</span>
+                <span className="text-sm font-medium text-gray-900 dark:text-white">Использовать тестовые данные</span>
               </label>
-              <p className="text-xs text-gray-500 mt-1">
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                 {config.useMock 
                   ? 'Использование симулированных данных для разработки'
                   : 'Подключение к живому API'
@@ -113,7 +113,7 @@ export function ConfigPanel({ className = '', onModeChange }: ConfigPanelProps) 
 
             {/* API URL */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Базовый URL API
               </label>
               <input
@@ -121,7 +121,7 @@ export function ConfigPanel({ className = '', onModeChange }: ConfigPanelProps) 
                 value={config.baseUrl}
                 onChange={(e) => updateBaseUrl(e.target.value)}
                 disabled={config.useMock}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm disabled:bg-gray-100 disabled:text-gray-500"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm disabled:bg-gray-100 disabled:text-gray-500 dark:bg-gray-700 dark:text-white dark:disabled:bg-gray-600"
                 placeholder="http://localhost:8000"
               />
             </div>
@@ -130,11 +130,11 @@ export function ConfigPanel({ className = '', onModeChange }: ConfigPanelProps) 
             {!config.useMock && (
               <div>
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-medium text-gray-700">Статус соединения</span>
+                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Статус соединения</span>
                   <button
                     onClick={testConnection}
                     disabled={connectionStatus.testing}
-                    className="px-2 py-1 text-xs bg-blue-100 hover:bg-blue-200 text-blue-700 rounded disabled:opacity-50"
+                    className="px-2 py-1 text-xs bg-blue-100 hover:bg-blue-200 dark:bg-blue-900 dark:hover:bg-blue-800 text-blue-700 dark:text-blue-300 rounded disabled:opacity-50"
                   >
                     {connectionStatus.testing ? 'Проверка...' : 'Тест'}
                   </button>
@@ -161,8 +161,8 @@ export function ConfigPanel({ className = '', onModeChange }: ConfigPanelProps) 
 
             {/* Environment Info */}
             <div className="pt-2 border-t border-gray-200">
-              <h4 className="text-xs font-medium text-gray-700 mb-2">Окружение</h4>
-              <div className="space-y-1 text-xs text-gray-500">
+              <h4 className="text-xs font-medium text-gray-700 dark:text-gray-300 mb-2">Окружение</h4>
+              <div className="space-y-1 text-xs text-gray-500 dark:text-gray-400">
                 <div>Режим: Разработка</div>
                 <div>Сборка: {import.meta.env.VITE_DEBUG_MODE === 'true' ? 'Отладка' : 'Релиз'}</div>
                 <div>API: {config.useMock ? 'Тест' : 'Живой'}</div>
@@ -172,7 +172,7 @@ export function ConfigPanel({ className = '', onModeChange }: ConfigPanelProps) 
 
           <button
             onClick={() => setIsOpen(false)}
-            className="absolute top-2 right-2 text-gray-400 hover:text-gray-600"
+            className="absolute top-2 right-2 text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300"
           >
             ×
           </button>

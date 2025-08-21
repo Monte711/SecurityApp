@@ -47,20 +47,32 @@ export const AlertsTable: React.FC = () => {
   }, []);
 
   const filteredEvents = events.filter(event => {
-    // Простая и безопасная фильтрация без доступа к hostname
-    if (!event || typeof event !== 'object') return false;
-    if (!event.event_id || !event.event_type) return false;
-    
-    // Только базовая фильтрация по критичности
-    const matchesSeverity = filterSeverity === 'all' || event.severity === filterSeverity;
-    
-    // Простой поиск только по ID и типу события
-    const eventId = event.event_id || '';
-    const eventType = event.event_type || '';
-    const matchesSearch = eventId.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         eventType.toLowerCase().includes(searchTerm.toLowerCase());
-    
-    return matchesSearch && matchesSeverity;
+    try {
+      if (!event) {
+        console.warn('Found null/undefined event in events array');
+        return false;
+      }
+      
+      // Безопасное получение hostname
+      let hostname = 'Unknown Host';
+      if (event.host && typeof event.host === 'object' && event.host.hostname) {
+        hostname = event.host.hostname;
+      } else if (event.source && typeof event.source === 'string') {
+        hostname = event.source;
+      }
+      
+      const eventType = event.event_type || '';
+      const source = event.source || '';
+      
+      const matchesSearch = hostname.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                           eventType.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                           source.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesSeverity = filterSeverity === 'all' || event.severity === filterSeverity;
+      return matchesSearch && matchesSeverity;
+    } catch (error) {
+      console.error('Error processing event:', event, error);
+      return false;
+    }
   });
 
   const getSeverityColor = (severity: string) => {
@@ -125,36 +137,16 @@ export const AlertsTable: React.FC = () => {
       reader.onload = (e) => {
         try {
           const jsonData = JSON.parse(e.target?.result as string);
-          
-          // Normalize the imported event structure to match our TelemetryEvent interface
+          // Add the imported event to the list
           const newEvent: TelemetryEvent = {
+            ...jsonData,
             event_id: `imported_${Date.now()}`,
             timestamp: new Date().toISOString(),
-            event_type: jsonData.event_type || 'imported',
-            severity: jsonData.severity || 'medium',
-            status: 'new',
-            ...jsonData
+            status: 'new'
           };
-          
-          // If source_host exists but not host, create proper host structure
-          if (jsonData.source_host && !jsonData.host) {
-            newEvent.host = {
-              host_id: `host-${Date.now()}`,
-              hostname: jsonData.source_host,
-              domain: jsonData.domain || 'unknown'
-            };
-          }
-          
-          // If neither host nor source_host exists, use source field
-          if (!newEvent.host && !newEvent.source) {
-            newEvent.source = jsonData.source_host || jsonData.hostname || 'Imported Event';
-          }
-          
-          console.log('📥 Importing event with structure:', newEvent);
           setEvents(prev => [newEvent, ...prev]);
           setShowImport(false);
         } catch (error) {
-          console.error('Import error:', error);
           alert('Неверный формат JSON файла');
         }
       };
@@ -175,8 +167,8 @@ export const AlertsTable: React.FC = () => {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Управление событиями</h2>
-          <p className="text-gray-600 dark:text-gray-400">Расширенные функции: импорт, экспорт, удаление событий</p>
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">События безопасности</h2>
+          <p className="text-gray-600 dark:text-gray-400">Мониторинг и расследование инцидентов безопасности</p>
         </div>
         <div className="flex gap-2">
           <button

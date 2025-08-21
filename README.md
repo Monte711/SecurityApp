@@ -1,242 +1,138 @@
-# 🛡️ Unified Enterprise Cybersecurity Platform
+# UECP - Unified Enterprise Cybersecurity Platform
 
-Модульная платформа кибербезопасности для сбора, анализа и мониторинга телеметрии с конечных точек.
+## 🚀 Quick Start (4 Simple Steps)
 
-## 🏗️ Архитектура
-
-Платформа состоит из следующих компонентов:
-
-### 🚀 Активные компоненты (готовы к использованию):
-- **`ingest-api/`** - FastAPI сервис для приема телеметрии
-- **`ui/`** - React веб-интерфейс с TypeScript
-- **`INFRA/`** - Docker Compose инфраструктура
-
-### 📦 Заготовки компонентов (для будущей разработки):
-- **`agent-windows/`** - Windows endpoint agent
-- **`edr-av-integration/`** - ClamAV + YARA интеграция
-- **`vuln-scanner/`** - OpenVAS сканер уязвимостей
-- **`tip-misp/`** - Threat Intelligence Platform
-- **`soar-engine/`** - Security Orchestration and Response
-- **`ml-module/`** - ML поведенческая аналитика
-
-## 🚀 Быстрый старт
-
-### Предварительные требования
-
-- **Docker Desktop** ([скачать](https://www.docker.com/products/docker-desktop/))
-- **PowerShell** (для Windows)
-- **Git** (опционально)
-
-### 1. Простой запуск (рекомендуется)
-
+### 1. Start Platform
 ```powershell
-# Запуск всей платформы одной командой
+.\start.ps1
+```
+
+### 2. Check Status
+```powershell
+.\status.ps1
+```
+
+### 3. Send Test Data
+```powershell
+.\test-data.ps1
+```
+
+### 4. View Dashboard
+Open: http://localhost:3000
+
+## � Essential Files Only
+
+This project now contains only the essential files you need:
+
+### 🎯 Main Management Scripts
+- **`start.ps1`** - Start the entire platform
+- **`stop.ps1`** - Stop all services  
+- **`status.ps1`** - Check system status
+- **`test-data.ps1`** - Send test events
+- **`test-agent.ps1`** - Test connectivity
+
+### 🤖 Agent Scripts  
+- **`agent.ps1`** - Full-featured data collection agent
+- **`start-agent.ps1`** - Start agent in new window
+- **`agent/windows/simple_sender.ps1`** - Basic agent (alternative)
+
+### 🐳 Infrastructure
+- **`INFRA/docker-compose.yml`** - All service definitions
+- **`ingest-api/`** - FastAPI backend
+- **`ui/`** - React frontend
+
+## 🌐 Web Interfaces
+
+| Service | URL | Purpose |
+|---------|-----|---------|
+| **Main Dashboard** | http://localhost:3000 | View events and data |
+| **API Docs** | http://localhost:8000/docs | API documentation |
+| **API Health** | http://localhost:8000/health | Service status |
+| **OpenSearch** | http://localhost:5601 | Data administration |
+
+## � Common Workflows
+
+### Complete Test Cycle
+```powershell
+# 1. Start everything
 .\start.ps1
 
-# Дождаться запуска всех сервисов (~ 1-2 минуты)
-```
+# 2. Send test data  
+.\test-data.ps1
 
-### 2. Ручной запуск
+# 3. Check results
+.\status.ps1
 
-```powershell
-# Перейти в папку инфраструктуры
-cd INFRA
+# 4. View in browser
+# Open http://localhost:3000
 
-# Запустить все сервисы включая UI
-docker-compose --profile dev up -d
-
-# Проверить статус контейнеров
-docker-compose ps
-```
-
-### 3. Остановка сервисов
-
-```powershell
-# Простая остановка
+# 5. Stop when done
 .\stop.ps1
-
-# Или ручная остановка
-cd INFRA
-docker-compose --profile dev down
-
-# Полная очистка (удаление данных)
-cd INFRA
-.\down_clean.ps1 -CleanAll
 ```
 
-## 🌐 Доступные интерфейсы
-
-После запуска доступны следующие веб-интерфейсы:
-
-| Сервис | URL | Описание |
-|--------|-----|----------|
-| **UI Dashboard** | http://localhost:3000 | Основной веб-интерфейс |
-| **API Documentation** | http://localhost:8000/docs | Swagger UI для API |
-| **Ingest API** | http://localhost:8000 | REST API для телеметрии |
-| **OpenSearch Dashboards** | http://localhost:5601 | Администрирование данных |
-| **OpenSearch API** | http://localhost:9200 | Прямой доступ к данным |
-
-## 📡 Использование API
-
-### Health Check
-```bash
-curl http://localhost:8000/health
-```
-
-### Отправка события
+### Start Data Collection
 ```powershell
-$body = @{
-    event_id = "example-001"
-    event_type = "process_start"
-    timestamp = "2025-08-20T12:00:00Z"
-    severity = "info"
-    host = @{
-        host_id = "workstation-001"
-        hostname = "WIN-PC01"
-        domain = "company.local"
-        os_version = "Windows 10"
-        ip_addresses = @("192.168.1.100")
-    }
-    agent = @{
-        agent_version = "1.0.0"
-        collect_level = "standard"
-    }
-    process = @{
-        pid = 1234
-        name = "notepad.exe"
-        path = "C:\Windows\System32\notepad.exe"
-        user = "john.doe"
-    }
-    tags = @("demo", "test")
-} | ConvertTo-Json -Depth 10
+# Interactive agent setup
+.\start-agent.ps1
 
-$headers = @{"Content-Type"="application/json"}
-Invoke-WebRequest -Uri http://localhost:8000/ingest -Method POST -Body $body -Headers $headers
+# Or direct agent start
+.\agent.ps1
+
+# Or simple agent
+cd agent\windows
+.\simple_sender.ps1
 ```
 
-### Получение событий
-```bash
-curl http://localhost:8000/events
-curl "http://localhost:8000/events?limit=10&event_type=process_start"
-curl "http://localhost:8000/events?severity=high&host_id=workstation-001"
-```
-
-## 🔧 Разработка
-
-### Структура проекта
-```
-├── ingest-api/          # FastAPI бэкенд
-│   ├── main.py         # Основной модуль API
-│   ├── requirements.txt # Python зависимости
-│   └── Dockerfile      # Docker образ
-├── ui/                 # React фронтенд
-│   ├── src/           # Исходный код
-│   ├── package.json   # Node.js зависимости
-│   └── Dockerfile     # Docker образ
-├── INFRA/             # Docker Compose
-│   ├── docker-compose.yml
-│   ├── up_clean.ps1   # Скрипт запуска
-│   └── down_clean.ps1 # Скрипт остановки
-└── shared/            # Общие утилиты
-```
-
-### Локальная разработка API
+### Verify Everything Works
 ```powershell
-cd ingest-api
-python -m venv venv
-venv\Scripts\Activate.ps1
-pip install -r requirements.txt
-uvicorn main:app --reload --host 0.0.0.0 --port 8000
+.\test-agent.ps1  # Test API connectivity
+.\test-data.ps1   # Send sample events
+.\status.ps1      # Check all services
 ```
 
-### Локальная разработка UI
-```powershell
-cd ui
-npm install
-npm run dev
-```
+## 🛠️ Troubleshooting
 
-## 📊 Схема событий
+### Platform Won't Start
+1. Check Docker is running: `docker version`
+2. Free up ports: 3000, 5601, 6379, 8000, 9200
+3. Restart Docker Desktop
 
-События телеметрии должны соответствовать следующей схеме:
+### No Data in Dashboard
+1. Run `.\test-data.ps1` to send sample events
+2. Check API: http://localhost:8000/stats
+3. Verify agent is running: `.\status.ps1`
 
-### Обязательные поля:
-- `event_id` - уникальный идентификатор события
-- `event_type` - тип события (process_start, file_create, network_connection и др.)
-- `timestamp` - время события в ISO 8601
-- `severity` - уровень критичности (info, low, medium, high, critical)
-- `host` - информация о хосте
-- `agent` - информация об агенте
+### Agent Connection Issues
+1. Ensure platform is running: `.\status.ps1`
+2. Test connectivity: `.\test-agent.ps1`
+3. Check firewall/antivirus settings
 
-### Опциональные поля:
-- `process` - информация о процессе
-- `file` - информация о файле
-- `network` - сетевая информация
-- `tags` - теги для классификации
+## 📊 What Data is Collected
 
-Полную схему см. в API документации: http://localhost:8000/docs
+The agents collect:
+- **System Info**: OS, memory, CPU, uptime
+- **Processes**: Running processes, memory usage
+- **Network**: Active connections, network adapters  
+- **Storage**: Disk usage and free space
+- **Events**: Process starts, file operations, network connections
 
-## 🐛 Устранение неполадок
+## � Security Notes
 
-### Проблемы с запуском
-1. **Docker не установлен**: Установите Docker Desktop
-2. **Порты заняты**: Проверьте что порты 3000, 5601, 6379, 8000, 9200 свободны
-3. **Недостаточно памяти**: Увеличьте лимиты памяти для Docker
+- All services run locally (localhost only)
+- No external network access required
+- Data stays on your machine
+- No authentication for development/testing
 
-### Проверка состояния
-```powershell
-# Статус контейнеров
-docker-compose ps
+## � Tips
 
-# Логи сервисов
-docker-compose logs ingest_api
-docker-compose logs ui
-docker-compose logs opensearch
-
-# Health check
-curl http://localhost:8000/health
-```
-
-### Очистка данных
-```powershell
-# Полная очистка (удаление всех данных)
-.\down_clean.ps1 -CleanAll
-
-# Удаление образов
-docker image prune -f
-```
-
-## 📚 Дополнительная документация
-
-### Основная документация
-- 📖 **[EXAMPLES.md](EXAMPLES.md)** - **Примеры использования и сценарии тестирования**
-- 📚 **[GLOSSARY.md](GLOSSARY.md)** - **Глоссарий терминов и справочник**
-- 🏗️ **[ARCHITECTURE.md](ARCHITECTURE.md)** - Техническая архитектура
-- 🔒 **[SECURITY_REQUIREMENTS.md](SECURITY_REQUIREMENTS.md)** - Требования безопасности
-- 📊 **[MODULE_STATUS.md](MODULE_STATUS.md)** - Статус модулей
-
-### Планирование и развитие
-- 🎯 **[DESIGN_DECISIONS.md](DESIGN_DECISIONS.md)** - Проектные решения
-- 📝 **[BACKLOG.md](BACKLOG.md)** - План развития
-- 🛣️ **[ROADMAP.md](ROADMAP.md)** - Дорожная карта
-
-### Быстрые ссылки
-- 🚀 [Быстрый старт](#-быстрый-старт) - Запуск за 2 минуты
-- 📡 [Примеры API](EXAMPLES.md#-примеры-работы-с-api) - Готовые запросы
-- 🌐 [Веб-интерфейсы](#-доступные-интерфейсы) - Все UI в одном месте
-- 🔍 [Мониторинг](EXAMPLES.md#-мониторинг-и-отладка) - Проверка состояния
-- 🧪 [Тестирование](EXAMPLES.md#-тестирование-системы) - Валидация работы
-
-## 📞 Поддержка
-
-При возникновении вопросов или проблем:
-1. Проверьте раздел "Устранение неполадок"
-2. Изучите логи Docker контейнеров
-3. Обратитесь к API документации
-4. Создайте issue в репозитории
+- **Dashboard updates every 30 seconds** - wait a moment to see new events
+- **Agent runs in separate window** - close window to stop collection
+- **Multiple agents can run** - each gets unique ID
+- **Test data includes different event types** - processes, files, network
 
 ---
 
-**Версия**: 1.0.0  
-**Статус**: В разработке  
-**Последнее обновление**: Август 2025
+**Need help?** 
+- Run `.\status.ps1` to see current state
+- Check http://localhost:8000/docs for API details
+- All scripts show progress and error messages

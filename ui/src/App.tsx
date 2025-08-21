@@ -1,18 +1,20 @@
 import React from 'react';
 import { Dashboard } from './components/Dashboard';
 import { AlertsTable } from './components/AlertsTable';
+import { SimpleEventsList } from './components/SimpleEventsList';
 import { ConfigPanel } from './components/ConfigPanel';
-import { Settings, Bell, Home, Activity } from 'lucide-react';
+import { Settings, Bell, Home, Activity, Monitor } from 'lucide-react';
 
 const App: React.FC = () => {
-  const [activeTab, setActiveTab] = React.useState('dashboard');
+  const [activeTab, setActiveTab] = React.useState('monitoring');
   const [apiMode, setApiMode] = React.useState<'mock' | 'real'>(
     import.meta.env.VITE_USE_MOCK_DATA === 'false' ? 'real' : 'mock'
   );
 
   const navigation = [
     { id: 'dashboard', name: 'Панель управления', icon: Home },
-    { id: 'events', name: 'События', icon: Bell },
+    { id: 'monitoring', name: 'Мониторинг', icon: Monitor },
+    { id: 'events', name: 'События (расширенные)', icon: Bell },
     { id: 'analytics', name: 'Аналитика', icon: Activity },
     { id: 'settings', name: 'Настройки', icon: Settings },
   ];
@@ -21,6 +23,8 @@ const App: React.FC = () => {
     switch (activeTab) {
       case 'dashboard':
         return <Dashboard />;
+      case 'monitoring':
+        return <SimpleEventsList />;
       case 'events':
         return <AlertsTable />;
       case 'analytics':
@@ -59,7 +63,7 @@ const App: React.FC = () => {
                         activeTab === item.id
                           ? 'border-blue-500 text-gray-900 dark:text-white'
                           : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300'
-                      } whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm inline-flex items-center`}
+                      } whitespace-nowrap py-2 px-3 border-b-2 font-medium text-sm inline-flex items-center`}
                     >
                       <Icon className="h-4 w-4 mr-2" />
                       {item.name}
@@ -69,7 +73,7 @@ const App: React.FC = () => {
               </div>
             </div>
             <div className="flex items-center">
-              <div className="text-sm text-gray-500 dark:text-gray-400">
+              <div className="text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap ml-4">
                 {apiMode === 'mock' ? 'Тестовый режим' : 'Режим реального API'}
               </div>
             </div>

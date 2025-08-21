@@ -1,28 +1,103 @@
-#!/usr/bin/env pwsh
-# Quick start script for the entire platform
+# UECP Platform Startup Script
+Write-Host "Starting UECP Platform..." -ForegroundColor Green
 
-Write-Host "Unified Enterprise Cybersecurity Platform" -ForegroundColor Cyan
-Write-Host "==========================================" -ForegroundColor Cyan
+# Check Docker
+Write-Host "Checking Docker availability..." -ForegroundColor Cyan
+try {
+    docker version | Out-Null
+    Write-Host "Docker is running" -ForegroundColor Green
+} catch {
+    Write-Host "ERROR: Docker is not running. Please start Docker Desktop." -ForegroundColor Red
+    exit 1
+}
 
-# Navigate to infrastructure folder
-Set-Location INFRA
+# Navigate to infrastructure
+Set-Location "c:\Users\PC\Desktop\test\INFRA"
 
-# Start all services including UI
-Write-Host "Starting all services..." -ForegroundColor Green
-docker-compose --profile dev up -d
+# Stop existing containers
+Write-Host "Stopping existing containers..." -ForegroundColor Yellow
+docker-compose down --remove-orphans | Out-Null
 
-Start-Sleep 3
+# Start core infrastructure
+Write-Host "Starting core infrastructure..." -ForegroundColor Cyan
+docker-compose up -d opensearch redis opensearch_dashboards ingest_api
 
-# Check status
-Write-Host "`nService Status:" -ForegroundColor Yellow
-docker-compose ps
+# Wait for services
+Write-Host "Waiting for services to initialize..." -ForegroundColor Yellow
+Start-Sleep -Seconds 15
 
-Write-Host "`nAvailable Interfaces:" -ForegroundColor Cyan
-Write-Host "- UI Dashboard:     http://localhost:3000" -ForegroundColor White
-Write-Host "- API Docs:         http://localhost:8000/docs" -ForegroundColor White
-Write-Host "- Health Check:     http://localhost:8000/health" -ForegroundColor White
-Write-Host "- OpenSearch:       http://localhost:9200" -ForegroundColor White
-Write-Host "- Dashboards:       http://localhost:5601" -ForegroundColor White
+# Check OpenSearch
+Write-Host "Checking OpenSearch..." -ForegroundColor Cyan
+$maxAttempts = 20
+for ($i = 1; $i -le $maxAttempts; $i++) {
+    try {
+        $response = Invoke-WebRequest -Uri "http://localhost:9200/_cluster/health" -UseBasicParsing -TimeoutSec 5
+        if ($response.StatusCode -eq 200) {
+            Write-Host "OpenSearch is ready" -ForegroundColor Green
+            break
+        }
+    } catch {
+        if ($i -eq $maxAttempts) {
+            Write-Host "ERROR: OpenSearch failed to start" -ForegroundColor Red
+            exit 1
+        }
+        Write-Host "Waiting for OpenSearch... (attempt $i/$maxAttempts)" -ForegroundColor Gray
+        Start-Sleep -Seconds 3
+    }
+}
 
-Write-Host "`nTo stop use: .\stop.ps1" -ForegroundColor Red
-Write-Host "==========================================" -ForegroundColor Cyan
+# Check Ingest API
+Write-Host "Checking Ingest API..." -ForegroundColor Cyan
+for ($i = 1; $i -le $maxAttempts; $i++) {
+    try {
+        $response = Invoke-WebRequest -Uri "http://localhost:8000/health" -UseBasicParsing -TimeoutSec 5
+        if ($response.StatusCode -eq 200) {
+            Write-Host "Ingest API is ready" -ForegroundColor Green
+            break
+        }
+    } catch {
+        if ($i -eq $maxAttempts) {
+            Write-Host "ERROR: Ingest API failed to start" -ForegroundColor Red
+            exit 1
+        }
+        Write-Host "Waiting for Ingest API... (attempt $i/$maxAttempts)" -ForegroundColor Gray
+        Start-Sleep -Seconds 3
+    }
+}
+
+# Start UI
+Write-Host "Starting UI Dashboard..." -ForegroundColor Cyan
+docker-compose --profile dev up -d ui
+
+# Check UI
+Write-Host "Checking UI Dashboard..." -ForegroundColor Cyan
+for ($i = 1; $i -le 15; $i++) {
+    try {
+        $response = Invoke-WebRequest -Uri "http://localhost:3000" -UseBasicParsing -TimeoutSec 5
+        if ($response.StatusCode -eq 200) {
+            Write-Host "UI Dashboard is ready" -ForegroundColor Green
+            break
+        }
+    } catch {
+        if ($i -eq 15) {
+            Write-Host "WARNING: UI Dashboard may not be ready" -ForegroundColor Yellow
+        } else {
+            Write-Host "Waiting for UI... (attempt $i/15)" -ForegroundColor Gray
+            Start-Sleep -Seconds 4
+        }
+    }
+}
+
+Write-Host "`nUECP Platform Started Successfully!" -ForegroundColor Green
+Write-Host "=================================" -ForegroundColor Green
+Write-Host "Available Services:" -ForegroundColor White
+Write-Host "  Main Dashboard:    http://localhost:3000" -ForegroundColor Cyan
+Write-Host "  API Documentation: http://localhost:8000/docs" -ForegroundColor Cyan
+Write-Host "  API Health:        http://localhost:8000/health" -ForegroundColor Cyan
+Write-Host "  OpenSearch UI:     http://localhost:5601" -ForegroundColor Cyan
+
+Write-Host "`nNext Steps:" -ForegroundColor Yellow
+Write-Host "  1. Start agent:    .\start-agent.ps1" -ForegroundColor Gray
+Write-Host "  2. Send test data: .\test-data.ps1" -ForegroundColor Gray
+Write-Host "  3. Check status:   .\status.ps1" -ForegroundColor Gray
+Write-Host "  4. Stop platform:  .\stop.ps1" -ForegroundColor Gray

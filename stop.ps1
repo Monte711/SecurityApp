@@ -1,16 +1,21 @@
-#!/usr/bin/env pwsh
-# Stop script for the entire platform
+# UECP Platform Stop Script
+Write-Host "Stopping UECP Platform..." -ForegroundColor Red
 
-Write-Host "Stopping Cybersecurity Platform" -ForegroundColor Red
-Write-Host "================================" -ForegroundColor Red
+# Navigate to infrastructure
+Set-Location "c:\Users\PC\Desktop\test\INFRA"
 
-# Navigate to infrastructure folder
-Set-Location INFRA
+# Stop all containers
+Write-Host "Stopping all containers..." -ForegroundColor Yellow
+docker-compose --profile dev down --remove-orphans
 
-# Stop services
-Write-Host "Stopping all services..." -ForegroundColor Yellow
-docker-compose --profile dev down
+# Check remaining containers
+Write-Host "`nChecking for remaining containers..." -ForegroundColor Cyan
+$containers = docker ps -a --filter "name=cybersec" --format "table {{.Names}}\t{{.Status}}"
+if ($containers) {
+    Write-Host $containers -ForegroundColor Gray
+} else {
+    Write-Host "All containers stopped successfully" -ForegroundColor Green
+}
 
-Write-Host "`nAll services stopped" -ForegroundColor Green
-Write-Host "To start use: .\start.ps1" -ForegroundColor Cyan
-Write-Host "================================" -ForegroundColor Red
+Write-Host "`nUECP Platform Stopped" -ForegroundColor Green
+Write-Host "To start again: .\start.ps1" -ForegroundColor Gray
