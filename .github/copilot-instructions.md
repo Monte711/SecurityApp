@@ -4,16 +4,11 @@ This workspace contains a modular cybersecurity platform with the following comp
 
 ## Project Structure
 - `ingest-api/` - Telemetry ingestion service (FastAPI)
-- `agent-windows/` - Windows endpoint agent
-- `edr-av-integration/` - ClamAV + YARA integration
-- `vuln-scanner/` - OpenVAS vulnerability scanning
-- `tip-misp/` - Threat Intelligence Platform
-- `soar-engine/` - Security Orchestration and Response
-- `ui-dashboard/` - React-based web interface
-- `ml-module/` - Machine learning behavioral analytics
+- `agent/windows/` - Windows endpoint agent
+- `ui/` - React-based web interface
 - `shared/` - Common utilities and schemas
-- `docker/` - Docker configurations
-- `tests/` - Integration tests
+- `INFRA/` - Docker infrastructure configurations
+- Core management scripts (start.ps1, stop.ps1, status.ps1, etc.)
 
 ## Development Guidelines
 - Each module is autonomous with its own tests and README
