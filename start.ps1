@@ -12,7 +12,8 @@ try {
 }
 
 # Navigate to infrastructure
-Set-Location "c:\Users\PC\Desktop\test\INFRA"
+$scriptPath = Split-Path -Parent $MyInvocation.MyCommand.Path
+Set-Location "$scriptPath\INFRA"
 
 # Stop existing containers
 Write-Host "Stopping existing containers..." -ForegroundColor Yellow
