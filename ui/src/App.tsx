@@ -7,9 +7,12 @@ import { Settings, Bell, Home, Activity, Monitor } from 'lucide-react';
 
 const App: React.FC = () => {
   const [activeTab, setActiveTab] = React.useState('monitoring');
-  const [apiMode, setApiMode] = React.useState<'mock' | 'real'>(
-    import.meta.env.VITE_USE_MOCK_DATA === 'false' ? 'real' : 'mock'
-  );
+
+  // Handler for API mode changes (used by ConfigPanel)
+  const handleApiModeChange = (mode: 'mock' | 'real') => {
+    // API mode is now managed entirely within ConfigPanel
+    console.log('API mode changed to:', mode);
+  };
 
   const navigation = [
     { id: 'dashboard', name: 'Панель управления', icon: Home },
@@ -36,7 +39,22 @@ const App: React.FC = () => {
           </div>
         );
       case 'settings':
-        return <ConfigPanel onModeChange={setApiMode} />;
+        return (
+          <div className="max-w-4xl mx-auto">
+            <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+              <div className="border-b border-gray-200 dark:border-gray-700 pb-4 mb-6">
+                <h2 className="text-lg font-medium text-gray-900 dark:text-white">Настройки платформы</h2>
+                <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                  Конфигурация API и режимов работы системы
+                </p>
+              </div>
+              
+
+              
+              <ConfigPanel onModeChange={handleApiModeChange} fullPage={true} />
+            </div>
+          </div>
+        );
       default:
         return <Dashboard />;
     }
@@ -48,34 +66,32 @@ const App: React.FC = () => {
       <nav className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
-            <div className="flex">
-              <div className="flex-shrink-0 flex items-center">
+            <div className="flex items-center">
+              <div className="flex-shrink-0">
                 <h1 className="text-xl font-bold text-gray-900 dark:text-white">Платформа Кибербезопасности</h1>
               </div>
-              <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
-                {navigation.map((item) => {
-                  const Icon = item.icon;
-                  return (
-                    <button
-                      key={item.id}
-                      onClick={() => setActiveTab(item.id)}
-                      className={`${
-                        activeTab === item.id
-                          ? 'border-blue-500 text-gray-900 dark:text-white'
-                          : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300'
-                      } whitespace-nowrap py-2 px-3 border-b-2 font-medium text-sm inline-flex items-center`}
-                    >
-                      <Icon className="h-4 w-4 mr-2" />
-                      {item.name}
-                    </button>
-                  );
-                })}
-              </div>
             </div>
-            <div className="flex items-center">
-              <div className="text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap ml-4">
-                {apiMode === 'mock' ? 'Тестовый режим' : 'Режим реального API'}
-              </div>
+          </div>
+          {/* Tabs row */}
+          <div className="flex border-t border-gray-200 dark:border-gray-700">
+            <div className="hidden sm:flex sm:space-x-8">
+              {navigation.map((item) => {
+                const Icon = item.icon;
+                return (
+                  <button
+                    key={item.id}
+                    onClick={() => setActiveTab(item.id)}
+                    className={`${
+                      activeTab === item.id
+                        ? 'border-blue-500 text-gray-900 dark:text-white'
+                        : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300'
+                    } whitespace-nowrap py-3 px-3 border-b-2 font-medium text-sm inline-flex items-center`}
+                  >
+                    <Icon className="h-4 w-4 mr-2" />
+                    {item.name}
+                  </button>
+                );
+              })}
             </div>
           </div>
         </div>
