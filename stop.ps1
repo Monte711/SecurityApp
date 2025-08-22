@@ -2,7 +2,8 @@
 Write-Host "Stopping UECP Platform..." -ForegroundColor Red
 
 # Navigate to infrastructure
-Set-Location "c:\Users\PC\Desktop\test\INFRA"
+$scriptPath = Split-Path -Parent $MyInvocation.MyCommand.Path
+Set-Location "$scriptPath\INFRA"
 
 # Stop all containers
 Write-Host "Stopping all containers..." -ForegroundColor Yellow

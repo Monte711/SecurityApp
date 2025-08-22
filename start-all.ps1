@@ -52,7 +52,8 @@ try {
 }
 
 # Переход в директорию инфраструктуры
-Set-Location "c:\Users\PC\Desktop\test\INFRA"
+$scriptPath = Split-Path -Parent $MyInvocation.MyCommand.Path
+Set-Location "$scriptPath\INFRA"
 
 # Остановка существующих контейнеров
 Write-Host "🛑 Остановка существующих контейнеров..." -ForegroundColor Yellow
@@ -112,7 +113,7 @@ Write-Host "  • Statistics:      http://localhost:8000/stats" -ForegroundColor
 Write-Host "  • Ingest:          http://localhost:8000/ingest" -ForegroundColor Gray
 
 Write-Host "`n✨ Для запуска агента выполните:" -ForegroundColor Yellow
-Write-Host "  cd c:\Users\PC\Desktop\test\agent\windows" -ForegroundColor Gray
+Write-Host "  .\start-agent.ps1" -ForegroundColor Gray
 Write-Host "  .\simple_sender.ps1" -ForegroundColor Gray
 
 Write-Host "`nДля остановки: .\stop-all.ps1" -ForegroundColor Red

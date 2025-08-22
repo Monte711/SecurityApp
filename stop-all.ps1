@@ -4,7 +4,8 @@
 Write-Host "🛑 Остановка UECP Platform..." -ForegroundColor Red
 
 # Переход в директорию инфраструктуры
-Set-Location "c:\Users\PC\Desktop\test\INFRA"
+$scriptPath = Split-Path -Parent $MyInvocation.MyCommand.Path
+Set-Location "$scriptPath\INFRA"
 
 # Остановка контейнеров с профилем dev
 Write-Host "🔄 Остановка dev-сервисов..." -ForegroundColor Yellow

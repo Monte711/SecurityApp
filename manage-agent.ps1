@@ -18,7 +18,8 @@ param(
     [string]$CollectionLevel = "standard"
 )
 
-$agentPath = "c:\Users\PC\Desktop\test\agent\windows"
+$scriptPath = Split-Path -Parent $MyInvocation.MyCommand.Path
+$agentPath = "$scriptPath\agent\windows"
 $apiUrl = "http://localhost:8000"
 
 # Функция проверки статуса API
