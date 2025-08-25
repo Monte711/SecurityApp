@@ -121,6 +121,71 @@ class IngestResponse(BaseModel):
     message: Optional[str] = Field(None, description="Дополнительное сообщение")
     processing_time_ms: Optional[int] = Field(None, description="Время обработки в мс")
 
+# === Схемы для агента host_posture (формат Go-агента) ===
+
+class GoAgentInfo(BaseModel):
+    agent_id: Optional[str] = Field(None, description="ID агента")
+    agent_version: Optional[str] = Field(None, description="Версия агента")
+
+class GoHostInfo(BaseModel):
+    host_id: Optional[str] = Field(None, description="ID хоста")
+    hostname: str = Field(..., description="Имя хоста")
+    os: Optional[Dict[str, Any]] = Field(None, description="Информация об ОС")
+    uptime_seconds: Optional[int] = Field(None, description="Время работы в секундах")
+
+class GoProcessInfo(BaseModel):
+    pid: Optional[int] = Field(None, description="PID процесса")
+    ppid: Optional[int] = Field(None, description="PPID родительского процесса")
+    name: Optional[str] = Field(None, description="Имя процесса")
+    exe_path: Optional[str] = Field(None, description="Путь к exe")
+    cmdline: Optional[str] = Field(None, description="Командная строка")
+    username: Optional[str] = Field(None, description="Пользователь")
+
+class GoAutorunInfo(BaseModel):
+    name: Optional[str] = Field(None, description="Имя автозапуска")
+    command: Optional[str] = Field(None, description="Команда")
+    location: Optional[str] = Field(None, description="Расположение")
+    enabled: Optional[bool] = Field(None, description="Включен ли")
+
+class GoAutorunsInfo(BaseModel):
+    startup_programs: Optional[List[GoAutorunInfo]] = Field(None, description="Программы автозапуска")
+    run_keys: Optional[List[GoAutorunInfo]] = Field(None, description="Ключи реестра Run")
+    services: Optional[List[GoAutorunInfo]] = Field(None, description="Службы")
+    scheduled_tasks: Optional[List[GoAutorunInfo]] = Field(None, description="Запланированные задачи")
+
+class GoInventoryInfo(BaseModel):
+    processes: Optional[List[GoProcessInfo]] = Field(None, description="Список процессов")
+    autoruns: Optional[GoAutorunsInfo] = Field(None, description="Автозапуски")
+
+class GoSecurityModule(BaseModel):
+    name: str = Field(..., description="Название модуля")
+    status: str = Field(..., description="Статус")
+    details: Optional[Dict[str, Any]] = Field(None, description="Детали")
+
+class GoSecurityInfo(BaseModel):
+    modules: Optional[List[GoSecurityModule]] = Field(None, description="Модули безопасности")
+
+class GoFinding(BaseModel):
+    rule_id: str = Field(..., description="ID правила")
+    severity: str = Field(..., description="Уровень критичности")
+    message_ru: str = Field(..., description="Сообщение на русском")
+    evidence: Optional[str] = Field(None, description="Доказательства")
+
+class GoMetadataInfo(BaseModel):
+    collector: Optional[str] = Field(None, description="Коллектор")
+    schema_version: Optional[str] = Field(None, description="Версия схемы")
+
+class HostPostureEvent(BaseModel):
+    event_id: str = Field(..., description="ID события")
+    event_type: str = Field(..., description="Тип события")
+    timestamp: str = Field(..., alias="@timestamp", description="Время события")
+    host: GoHostInfo = Field(..., description="Информация о хосте")
+    agent: GoAgentInfo = Field(..., description="Информация об агенте")
+    inventory: Optional[GoInventoryInfo] = Field(None, description="Инвентарь")
+    security: Optional[GoSecurityInfo] = Field(None, description="Безопасность")
+    findings: Optional[List[GoFinding]] = Field(None, description="Находки")
+    metadata: Optional[GoMetadataInfo] = Field(None, description="Метаданные")
+
 # === Схемы для событий безопасности (новый формат) ===
 
 class SecurityEvent(BaseModel):
@@ -226,8 +291,7 @@ async def shutdown_event():
         await opensearch_client.close()
     
     if redis_client:
-        redis_client.close()
-        await redis_client.wait_closed()
+        await redis_client.close()
     
     logger.info("Ingest API остановлен")
 
@@ -416,6 +480,94 @@ async def ingest_event(
         raise HTTPException(
             status_code=500,
             detail=f"Внутренняя ошибка обработки события"
+        )
+
+@app.post("/ingest/host-posture", response_model=IngestResponse)
+async def ingest_host_posture_event(
+    event: HostPostureEvent,
+    request: Request,
+    background_tasks: BackgroundTasks,
+    opensearch: AsyncOpenSearch = Depends(get_opensearch),
+    redis: aioredis.Redis = Depends(get_redis)
+) -> IngestResponse:
+    """
+    Прием события host_posture от Go-агента.
+    
+    Обеспечивает:
+    - Валидацию события по схеме HostPostureEvent
+    - Идемпотентность через event_id
+    - Сохранение в OpenSearch
+    - Публикацию в Redis Stream
+    """
+    start_time = datetime.now()
+    
+    try:
+        # Получение дополнительных заголовков
+        agent_id = request.headers.get("X-Agent-ID", event.agent.agent_id or "unknown")
+        user_agent = request.headers.get("User-Agent", "")
+        
+        logger.info(f"Получено событие host_posture {event.event_id} от агента {agent_id}")
+        
+        # Определение индекса
+        index_name = get_index_name(event.timestamp)
+        
+        # Проверка идемпотентности
+        exists = await check_event_exists(opensearch, index_name, event.event_id)
+        if exists:
+            logger.info(f"Событие host_posture {event.event_id} уже существует")
+            processing_time = int((datetime.now() - start_time).total_seconds() * 1000)
+            return IngestResponse(
+                event_id=event.event_id,
+                status="duplicate",
+                message="Событие уже было обработано",
+                processing_time_ms=processing_time
+            )
+        
+        # Подготовка данных для сохранения
+        event_data = event.dict()
+        event_data['received_at'] = datetime.now(timezone.utc).isoformat()
+        event_data['agent_id'] = agent_id
+        event_data['user_agent'] = user_agent
+        event_data['format_type'] = 'host_posture'
+        
+        # Добавляем совместимые поля для UI
+        event_data['severity'] = 'info'
+        event_data['host_info'] = {
+            'hostname': event.host.hostname,
+            'host_id': event.host.host_id or event.host.hostname,
+            'os': event.host.os,
+            'uptime_seconds': event.host.uptime_seconds
+        }
+        
+        # Сохранение в OpenSearch
+        indexed = await index_event(opensearch, index_name, event.event_id, event_data)
+        if not indexed:
+            raise HTTPException(status_code=500, detail="Ошибка сохранения события host_posture")
+        
+        # Публикация в Redis Stream для дальнейшей обработки
+        published = await publish_to_stream(redis, "events:host_posture", event_data)
+        if not published:
+            logger.warning(f"Событие host_posture {event.event_id} сохранено в OpenSearch, но не опубликовано в Redis")
+        
+        processing_time = int((datetime.now() - start_time).total_seconds() * 1000)
+        
+        logger.info(f"Событие host_posture {event.event_id} успешно обработано за {processing_time}ms")
+        
+        return IngestResponse(
+            event_id=event.event_id,
+            status="accepted",
+            message="Событие host_posture успешно обработано",
+            processing_time_ms=processing_time
+        )
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        processing_time = int((datetime.now() - start_time).total_seconds() * 1000)
+        logger.error(f"Ошибка обработки события host_posture {event.event_id}: {e}")
+        raise HTTPException(
+            status_code=500,
+            detail=f"Внутренняя ошибка обработки события host_posture"
         )
 
 @app.post("/ingest/security", response_model=IngestResponse)

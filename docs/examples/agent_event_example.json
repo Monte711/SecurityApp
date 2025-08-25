@@ -1,0 +1,4192 @@
+{
+  "event_id": "4a350af5-6f39-4b7e-845d-dd1d3ba9c040",
+  "event_type": "host_posture",
+  "@timestamp": "2025-08-25T13:03:04Z",
+  "host": {
+    "host_id": "57d9d3b6-10ae-4fd4-8486-703a1d26717e",
+    "hostname": "DESKTOP-HKR714G",
+    "os": {
+      "name": "Windows 10 Pro",
+      "version": "10.0.19045.6216 Build 19045.6216",
+      "build": "10.0.19045.6216 Build 19045.6216"
+    },
+    "uptime_seconds": 23222
+  },
+  "agent": {
+    "agent_id": "win-agent-001",
+    "agent_version": "0.1.0"
+  },
+  "inventory": {
+    "processes": [
+      {
+        "pid": 88,
+        "ppid": 4,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 156,
+        "ppid": 4,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 480,
+        "ppid": 17712,
+        "name": "Code.exe",
+        "exe_path": "C:\\Users\\PC\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe",
+        "cmdline": "\"C:\\Users\\PC\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe\" --type=utility --utility-sub-type=node.mojom.NodeService --lang=en-US --service-sandbox-type=none --video-capture-use-gpu-memory-buffer --user-data-dir=\"C:\\Users\\PC\\AppData\\Roaming\\Code\" --standard-schemes=vscode-webview,vscode-file --enable-sandbox --secure-schemes=vscode-webview,vscode-file --cors-schemes=vscode-webview,vscode-file --fetch-schemes=vscode-webview,vscode-file --service-worker-schemes=vscode-webview --code-cache-schemes=vscode-webview,vscode-file --field-trial-handle=1752,i,17828068653338241611,15298562903451463468,262144 --enable-features=DocumentPolicyIncludeJSCallStacksInCrashReports,EarlyEstablishGpuChannel,EnableTransparentHwndEnlargement,EstablishGpuChannelAsync --disable-features=CalculateNativeWinOcclusion,FontationsLinuxSystemFonts,ScreenAIOCREnabled,SpareRendererForSitePerProcess,WinDelaySpellcheckServiceInit --variations-seed-version --mojo-platform-channel-handle=4608 /prefetch:8",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 492,
+        "ppid": 944,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 532,
+        "ppid": 944,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 576,
+        "ppid": 4,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 824,
+        "ppid": 816,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 944,
+        "ppid": 816,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 964,
+        "ppid": 936,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 1016,
+        "ppid": 944,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 1052,
+        "ppid": 936,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 1176,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 1200,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 1204,
+        "ppid": 944,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 1208,
+        "ppid": 1052,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 1284,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 1348,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 1408,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 1424,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 1448,
+        "ppid": 5860,
+        "name": "wslhost.exe",
+        "exe_path": "C:\\Program Files\\WSL\\wslhost.exe",
+        "cmdline": " --distro-id {eefddcd5-73b6-463f-8c88-b75d4c410f22} --vm-id {7c017355-69f4-4a0f-90ff-05e648418869} --handle 716 --event 752 --parent 756",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 1584,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 1588,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 1620,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 1636,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 1644,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 1652,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 1712,
+        "ppid": 1176,
+        "name": "dllhost.exe",
+        "exe_path": "C:\\Windows\\System32\\dllhost.exe",
+        "cmdline": "C:\\Windows\\system32\\DllHost.exe /Processid:{17696EAC-9568-4CF5-BB8C-82515AAD6C09}",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 1716,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 1736,
+        "ppid": 1016,
+        "name": "svchost.exe",
+        "exe_path": "C:\\Windows\\System32\\svchost.exe",
+        "cmdline": "C:\\Windows\\system32\\svchost.exe -k UnistackSvcGroup",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 1756,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 1808,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 1828,
+        "ppid": 480,
+        "name": "powershell.exe",
+        "exe_path": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "cmdline": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -noexit -command \"try { . \\\"c:\\Users\\PC\\AppData\\Local\\Programs\\Microsoft VS Code\\resources\\app\\out\\vs\\workbench\\contrib\\terminal\\common\\scripts\\shellIntegration.ps1\\\" } catch {}\"",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 1880,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 1888,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 1904,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 2024,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 2052,
+        "ppid": 5812,
+        "name": "wslrelay.exe",
+        "exe_path": "C:\\Program Files\\WSL\\wslrelay.exe",
+        "cmdline": " --mode 2 --vm-id {7c017355-69f4-4a0f-90ff-05e648418869} --handle 1392",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 2088,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 2156,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 2164,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 2216,
+        "ppid": 480,
+        "name": "powershell.exe",
+        "exe_path": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "cmdline": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -noexit -command \"try { . \\\"c:\\Users\\PC\\AppData\\Local\\Programs\\Microsoft VS Code\\resources\\app\\out\\vs\\workbench\\contrib\\terminal\\common\\scripts\\shellIntegration.ps1\\\" } catch {}\"",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 2352,
+        "ppid": 12928,
+        "name": "chrome.exe",
+        "exe_path": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+        "cmdline": "\"C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe\" --type=renderer --no-pre-read-main-dll --video-capture-use-gpu-memory-buffer --lang=ru --device-scale-factor=1.25 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=7 --time-ticks-at-unix-epoch=-1756103762258321 --launch-time-ticks=20828924826 --metrics-shmem-handle=4832,i,17429040520734841409,6967665542797896887,2097152 --field-trial-handle=1464,i,8309392995939714741,3063187248525716149,262144 --variations-seed-version=20250824-180049.414000 --mojo-platform-channel-handle=4256 /prefetch:1",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 2400,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 2408,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 2424,
+        "ppid": 1448,
+        "name": "conhost.exe",
+        "exe_path": "C:\\Windows\\System32\\conhost.exe",
+        "cmdline": "\\??\\C:\\Windows\\system32\\conhost.exe 0x4",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 2548,
+        "ppid": 1052,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 2556,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 2624,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 2776,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 2784,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 2792,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 2860,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 2904,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 2920,
+        "ppid": 5812,
+        "name": "wslhost.exe",
+        "exe_path": "C:\\Program Files\\WSL\\wslhost.exe",
+        "cmdline": " --vm-id {7c017355-69f4-4a0f-90ff-05e648418869} --handle 1520",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 2972,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 3024,
+        "ppid": 5812,
+        "name": "wslhost.exe",
+        "exe_path": "C:\\Program Files\\WSL\\wslhost.exe",
+        "cmdline": " --vm-id {7c017355-69f4-4a0f-90ff-05e648418869} --handle 1472",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 3044,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 3132,
+        "ppid": 6168,
+        "name": "browser.exe",
+        "exe_path": "C:\\Users\\PC\\AppData\\Local\\Yandex\\YandexBrowser\\Application\\browser.exe",
+        "cmdline": "\"C:\\Users\\PC\\AppData\\Local\\Yandex\\YandexBrowser\\Application\\browser.exe\" --type=gpu-process --user-id=B8085D8A-22E0-4945-8547-A653B2BE061C --brand-id=yandex --no-pre-read-main-dll --gpu-preferences=UAAAAAAAAADgAAAEAAAAAAAAAAAAAAAAAABgAAEAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAEAAAAAAAAAAIAAAAAAAAAAgAAAAAAAAA --gpu-process-kind=sandboxed --field-trial-handle=1928,i,13331809330070461085,13927758089240476913,262144 --variations-seed-version --mojo-platform-channel-handle=1924 /prefetch:2",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 3208,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 3224,
+        "ppid": 17712,
+        "name": "Code.exe",
+        "exe_path": "C:\\Users\\PC\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe",
+        "cmdline": "\"C:\\Users\\PC\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe\" --type=utility --utility-sub-type=node.mojom.NodeService --lang=en-US --service-sandbox-type=none --video-capture-use-gpu-memory-buffer --user-data-dir=\"C:\\Users\\PC\\AppData\\Roaming\\Code\" --standard-schemes=vscode-webview,vscode-file --enable-sandbox --secure-schemes=vscode-webview,vscode-file --cors-schemes=vscode-webview,vscode-file --fetch-schemes=vscode-webview,vscode-file --service-worker-schemes=vscode-webview --code-cache-schemes=vscode-webview,vscode-file --field-trial-handle=1752,i,17828068653338241611,15298562903451463468,262144 --enable-features=DocumentPolicyIncludeJSCallStacksInCrashReports,EarlyEstablishGpuChannel,EnableTransparentHwndEnlargement,EstablishGpuChannelAsync --disable-features=CalculateNativeWinOcclusion,FontationsLinuxSystemFonts,ScreenAIOCREnabled,SpareRendererForSitePerProcess,WinDelaySpellcheckServiceInit --variations-seed-version --mojo-platform-channel-handle=4092 /prefetch:8",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 3228,
+        "ppid": 1176,
+        "name": "UserOOBEBroker.exe",
+        "exe_path": "C:\\Windows\\System32\\oobe\\UserOOBEBroker.exe",
+        "cmdline": "C:\\Windows\\System32\\oobe\\UserOOBEBroker.exe -Embedding",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 3244,
+        "ppid": 10112,
+        "name": "explorer.exe",
+        "exe_path": "C:\\Windows\\explorer.exe",
+        "cmdline": "C:\\Windows\\Explorer.EXE",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 3300,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 3308,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 3316,
+        "ppid": 1176,
+        "name": "ShellExperienceHost.exe",
+        "exe_path": "C:\\Windows\\SystemApps\\ShellExperienceHost_cw5n1h2txyewy\\ShellExperienceHost.exe",
+        "cmdline": "\"C:\\Windows\\SystemApps\\ShellExperienceHost_cw5n1h2txyewy\\ShellExperienceHost.exe\" -ServerName:App.AppXtk181tbxbce2qsex02s8tw7hfxa9xb3t.mca",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 3388,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 3448,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 3464,
+        "ppid": 480,
+        "name": "powershell.exe",
+        "exe_path": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "cmdline": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -noexit -command \"try { . \\\"c:\\Users\\PC\\AppData\\Local\\Programs\\Microsoft VS Code\\resources\\app\\out\\vs\\workbench\\contrib\\terminal\\common\\scripts\\shellIntegration.ps1\\\" } catch {}\"",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 3520,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 3588,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 3632,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 3668,
+        "ppid": 3300,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 3700,
+        "ppid": 1176,
+        "name": "SDXHelper.exe",
+        "exe_path": "C:\\Program Files\\Microsoft Office\\root\\Office16\\SDXHelper.exe",
+        "cmdline": "\"C:\\Program Files\\Microsoft Office\\Root\\Office16\\SDXHelper.exe\" -Embedding",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 3708,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 3740,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 3744,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 3760,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 3768,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 3812,
+        "ppid": 1448,
+        "name": "Podman Desktop.exe",
+        "exe_path": "C:\\Users\\PC\\AppData\\Local\\Programs\\Podman Desktop\\Podman Desktop.exe",
+        "cmdline": "\"C:\\Users\\PC\\AppData\\Local\\Programs\\Podman Desktop\\Podman Desktop.exe\" ",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 3884,
+        "ppid": 4,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 3924,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 3960,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 3968,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 4008,
+        "ppid": 2972,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 4032,
+        "ppid": 11608,
+        "name": "conhost.exe",
+        "exe_path": "C:\\Windows\\System32\\conhost.exe",
+        "cmdline": "\\??\\C:\\Windows\\system32\\conhost.exe 0x4",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 4172,
+        "ppid": 480,
+        "name": "powershell.exe",
+        "exe_path": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "cmdline": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -noexit -command \"try { . \\\"c:\\Users\\PC\\AppData\\Local\\Programs\\Microsoft VS Code\\resources\\app\\out\\vs\\workbench\\contrib\\terminal\\common\\scripts\\shellIntegration.ps1\\\" } catch {}\"",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 4212,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 4264,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 4276,
+        "ppid": 3024,
+        "name": "conhost.exe",
+        "exe_path": "C:\\Windows\\System32\\conhost.exe",
+        "cmdline": "\\??\\C:\\Windows\\system32\\conhost.exe 0x4",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 4300,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 4312,
+        "ppid": 17712,
+        "name": "Code.exe",
+        "exe_path": "C:\\Users\\PC\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe",
+        "cmdline": "\"C:\\Users\\PC\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe\" --type=utility --utility-sub-type=node.mojom.NodeService --lang=en-US --service-sandbox-type=none --dns-result-order=ipv4first --experimental-network-inspection --inspect-port=0 --video-capture-use-gpu-memory-buffer --user-data-dir=\"C:\\Users\\PC\\AppData\\Roaming\\Code\" --standard-schemes=vscode-webview,vscode-file --enable-sandbox --secure-schemes=vscode-webview,vscode-file --cors-schemes=vscode-webview,vscode-file --fetch-schemes=vscode-webview,vscode-file --service-worker-schemes=vscode-webview --code-cache-schemes=vscode-webview,vscode-file --field-trial-handle=1752,i,17828068653338241611,15298562903451463468,262144 --enable-features=DocumentPolicyIncludeJSCallStacksInCrashReports,EarlyEstablishGpuChannel,EnableTransparentHwndEnlargement,EstablishGpuChannelAsync --disable-features=CalculateNativeWinOcclusion,FontationsLinuxSystemFonts,ScreenAIOCREnabled,SpareRendererForSitePerProcess,WinDelaySpellcheckServiceInit --variations-seed-version --mojo-platform-channel-handle=5876 /prefetch:8",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 4328,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 4432,
+        "ppid": 10308,
+        "name": "wsl.exe",
+        "exe_path": "C:\\Windows\\System32\\wsl.exe",
+        "cmdline": "C:\\Windows\\System32\\wsl.exe -d podman-machine-default sh",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 4464,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 4472,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 4560,
+        "ppid": 13392,
+        "name": "Insomnia.exe",
+        "exe_path": "C:\\Users\\PC\\AppData\\Local\\insomnia\\app-11.4.0\\Insomnia.exe",
+        "cmdline": "\"C:\\Users\\PC\\AppData\\Local\\insomnia\\app-11.4.0\\Insomnia.exe\" ",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 4628,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 4648,
+        "ppid": 1016,
+        "name": "AnyDesk.exe",
+        "exe_path": "C:\\Program Files (x86)\\AnyDesk\\AnyDesk.exe",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 4696,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 4732,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 4740,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 4892,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 4940,
+        "ppid": 480,
+        "name": "conhost.exe",
+        "exe_path": "C:\\Windows\\System32\\conhost.exe",
+        "cmdline": "\\\\?\\C:\\Windows\\system32\\conhost.exe --headless --width 48 --height 20 --signal 0x3c8 --server 0x3c0",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 5064,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 5112,
+        "ppid": 1016,
+        "name": "svchost.exe",
+        "exe_path": "C:\\Windows\\System32\\svchost.exe",
+        "cmdline": "C:\\Windows\\system32\\svchost.exe -k ClipboardSvcGroup -p -s cbdhsvc",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 5132,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 5140,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 5152,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 5168,
+        "ppid": 19332,
+        "name": "insomnia-11.4.0.exe",
+        "exe_path": "C:\\Users\\PC\\AppData\\Local\\insomnia\\app-11.4.0\\insomnia-11.4.0.exe",
+        "cmdline": "\"C:\\Users\\PC\\AppData\\Local\\insomnia\\app-11.4.0\\insomnia-11.4.0.exe\" --type=gpu-process --user-data-dir=\"C:\\Users\\PC\\AppData\\Roaming\\Insomnia\" --gpu-preferences=UAAAAAAAAADgAAAEAAAAAAAAAAAAAAAAAABgAAEAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAEAAAAAAAAAAIAAAAAAAAAAgAAAAAAAAA --field-trial-handle=1936,i,7906818963516899276,5626562586678948742,262144 --enable-features=DocumentPolicyIncludeJSCallStacksInCrashReports,PdfUseShowSaveFilePicker --disable-features=SpareRendererForSitePerProcess,WinDelaySpellcheckServiceInit --variations-seed-version --mojo-platform-channel-handle=1924 /prefetch:2",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 5180,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 5192,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 5200,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 5220,
+        "ppid": 10308,
+        "name": "wsl.exe",
+        "exe_path": "C:\\Windows\\System32\\wsl.exe",
+        "cmdline": "C:\\Windows\\System32\\wsl.exe -d docker-desktop -e /usr/bin/vpnkit-bridge --pid-file=/run/vpnkit-bridge.pid guest",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 5252,
+        "ppid": 4696,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 5272,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 5292,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 5336,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 5372,
+        "ppid": 1176,
+        "name": "SystemSettings.exe",
+        "exe_path": "C:\\Windows\\ImmersiveControlPanel\\SystemSettings.exe",
+        "cmdline": "\"C:\\Windows\\ImmersiveControlPanel\\SystemSettings.exe\" -ServerName:microsoft.windows.immersivecontrolpanel",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 5456,
+        "ppid": 480,
+        "name": "conhost.exe",
+        "exe_path": "C:\\Windows\\System32\\conhost.exe",
+        "cmdline": "\\\\?\\C:\\Windows\\system32\\conhost.exe --headless --width 80 --height 30 --signal 0x428 --server 0x43c",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 5464,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 5476,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 5484,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 5496,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 5532,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 5540,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 5548,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 5556,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 5572,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 5720,
+        "ppid": 17488,
+        "name": "conhost.exe",
+        "exe_path": "C:\\Windows\\System32\\conhost.exe",
+        "cmdline": "\\??\\C:\\Windows\\system32\\conhost.exe 0x4",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 5724,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 5772,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 5780,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 5812,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 5820,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 5860,
+        "ppid": 7504,
+        "name": "wsl.exe",
+        "exe_path": "C:\\Program Files\\WSL\\wsl.exe",
+        "cmdline": "C:\\Windows\\System32\\wsl.exe -d docker-desktop -u root -e wsl-bootstrap run --base-image \"/c/Program Files/Docker/Docker/resources/docker-desktop.iso\" --cli-iso \"/c/Program Files/Docker/Docker/resources/wsl/docker-wsl-cli.iso\" --data-disk 36966622-1b86-1149-9c6f-a78881598f6b",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 5864,
+        "ppid": 480,
+        "name": "conhost.exe",
+        "exe_path": "C:\\Windows\\System32\\conhost.exe",
+        "cmdline": "\\\\?\\C:\\Windows\\system32\\conhost.exe --headless --width 80 --height 30 --signal 0x6e0 --server 0x6a0",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 6004,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 6064,
+        "ppid": 4312,
+        "name": "Code.exe",
+        "exe_path": "C:\\Users\\PC\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe",
+        "cmdline": "\"C:\\Users\\PC\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe\" --max-old-space-size=3072 \"c:\\Users\\PC\\AppData\\Local\\Programs\\Microsoft VS Code\\resources\\app\\extensions\\node_modules\\typescript\\lib\\tsserver.js\" --useInferredProjectPerProjectRoot --enableTelemetry --cancellationPipeName C:\\Users\\PC\\AppData\\Local\\Temp\\vscode-typescript\\6fda06993d062440d9fd\\tscancellation-11cc897f9df814e6b7ee.tmp* --globalPlugins @vscode/copilot-typescript-server-plugin,vue-typescript-plugin-pack --pluginProbeLocations c:\\Users\\PC\\.vscode\\extensions\\github.copilot-chat-0.30.3,c:\\Users\\PC\\.vscode\\extensions\\vue.volar-3.0.6 --locale en --noGetErrOnBackgroundUpdate --canUseWatchEvents --validateDefaultNpmLocation --useNodeIpc",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 6100,
+        "ppid": 5820,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 6108,
+        "ppid": 4740,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 6168,
+        "ppid": 3244,
+        "name": "browser.exe",
+        "exe_path": "C:\\Users\\PC\\AppData\\Local\\Yandex\\YandexBrowser\\Application\\browser.exe",
+        "cmdline": "\"C:\\Users\\PC\\AppData\\Local\\Yandex\\YandexBrowser\\Application\\browser.exe\" --shutdown-if-not-closed-by-system-restart",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 6272,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 6336,
+        "ppid": 5220,
+        "name": "wsl.exe",
+        "exe_path": "C:\\Program Files\\WSL\\wsl.exe",
+        "cmdline": "C:\\Windows\\System32\\wsl.exe -d docker-desktop -e /usr/bin/vpnkit-bridge --pid-file=/run/vpnkit-bridge.pid guest",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 6340,
+        "ppid": 0,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 6440,
+        "ppid": 14748,
+        "name": "Code.exe",
+        "exe_path": "C:\\Users\\PC\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe",
+        "cmdline": "\"C:\\Users\\PC\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe\" \"c:/Users/PC/AppData/Local/Programs/Microsoft VS Code/resources/app/extensions/node_modules/typescript/lib/typingsInstaller.js\" --globalTypingsCacheLocation C:/Users/PC/AppData/Local/Microsoft/TypeScript/5.9 --enableTelemetry --typesMapLocation \"c:/Users/PC/AppData/Local/Programs/Microsoft VS Code/resources/app/extensions/node_modules/typescript/lib/typesMap.json\" --validateDefaultNpmLocation",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 6508,
+        "ppid": 6168,
+        "name": "browser.exe",
+        "exe_path": "C:\\Users\\PC\\AppData\\Local\\Yandex\\YandexBrowser\\Application\\browser.exe",
+        "cmdline": "\"C:\\Users\\PC\\AppData\\Local\\Yandex\\YandexBrowser\\Application\\browser.exe\" --type=renderer --user-id=B8085D8A-22E0-4945-8547-A653B2BE061C --brand-id=yandex --help-url=https://api.browser.yandex.ru/redirect/help/ --user-agent-info --web-ntp-url-for-renderer=https://webntp.yandex.ru/ --translate-security-origin=https://browser.translate.yandex.net/ --enable-instaserp --extensions-on-chrome-urls --no-pre-read-main-dll --video-capture-use-gpu-memory-buffer --lang=ru --device-scale-factor=1.25 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=113 --time-ticks-at-unix-epoch=-1756103762258322 --launch-time-ticks=1284758143 --field-trial-handle=1928,i,13331809330070461085,13927758089240476913,262144 --variations-seed-version --mojo-platform-channel-handle=9524 /prefetch:1",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 6652,
+        "ppid": 6168,
+        "name": "browser.exe",
+        "exe_path": "C:\\Users\\PC\\AppData\\Local\\Yandex\\YandexBrowser\\Application\\browser.exe",
+        "cmdline": "\"C:\\Users\\PC\\AppData\\Local\\Yandex\\YandexBrowser\\Application\\browser.exe\" --type=utility --utility-sub-type=page_dssm.mojom.PageDSSMServiceFactory --lang=ru --service-sandbox-type=utility --utility-enable-page-dssm --video-capture-use-gpu-memory-buffer --user-id=B8085D8A-22E0-4945-8547-A653B2BE061C --brand-id=yandex --extensions-on-chrome-urls --no-pre-read-main-dll --process-name=page_dssm --field-trial-handle=1928,i,13331809330070461085,13927758089240476913,262144 --variations-seed-version --mojo-platform-channel-handle=11632 --brver=25.8.0.1908 /prefetch:8",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 6712,
+        "ppid": 6168,
+        "name": "browser.exe",
+        "exe_path": "C:\\Users\\PC\\AppData\\Local\\Yandex\\YandexBrowser\\Application\\browser.exe",
+        "cmdline": "\"C:\\Users\\PC\\AppData\\Local\\Yandex\\YandexBrowser\\Application\\browser.exe\" --type=renderer --user-id=B8085D8A-22E0-4945-8547-A653B2BE061C --brand-id=yandex --help-url=https://api.browser.yandex.ru/redirect/help/ --user-agent-info --web-ntp-url-for-renderer=https://webntp.yandex.ru/ --translate-security-origin=https://browser.translate.yandex.net/ --enable-instaserp --extensions-on-chrome-urls --no-pre-read-main-dll --video-capture-use-gpu-memory-buffer --lang=ru --device-scale-factor=1.25 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=134 --time-ticks-at-unix-epoch=-1756103762258322 --launch-time-ticks=5759076691 --field-trial-handle=1928,i,13331809330070461085,13927758089240476913,262144 --variations-seed-version --mojo-platform-channel-handle=11104 /prefetch:1",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 6884,
+        "ppid": 1176,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 6936,
+        "ppid": 6168,
+        "name": "browser.exe",
+        "exe_path": "C:\\Users\\PC\\AppData\\Local\\Yandex\\YandexBrowser\\Application\\browser.exe",
+        "cmdline": "\"C:\\Users\\PC\\AppData\\Local\\Yandex\\YandexBrowser\\Application\\browser.exe\" --type=renderer --user-id=B8085D8A-22E0-4945-8547-A653B2BE061C --brand-id=yandex --help-url=https://api.browser.yandex.ru/redirect/help/ --user-agent-info --web-ntp-url-for-renderer=https://webntp.yandex.ru/ --translate-security-origin=https://browser.translate.yandex.net/ --enable-instaserp --extensions-on-chrome-urls --no-pre-read-main-dll --video-capture-use-gpu-memory-buffer --lang=ru --device-scale-factor=1.25 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=187 --time-ticks-at-unix-epoch=-1756103762258322 --launch-time-ticks=21691239547 --field-trial-handle=1928,i,13331809330070461085,13927758089240476913,262144 --variations-seed-version --mojo-platform-channel-handle=12444 /prefetch:1",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 6984,
+        "ppid": 4312,
+        "name": "Code.exe",
+        "exe_path": "C:\\Users\\PC\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe",
+        "cmdline": "\"C:\\Users\\PC\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe\" c:\\Users\\PC\\.vscode\\extensions\\ms-azuretools.vscode-containers-2.1.0\\dist\\dockerfile-language-server-nodejs\\lib\\server.js --node-ipc --node-ipc --clientProcessId=4312",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 6996,
+        "ppid": 1176,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 7040,
+        "ppid": 2920,
+        "name": "msrdc.exe",
+        "exe_path": "C:\\Program Files\\WSL\\msrdc.exe",
+        "cmdline": "msrdc.exe /wslg /silent /v:7C017355-69F4-4A0F-90FF-05E648418869 /hvsocketserviceid:00000001-FACB-11E6-BD58-64006A7986D3 /plugin:WSLDVC_PACKAGE /wslgsharedmemorypath:WSL\\7C017355-69F4-4A0F-90FF-05E648418869\\wslg \"C:\\Program Files\\WSL\\wslg.rdp\"",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 7072,
+        "ppid": 1176,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 7204,
+        "ppid": 11728,
+        "name": "Code.exe",
+        "exe_path": "C:\\Users\\PC\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe",
+        "cmdline": "\"C:\\Users\\PC\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe\" c:\\Users\\PC\\.vscode\\extensions\\ms-azuretools.vscode-containers-2.1.0\\dist\\dockerfile-language-server-nodejs\\lib\\server.js --node-ipc --node-ipc --clientProcessId=11728",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 7224,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 7236,
+        "ppid": 480,
+        "name": "conhost.exe",
+        "exe_path": "C:\\Windows\\System32\\conhost.exe",
+        "cmdline": "\\\\?\\C:\\Windows\\system32\\conhost.exe --headless --width 129 --height 20 --signal 0x5ac --server 0x5a4",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 7240,
+        "ppid": 11728,
+        "name": "Code.exe",
+        "exe_path": "C:\\Users\\PC\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe",
+        "cmdline": "\"C:\\Users\\PC\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe\" \"c:\\Users\\PC\\AppData\\Local\\Programs\\Microsoft VS Code\\resources\\app\\extensions\\css-language-features\\server\\dist\\node\\cssServerMain\" --node-ipc --clientProcessId=11728",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 7364,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 7424,
+        "ppid": 6168,
+        "name": "browser.exe",
+        "exe_path": "C:\\Users\\PC\\AppData\\Local\\Yandex\\YandexBrowser\\Application\\browser.exe",
+        "cmdline": "\"C:\\Users\\PC\\AppData\\Local\\Yandex\\YandexBrowser\\Application\\browser.exe\" --type=renderer --user-id=B8085D8A-22E0-4945-8547-A653B2BE061C --brand-id=yandex --help-url=https://api.browser.yandex.ru/redirect/help/ --user-agent-info --web-ntp-url-for-renderer=https://webntp.yandex.ru/ --translate-security-origin=https://browser.translate.yandex.net/ --enable-instaserp --extensions-on-chrome-urls --no-pre-read-main-dll --video-capture-use-gpu-memory-buffer --lang=ru --device-scale-factor=1.25 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=57 --time-ticks-at-unix-epoch=-1756103762258322 --launch-time-ticks=35003786 --field-trial-handle=1928,i,13331809330070461085,13927758089240476913,262144 --variations-seed-version --mojo-platform-channel-handle=7876 /prefetch:1",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 7432,
+        "ppid": 10308,
+        "name": "Docker Desktop.exe",
+        "exe_path": "C:\\Program Files\\Docker\\Docker\\frontend\\Docker Desktop.exe",
+        "cmdline": "\"C:\\Program Files\\Docker\\Docker\\frontend\\Docker Desktop.exe\" --analytics-enabled=true --name=new-license",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 7504,
+        "ppid": 10308,
+        "name": "wsl.exe",
+        "exe_path": "C:\\Windows\\System32\\wsl.exe",
+        "cmdline": "C:\\Windows\\System32\\wsl.exe -d docker-desktop -u root -e wsl-bootstrap run --base-image \"/c/Program Files/Docker/Docker/resources/docker-desktop.iso\" --cli-iso \"/c/Program Files/Docker/Docker/resources/wsl/docker-wsl-cli.iso\" --data-disk 36966622-1b86-1149-9c6f-a78881598f6b",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 7600,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 7704,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 7744,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 7748,
+        "ppid": 2920,
+        "name": "conhost.exe",
+        "exe_path": "C:\\Windows\\System32\\conhost.exe",
+        "cmdline": "\\??\\C:\\Windows\\system32\\conhost.exe 0x4",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 7772,
+        "ppid": 480,
+        "name": "powershell.exe",
+        "exe_path": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "cmdline": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -noexit -command \"try { . \\\"c:\\Users\\PC\\AppData\\Local\\Programs\\Microsoft VS Code\\resources\\app\\out\\vs\\workbench\\contrib\\terminal\\common\\scripts\\shellIntegration.ps1\\\" } catch {}\"",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 7872,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 8204,
+        "ppid": 5272,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 8296,
+        "ppid": 2860,
+        "name": "sihost.exe",
+        "exe_path": "C:\\Windows\\System32\\sihost.exe",
+        "cmdline": "sihost.exe",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 8316,
+        "ppid": 17292,
+        "name": "wslhost.exe",
+        "exe_path": "C:\\Program Files\\WSL\\wslhost.exe",
+        "cmdline": " --distro-id {e5088c7a-6fd4-4282-864d-37526f03228c} --vm-id {7c017355-69f4-4a0f-90ff-05e648418869} --handle 724 --event 752 --parent 756",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 8332,
+        "ppid": 1016,
+        "name": "svchost.exe",
+        "exe_path": "C:\\Windows\\System32\\svchost.exe",
+        "cmdline": "C:\\Windows\\system32\\svchost.exe -k UnistackSvcGroup -s CDPUserSvc",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 8368,
+        "ppid": 4432,
+        "name": "wsl.exe",
+        "exe_path": "C:\\Program Files\\WSL\\wsl.exe",
+        "cmdline": "C:\\Windows\\System32\\wsl.exe -d podman-machine-default sh",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 8424,
+        "ppid": 1016,
+        "name": "svchost.exe",
+        "exe_path": "C:\\Windows\\System32\\svchost.exe",
+        "cmdline": "C:\\Windows\\system32\\svchost.exe -k UnistackSvcGroup -s WpnUserService",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 8532,
+        "ppid": 12928,
+        "name": "chrome.exe",
+        "exe_path": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+        "cmdline": "\"C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe\" --type=utility --utility-sub-type=storage.mojom.StorageService --lang=ru --service-sandbox-type=service --no-pre-read-main-dll --metrics-shmem-handle=2432,i,3141024700261775740,5115864198629185259,524288 --field-trial-handle=1464,i,8309392995939714741,3063187248525716149,262144 --variations-seed-version=20250824-180049.414000 --mojo-platform-channel-handle=2440 /prefetch:8",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 8536,
+        "ppid": 2556,
+        "name": "taskhostw.exe",
+        "exe_path": "C:\\Windows\\System32\\taskhostw.exe",
+        "cmdline": "taskhostw.exe {222A245B-E637-4AE9-A93F-A59CA119A75E}",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 8604,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 8656,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 8680,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 8876,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 8896,
+        "ppid": 1176,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 9016,
+        "ppid": 1176,
+        "name": "Video.UI.exe",
+        "exe_path": "C:\\Program Files\\WindowsApps\\Microsoft.ZuneVideo_10.25071.10101.0_x64__8wekyb3d8bbwe\\Video.UI.exe",
+        "cmdline": "\"C:\\Program Files\\WindowsApps\\Microsoft.ZuneVideo_10.25071.10101.0_x64__8wekyb3d8bbwe\\Video.UI.exe\" -ServerName:Microsoft.ZuneVideo.AppX758ya5sqdjd98rx6z7g95nw6jy7bqx9y.mca",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 9052,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 9132,
+        "ppid": 9052,
+        "name": "ctfmon.exe",
+        "exe_path": "C:\\Windows\\System32\\ctfmon.exe",
+        "cmdline": "",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 9168,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 9404,
+        "ppid": 2556,
+        "name": "taskhostw.exe",
+        "exe_path": "C:\\Windows\\System32\\taskhostw.exe",
+        "cmdline": "taskhostw.exe",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 9548,
+        "ppid": 3812,
+        "name": "Podman Desktop.exe",
+        "exe_path": "C:\\Users\\PC\\AppData\\Local\\Programs\\Podman Desktop\\Podman Desktop.exe",
+        "cmdline": "\"C:\\Users\\PC\\AppData\\Local\\Programs\\Podman Desktop\\Podman Desktop.exe\" --type=gpu-process --user-data-dir=\"C:\\Users\\PC\\AppData\\Roaming\\Podman Desktop\" --gpu-preferences=UAAAAAAAAADgAAAEAAAAAAAAAAAAAAAAAABgAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAEAAAAAAAAAAIAAAAAAAAAAgAAAAAAAAA --use-gl=angle --use-angle=swiftshader-webgl --field-trial-handle=1856,i,1563440876678912236,14739453800188618444,262144 --enable-features=EnableTransparentHwndEnlargement,PdfUseShowSaveFilePicker --disable-features=ScreenAIOCREnabled,SpareRendererForSitePerProcess,WinDelaySpellcheckServiceInit --variations-seed-version --mojo-platform-channel-handle=1852 /prefetch:2",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 9684,
+        "ppid": 7344,
+        "name": "nekobox.exe",
+        "exe_path": "C:\\Users\\PC\\Desktop\\nekoray\\nekobox.exe",
+        "cmdline": "",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 9808,
+        "ppid": 4312,
+        "name": "Code.exe",
+        "exe_path": "C:\\Users\\PC\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe",
+        "cmdline": "\"C:\\Users\\PC\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe\" c:\\Users\\PC\\.vscode\\extensions\\ms-azuretools.vscode-containers-2.1.0\\dist\\compose-language-service\\lib\\server.js --node-ipc --node-ipc --clientProcessId=4312",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 9816,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 10080,
+        "ppid": 1176,
+        "name": "CompPkgSrv.exe",
+        "exe_path": "C:\\Windows\\System32\\CompPkgSrv.exe",
+        "cmdline": "C:\\Windows\\System32\\CompPkgSrv.exe -Embedding",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 10128,
+        "ppid": 1016,
+        "name": "svchost.exe",
+        "exe_path": "C:\\Windows\\System32\\svchost.exe",
+        "cmdline": "C:\\Windows\\system32\\svchost.exe -k LocalService -p -s CaptureService",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 10308,
+        "ppid": 11608,
+        "name": "com.docker.backend.exe",
+        "exe_path": "C:\\Program Files\\Docker\\Docker\\resources\\com.docker.backend.exe",
+        "cmdline": "\"C:\\Program Files\\Docker\\Docker\\resources\\com.docker.backend.exe\" services",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 10416,
+        "ppid": 6168,
+        "name": "browser.exe",
+        "exe_path": "C:\\Users\\PC\\AppData\\Local\\Yandex\\YandexBrowser\\Application\\browser.exe",
+        "cmdline": "\"C:\\Users\\PC\\AppData\\Local\\Yandex\\YandexBrowser\\Application\\browser.exe\" --type=renderer --user-id=B8085D8A-22E0-4945-8547-A653B2BE061C --brand-id=yandex --help-url=https://api.browser.yandex.ru/redirect/help/ --user-agent-info --web-ntp-url-for-renderer=https://webntp.yandex.ru/ --translate-security-origin=https://browser.translate.yandex.net/ --enable-instaserp --extensions-on-chrome-urls --no-pre-read-main-dll --video-capture-use-gpu-memory-buffer --lang=ru --device-scale-factor=1.25 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=173 --time-ticks-at-unix-epoch=-1756103762258322 --launch-time-ticks=18808637212 --field-trial-handle=1928,i,13331809330070461085,13927758089240476913,262144 --variations-seed-version --mojo-platform-channel-handle=12072 /prefetch:1",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 10436,
+        "ppid": 1176,
+        "name": "StartMenuExperienceHost.exe",
+        "exe_path": "C:\\Windows\\SystemApps\\Microsoft.Windows.StartMenuExperienceHost_cw5n1h2txyewy\\StartMenuExperienceHost.exe",
+        "cmdline": "\"C:\\Windows\\SystemApps\\Microsoft.Windows.StartMenuExperienceHost_cw5n1h2txyewy\\StartMenuExperienceHost.exe\" -ServerName:App.AppXywbrabmsek0gm3tkwpr5kwzbs55tkqay.mca",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 10588,
+        "ppid": 1176,
+        "name": "RuntimeBroker.exe",
+        "exe_path": "C:\\Windows\\System32\\RuntimeBroker.exe",
+        "cmdline": "C:\\Windows\\System32\\RuntimeBroker.exe -Embedding",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 10720,
+        "ppid": 1176,
+        "name": "SearchApp.exe",
+        "exe_path": "C:\\Windows\\SystemApps\\Microsoft.Windows.Search_cw5n1h2txyewy\\SearchApp.exe",
+        "cmdline": "\"C:\\Windows\\SystemApps\\Microsoft.Windows.Search_cw5n1h2txyewy\\SearchApp.exe\" -ServerName:CortanaUI.AppX8z9r6jm96hw4bsbneegw0kyxx296wr9t.mca",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 10816,
+        "ppid": 1176,
+        "name": "RuntimeBroker.exe",
+        "exe_path": "C:\\Windows\\System32\\RuntimeBroker.exe",
+        "cmdline": "C:\\Windows\\System32\\RuntimeBroker.exe -Embedding",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 10864,
+        "ppid": 6168,
+        "name": "browser.exe",
+        "exe_path": "C:\\Users\\PC\\AppData\\Local\\Yandex\\YandexBrowser\\Application\\browser.exe",
+        "cmdline": "\"C:\\Users\\PC\\AppData\\Local\\Yandex\\YandexBrowser\\Application\\browser.exe\" --type=renderer --user-id=B8085D8A-22E0-4945-8547-A653B2BE061C --brand-id=yandex --help-url=https://api.browser.yandex.ru/redirect/help/ --user-agent-info --web-ntp-url-for-renderer=https://webntp.yandex.ru/ --translate-security-origin=https://browser.translate.yandex.net/ --enable-instaserp --extensions-on-chrome-urls --no-pre-read-main-dll --video-capture-use-gpu-memory-buffer --lang=ru --device-scale-factor=1.25 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=177 --time-ticks-at-unix-epoch=-1756103762258322 --launch-time-ticks=20097079508 --field-trial-handle=1928,i,13331809330070461085,13927758089240476913,262144 --variations-seed-version --mojo-platform-channel-handle=11880 /prefetch:1",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 10996,
+        "ppid": 0,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 11028,
+        "ppid": 19332,
+        "name": "insomnia-11.4.0.exe",
+        "exe_path": "C:\\Users\\PC\\AppData\\Local\\insomnia\\app-11.4.0\\insomnia-11.4.0.exe",
+        "cmdline": "\"C:\\Users\\PC\\AppData\\Local\\insomnia\\app-11.4.0\\insomnia-11.4.0.exe\" --type=renderer --user-data-dir=\"C:\\Users\\PC\\AppData\\Roaming\\Insomnia\" --standard-schemes=insomnia-event-source,https,http,insomnia-templating-worker-database --secure-schemes=insomnia-event-source,https,http,insomnia-templating-worker-database,sentry-ipc --bypasscsp-schemes=sentry-ipc --cors-schemes=sentry-ipc --fetch-schemes=insomnia-event-source,https,http,insomnia-templating-worker-database,sentry-ipc --streaming-schemes=insomnia-event-source --app-user-model-id=com.squirrel.insomnia.insomnia-11.4.0 --app-path=\"C:\\Users\\PC\\AppData\\Local\\insomnia\\app-11.4.0\\resources\\app.asar\" --no-sandbox --no-zygote --disable-blink-features=Auxclick --video-capture-use-gpu-memory-buffer --lang=ru --device-scale-factor=1.25 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=4 --time-ticks-at-unix-epoch=-1756103762258321 --launch-time-ticks=18639541113 --field-trial-handle=1936,i,7906818963516899276,5626562586678948742,262144 --enable-features=DocumentPolicyIncludeJSCallStacksInCrashReports,PdfUseShowSaveFilePicker --disable-features=SpareRendererForSitePerProcess,WinDelaySpellcheckServiceInit --variations-seed-version --mojo-platform-channel-handle=3112 /prefetch:1",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 11032,
+        "ppid": 17712,
+        "name": "Code.exe",
+        "exe_path": "C:\\Users\\PC\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe",
+        "cmdline": "\"C:\\Users\\PC\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe\" --type=utility --utility-sub-type=node.mojom.NodeService --lang=en-US --service-sandbox-type=none --video-capture-use-gpu-memory-buffer --user-data-dir=\"C:\\Users\\PC\\AppData\\Roaming\\Code\" --standard-schemes=vscode-webview,vscode-file --enable-sandbox --secure-schemes=vscode-webview,vscode-file --cors-schemes=vscode-webview,vscode-file --fetch-schemes=vscode-webview,vscode-file --service-worker-schemes=vscode-webview --code-cache-schemes=vscode-webview,vscode-file --field-trial-handle=1752,i,17828068653338241611,15298562903451463468,262144 --enable-features=DocumentPolicyIncludeJSCallStacksInCrashReports,EarlyEstablishGpuChannel,EnableTransparentHwndEnlargement,EstablishGpuChannelAsync --disable-features=CalculateNativeWinOcclusion,FontationsLinuxSystemFonts,ScreenAIOCREnabled,SpareRendererForSitePerProcess,WinDelaySpellcheckServiceInit --variations-seed-version --mojo-platform-channel-handle=3704 /prefetch:8",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 11104,
+        "ppid": 12928,
+        "name": "chrome.exe",
+        "exe_path": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+        "cmdline": "\"C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe\" --type=gpu-process --no-pre-read-main-dll --gpu-preferences=SAAAAAAAAADgAAAIAAAAAAAAAAAAAGAAAQAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAABAAAAAAAAAACAAAAAAAAAAIAAAAAAAAAA== --metrics-shmem-handle=1852,i,2108991016667960989,16415048052761320250,262144 --field-trial-handle=1464,i,8309392995939714741,3063187248525716149,262144 --variations-seed-version=20250824-180049.414000 --mojo-platform-channel-handle=2032 /prefetch:2",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 11140,
+        "ppid": 3244,
+        "name": "Telegram.exe",
+        "exe_path": "C:\\Users\\PC\\AppData\\Roaming\\Telegram Desktop\\Telegram.exe",
+        "cmdline": "\"C:\\Users\\PC\\AppData\\Roaming\\Telegram Desktop\\Telegram.exe\" ",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 11372,
+        "ppid": 480,
+        "name": "conhost.exe",
+        "exe_path": "C:\\Windows\\System32\\conhost.exe",
+        "cmdline": "\\\\?\\C:\\Windows\\system32\\conhost.exe --headless --width 80 --height 30 --signal 0x4d8 --server 0x4c8",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 11428,
+        "ppid": 0,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 11608,
+        "ppid": 12684,
+        "name": "com.docker.backend.exe",
+        "exe_path": "C:\\Program Files\\Docker\\Docker\\resources\\com.docker.backend.exe",
+        "cmdline": "\"C:\\Program Files\\Docker\\Docker\\resources\\com.docker.backend.exe\"",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 11624,
+        "ppid": 12928,
+        "name": "chrome.exe",
+        "exe_path": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+        "cmdline": "\"C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe\" --type=renderer --no-pre-read-main-dll --video-capture-use-gpu-memory-buffer --lang=ru --device-scale-factor=1.25 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=9 --time-ticks-at-unix-epoch=-1756103762258321 --launch-time-ticks=20830780596 --metrics-shmem-handle=5376,i,16635567853949203468,15136394444204532645,2097152 --field-trial-handle=1464,i,8309392995939714741,3063187248525716149,262144 --variations-seed-version=20250824-180049.414000 --mojo-platform-channel-handle=5384 /prefetch:1",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 11656,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 11684,
+        "ppid": 1176,
+        "name": "LockApp.exe",
+        "exe_path": "C:\\Windows\\SystemApps\\Microsoft.LockApp_cw5n1h2txyewy\\LockApp.exe",
+        "cmdline": "\"C:\\Windows\\SystemApps\\Microsoft.LockApp_cw5n1h2txyewy\\LockApp.exe\" -ServerName:WindowsDefaultLockScreen.AppX7y4nbzq37zn4ks9k7amqjywdat7d3j2z.mca",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 11728,
+        "ppid": 17712,
+        "name": "Code.exe",
+        "exe_path": "C:\\Users\\PC\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe",
+        "cmdline": "\"C:\\Users\\PC\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe\" --type=utility --utility-sub-type=node.mojom.NodeService --lang=en-US --service-sandbox-type=none --dns-result-order=ipv4first --experimental-network-inspection --inspect-port=0 --video-capture-use-gpu-memory-buffer --user-data-dir=\"C:\\Users\\PC\\AppData\\Roaming\\Code\" --standard-schemes=vscode-webview,vscode-file --enable-sandbox --secure-schemes=vscode-webview,vscode-file --cors-schemes=vscode-webview,vscode-file --fetch-schemes=vscode-webview,vscode-file --service-worker-schemes=vscode-webview --code-cache-schemes=vscode-webview,vscode-file --field-trial-handle=1752,i,17828068653338241611,15298562903451463468,262144 --enable-features=DocumentPolicyIncludeJSCallStacksInCrashReports,EarlyEstablishGpuChannel,EnableTransparentHwndEnlargement,EstablishGpuChannelAsync --disable-features=CalculateNativeWinOcclusion,FontationsLinuxSystemFonts,ScreenAIOCREnabled,SpareRendererForSitePerProcess,WinDelaySpellcheckServiceInit --variations-seed-version --mojo-platform-channel-handle=3708 /prefetch:8",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 11848,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 11856,
+        "ppid": 1176,
+        "name": "RuntimeBroker.exe",
+        "exe_path": "C:\\Windows\\System32\\RuntimeBroker.exe",
+        "cmdline": "C:\\Windows\\System32\\RuntimeBroker.exe -Embedding",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 11964,
+        "ppid": 6168,
+        "name": "browser.exe",
+        "exe_path": "C:\\Users\\PC\\AppData\\Local\\Yandex\\YandexBrowser\\Application\\browser.exe",
+        "cmdline": "\"C:\\Users\\PC\\AppData\\Local\\Yandex\\YandexBrowser\\Application\\browser.exe\" --type=renderer --user-id=B8085D8A-22E0-4945-8547-A653B2BE061C --brand-id=yandex --help-url=https://api.browser.yandex.ru/redirect/help/ --user-agent-info --web-ntp-url-for-renderer=https://webntp.yandex.ru/ --translate-security-origin=https://browser.translate.yandex.net/ --enable-instaserp --extensions-on-chrome-urls --no-pre-read-main-dll --video-capture-use-gpu-memory-buffer --lang=ru --device-scale-factor=1.25 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=111 --time-ticks-at-unix-epoch=-1756103762258322 --launch-time-ticks=1276705132 --field-trial-handle=1928,i,13331809330070461085,13927758089240476913,262144 --variations-seed-version --mojo-platform-channel-handle=8652 /prefetch:1",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 12092,
+        "ppid": 0,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 12328,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 12648,
+        "ppid": 4312,
+        "name": "Code.exe",
+        "exe_path": "C:\\Users\\PC\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe",
+        "cmdline": "\"C:\\Users\\PC\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe\" --max-old-space-size=3072 \"c:\\Users\\PC\\AppData\\Local\\Programs\\Microsoft VS Code\\resources\\app\\extensions\\node_modules\\typescript\\lib\\tsserver.js\" --serverMode partialSemantic --useInferredProjectPerProjectRoot --disableAutomaticTypingAcquisition --cancellationPipeName C:\\Users\\PC\\AppData\\Local\\Temp\\vscode-typescript\\6fda06993d062440d9fd\\tscancellation-5c4e61b64fdcbfa74450.tmp* --globalPlugins @vscode/copilot-typescript-server-plugin,vue-typescript-plugin-pack --pluginProbeLocations c:\\Users\\PC\\.vscode\\extensions\\github.copilot-chat-0.30.3,c:\\Users\\PC\\.vscode\\extensions\\vue.volar-3.0.6 --locale en --noGetErrOnBackgroundUpdate --canUseWatchEvents --validateDefaultNpmLocation --useNodeIpc",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 12652,
+        "ppid": 6168,
+        "name": "browser.exe",
+        "exe_path": "C:\\Users\\PC\\AppData\\Local\\Yandex\\YandexBrowser\\Application\\browser.exe",
+        "cmdline": "\"C:\\Users\\PC\\AppData\\Local\\Yandex\\YandexBrowser\\Application\\browser.exe\" --type=utility --utility-sub-type=network.mojom.NetworkService --lang=ru --service-sandbox-type=none --user-id=B8085D8A-22E0-4945-8547-A653B2BE061C --brand-id=yandex --extensions-on-chrome-urls --no-pre-read-main-dll --process-name=\"Network Service\" --field-trial-handle=1928,i,13331809330070461085,13927758089240476913,262144 --variations-seed-version --mojo-platform-channel-handle=2088 --brver=25.8.0.1908 /prefetch:3",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 12672,
+        "ppid": 480,
+        "name": "powershell.exe",
+        "exe_path": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "cmdline": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -noexit -command \"try { . \\\"c:\\Users\\PC\\AppData\\Local\\Programs\\Microsoft VS Code\\resources\\app\\out\\vs\\workbench\\contrib\\terminal\\common\\scripts\\shellIntegration.ps1\\\" } catch {}\"",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 12676,
+        "ppid": 3244,
+        "name": "SecurityHealthSystray.exe",
+        "exe_path": "C:\\Windows\\System32\\SecurityHealthSystray.exe",
+        "cmdline": "\"C:\\Windows\\System32\\SecurityHealthSystray.exe\" ",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 12840,
+        "ppid": 1176,
+        "name": "RuntimeBroker.exe",
+        "exe_path": "C:\\Windows\\System32\\RuntimeBroker.exe",
+        "cmdline": "C:\\Windows\\System32\\RuntimeBroker.exe -Embedding",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 12896,
+        "ppid": 1176,
+        "name": "TextInputHost.exe",
+        "exe_path": "C:\\Windows\\SystemApps\\MicrosoftWindows.Client.CBS_cw5n1h2txyewy\\TextInputHost.exe",
+        "cmdline": "\"C:\\Windows\\SystemApps\\MicrosoftWindows.Client.CBS_cw5n1h2txyewy\\TextInputHost.exe\" -ServerName:InputApp.AppXk0k6mrh4r2q0ct33a9wgbez0x7v9cz5y.mca",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 12928,
+        "ppid": 3244,
+        "name": "chrome.exe",
+        "exe_path": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+        "cmdline": "\"C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe\" ",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 13020,
+        "ppid": 1176,
+        "name": "dllhost.exe",
+        "exe_path": "C:\\Windows\\System32\\dllhost.exe",
+        "cmdline": "C:\\Windows\\system32\\DllHost.exe /Processid:{973D20D7-562D-44B9-B70B-5A0F49CCDF3F}",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 13044,
+        "ppid": 0,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 13064,
+        "ppid": 6168,
+        "name": "browser.exe",
+        "exe_path": "C:\\Users\\PC\\AppData\\Local\\Yandex\\YandexBrowser\\Application\\browser.exe",
+        "cmdline": "C:\\Users\\PC\\AppData\\Local\\Yandex\\YandexBrowser\\Application\\browser.exe --type=crashpad-handler \"--user-data-dir=C:\\Users\\PC\\AppData\\Local\\Yandex\\YandexBrowser\\User Data\" /prefetch:4 --monitor-self-annotation=ptype=crashpad-handler \"--database=C:\\Users\\PC\\AppData\\Local\\Yandex\\YandexBrowser\\User Data\\Crashpad\" \"--metrics-dir=C:\\Users\\PC\\AppData\\Local\\Yandex\\YandexBrowser\\User Data\" --url=https://crash-reports.browser.yandex.net/submit --annotation=install_date=1727773491 --annotation=last_update_date=1755690273 --annotation=launches_after_update=8 --annotation=machine_id=854fd6ab8b051bfa8f8a3afc1a91c156 --annotation=main_process_pid=6168 --annotation=metrics_client_id=fbf8b9e041444cd6b4fbc1344689bfde --annotation=plat=Win64 --annotation=prod=Yandex --annotation=session_logout=False --annotation=ver=25.8.0.1908 --initial-client-data=0x148,0x14c,0x150,0x90,0x154,0x7ffe4f181bb0,0x7ffe4f181bbc,0x7ffe4f181bc8",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 13344,
+        "ppid": 6168,
+        "name": "browser.exe",
+        "exe_path": "C:\\Users\\PC\\AppData\\Local\\Yandex\\YandexBrowser\\Application\\browser.exe",
+        "cmdline": "\"C:\\Users\\PC\\AppData\\Local\\Yandex\\YandexBrowser\\Application\\browser.exe\" --type=utility --utility-sub-type=storage.mojom.StorageService --lang=ru --service-sandbox-type=service --user-id=B8085D8A-22E0-4945-8547-A653B2BE061C --brand-id=yandex --extensions-on-chrome-urls --no-pre-read-main-dll --process-name=\"Storage Service\" --field-trial-handle=1928,i,13331809330070461085,13927758089240476913,262144 --variations-seed-version --mojo-platform-channel-handle=2620 --brver=25.8.0.1908 /prefetch:8",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 13444,
+        "ppid": 6168,
+        "name": "browser.exe",
+        "exe_path": "C:\\Users\\PC\\AppData\\Local\\Yandex\\YandexBrowser\\Application\\browser.exe",
+        "cmdline": "\"C:\\Users\\PC\\AppData\\Local\\Yandex\\YandexBrowser\\Application\\browser.exe\" --type=renderer --user-id=B8085D8A-22E0-4945-8547-A653B2BE061C --brand-id=yandex --extension-process --help-url=https://api.browser.yandex.ru/redirect/help/ --user-agent-info --web-ntp-url-for-renderer=https://webntp.yandex.ru/ --translate-security-origin=https://browser.translate.yandex.net/ --enable-instaserp --extensions-on-chrome-urls --no-pre-read-main-dll --video-capture-use-gpu-memory-buffer --lang=ru --device-scale-factor=1.25 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=9 --time-ticks-at-unix-epoch=-1756103762258322 --may-use-trampoline-gpu --launch-time-ticks=27560433 --field-trial-handle=1928,i,13331809330070461085,13927758089240476913,262144 --variations-seed-version --mojo-platform-channel-handle=3280 /prefetch:2",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 13456,
+        "ppid": 6168,
+        "name": "browser.exe",
+        "exe_path": "C:\\Users\\PC\\AppData\\Local\\Yandex\\YandexBrowser\\Application\\browser.exe",
+        "cmdline": "\"C:\\Users\\PC\\AppData\\Local\\Yandex\\YandexBrowser\\Application\\browser.exe\" --type=renderer --user-id=B8085D8A-22E0-4945-8547-A653B2BE061C --brand-id=yandex --extension-process --help-url=https://api.browser.yandex.ru/redirect/help/ --user-agent-info --web-ntp-url-for-renderer=https://webntp.yandex.ru/ --translate-security-origin=https://browser.translate.yandex.net/ --enable-instaserp --extensions-on-chrome-urls --no-pre-read-main-dll --video-capture-use-gpu-memory-buffer --lang=ru --device-scale-factor=1.25 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=10 --time-ticks-at-unix-epoch=-1756103762258322 --may-use-trampoline-gpu --launch-time-ticks=27583984 --field-trial-handle=1928,i,13331809330070461085,13927758089240476913,262144 --variations-seed-version --mojo-platform-channel-handle=3516 /prefetch:2",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 13588,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 13724,
+        "ppid": 1176,
+        "name": "RuntimeBroker.exe",
+        "exe_path": "C:\\Windows\\System32\\RuntimeBroker.exe",
+        "cmdline": "C:\\Windows\\System32\\RuntimeBroker.exe -Embedding",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 13800,
+        "ppid": 6168,
+        "name": "browser.exe",
+        "exe_path": "C:\\Users\\PC\\AppData\\Local\\Yandex\\YandexBrowser\\Application\\browser.exe",
+        "cmdline": "\"C:\\Users\\PC\\AppData\\Local\\Yandex\\YandexBrowser\\Application\\browser.exe\" --type=utility --utility-sub-type=audio.mojom.AudioService --lang=ru --service-sandbox-type=audio --user-id=B8085D8A-22E0-4945-8547-A653B2BE061C --brand-id=yandex --extensions-on-chrome-urls --no-pre-read-main-dll --process-name=\"Audio Service\" --field-trial-handle=1928,i,13331809330070461085,13927758089240476913,262144 --variations-seed-version --mojo-platform-channel-handle=5304 --brver=25.8.0.1908 /prefetch:8",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 13868,
+        "ppid": 17712,
+        "name": "Code.exe",
+        "exe_path": "C:\\Users\\PC\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe",
+        "cmdline": "\"C:\\Users\\PC\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe\" --type=utility --utility-sub-type=network.mojom.NetworkService --lang=en-US --service-sandbox-type=none --user-data-dir=\"C:\\Users\\PC\\AppData\\Roaming\\Code\" --standard-schemes=vscode-webview,vscode-file --enable-sandbox --secure-schemes=vscode-webview,vscode-file --cors-schemes=vscode-webview,vscode-file --fetch-schemes=vscode-webview,vscode-file --service-worker-schemes=vscode-webview --code-cache-schemes=vscode-webview,vscode-file --field-trial-handle=1752,i,17828068653338241611,15298562903451463468,262144 --enable-features=DocumentPolicyIncludeJSCallStacksInCrashReports,EarlyEstablishGpuChannel,EnableTransparentHwndEnlargement,EstablishGpuChannelAsync --disable-features=CalculateNativeWinOcclusion,FontationsLinuxSystemFonts,ScreenAIOCREnabled,SpareRendererForSitePerProcess,WinDelaySpellcheckServiceInit --variations-seed-version --mojo-platform-channel-handle=1912 /prefetch:3",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 14176,
+        "ppid": 6168,
+        "name": "browser.exe",
+        "exe_path": "C:\\Users\\PC\\AppData\\Local\\Yandex\\YandexBrowser\\Application\\browser.exe",
+        "cmdline": "\"C:\\Users\\PC\\AppData\\Local\\Yandex\\YandexBrowser\\Application\\browser.exe\" --type=renderer --user-id=B8085D8A-22E0-4945-8547-A653B2BE061C --brand-id=yandex --help-url=https://api.browser.yandex.ru/redirect/help/ --user-agent-info --web-ntp-url-for-renderer=https://webntp.yandex.ru/ --translate-security-origin=https://browser.translate.yandex.net/ --ya-custo-process --enable-instaserp --extensions-on-chrome-urls --no-pre-read-main-dll --video-capture-use-gpu-memory-buffer --lang=ru --device-scale-factor=1.25 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=48 --time-ticks-at-unix-epoch=-1756103762258322 --launch-time-ticks=30149189 --field-trial-handle=1928,i,13331809330070461085,13927758089240476913,262144 --variations-seed-version --mojo-platform-channel-handle=6240 /prefetch:1",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 14312,
+        "ppid": 480,
+        "name": "powershell.exe",
+        "exe_path": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "cmdline": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -noexit -command \"try { . \\\"c:\\Users\\PC\\AppData\\Local\\Programs\\Microsoft VS Code\\resources\\app\\out\\vs\\workbench\\contrib\\terminal\\common\\scripts\\shellIntegration.ps1\\\" } catch {}\"",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 14400,
+        "ppid": 4312,
+        "name": "Code.exe",
+        "exe_path": "C:\\Users\\PC\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe",
+        "cmdline": "\"C:\\Users\\PC\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe\" \"c:\\Users\\PC\\AppData\\Local\\Programs\\Microsoft VS Code\\resources\\app\\extensions\\json-language-features\\server\\dist\\node\\jsonServerMain\" --node-ipc --clientProcessId=4312",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 14556,
+        "ppid": 15608,
+        "name": "AMDRSServ.exe",
+        "exe_path": "C:\\Program Files\\WindowsApps\\AdvancedMicroDevicesInc-2.AMDRadeonSoftware_10.20.40028.0_x64__0a9344xs7nr4m\\radeonsoftware\\AMDRSServ.exe",
+        "cmdline": "\"C:\\Program Files\\WindowsApps\\AdvancedMicroDevicesInc-2.AMDRadeonSoftware_10.20.40028.0_x64__0a9344xs7nr4m\\radeonsoftware\\AMDRSServ.exe\" ",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 14708,
+        "ppid": 0,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 14716,
+        "ppid": 12928,
+        "name": "chrome.exe",
+        "exe_path": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+        "cmdline": "\"C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe\" --type=crashpad-handler \"--user-data-dir=C:\\Users\\PC\\AppData\\Local\\Google\\Chrome\\User Data\" /prefetch:4 --monitor-self-annotation=ptype=crashpad-handler \"--database=C:\\Users\\PC\\AppData\\Local\\Google\\Chrome\\User Data\\Crashpad\" \"--metrics-dir=C:\\Users\\PC\\AppData\\Local\\Google\\Chrome\\User Data\" --url=https://clients2.google.com/cr/report --annotation=channel= --annotation=plat=Win64 --annotation=prod=Chrome --annotation=ver=139.0.7258.139 --initial-client-data=0x214,0x218,0x21c,0x1f0,0x220,0x7ffe5fd37668,0x7ffe5fd37674,0x7ffe5fd37680",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 14748,
+        "ppid": 11728,
+        "name": "Code.exe",
+        "exe_path": "C:\\Users\\PC\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe",
+        "cmdline": "\"C:\\Users\\PC\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe\" --max-old-space-size=3072 \"c:\\Users\\PC\\AppData\\Local\\Programs\\Microsoft VS Code\\resources\\app\\extensions\\node_modules\\typescript\\lib\\tsserver.js\" --useInferredProjectPerProjectRoot --enableTelemetry --cancellationPipeName C:\\Users\\PC\\AppData\\Local\\Temp\\vscode-typescript\\9e4400bc3149febe683c\\tscancellation-a4fa6adbcb589dad9c0b.tmp* --globalPlugins @vscode/copilot-typescript-server-plugin,vue-typescript-plugin-pack --pluginProbeLocations c:\\Users\\PC\\.vscode\\extensions\\github.copilot-chat-0.30.3,c:\\Users\\PC\\.vscode\\extensions\\vue.volar-3.0.6 --locale en --noGetErrOnBackgroundUpdate --canUseWatchEvents --validateDefaultNpmLocation --useNodeIpc",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 14852,
+        "ppid": 6064,
+        "name": "Code.exe",
+        "exe_path": "C:\\Users\\PC\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe",
+        "cmdline": "\"C:\\Users\\PC\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe\" \"c:/Users/PC/AppData/Local/Programs/Microsoft VS Code/resources/app/extensions/node_modules/typescript/lib/typingsInstaller.js\" --globalTypingsCacheLocation C:/Users/PC/AppData/Local/Microsoft/TypeScript/5.9 --enableTelemetry --typesMapLocation \"c:/Users/PC/AppData/Local/Programs/Microsoft VS Code/resources/app/extensions/node_modules/typescript/lib/typesMap.json\" --validateDefaultNpmLocation",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 14896,
+        "ppid": 10308,
+        "name": "com.docker.build.exe",
+        "exe_path": "C:\\Program Files\\Docker\\Docker\\resources\\com.docker.build.exe",
+        "cmdline": "\"C:\\Program Files\\Docker\\Docker\\resources\\com.docker.build.exe\" --log-no-timestamp",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 14996,
+        "ppid": 6168,
+        "name": "browser.exe",
+        "exe_path": "C:\\Users\\PC\\AppData\\Local\\Yandex\\YandexBrowser\\Application\\browser.exe",
+        "cmdline": "\"C:\\Users\\PC\\AppData\\Local\\Yandex\\YandexBrowser\\Application\\browser.exe\" --type=renderer --user-id=B8085D8A-22E0-4945-8547-A653B2BE061C --brand-id=yandex --help-url=https://api.browser.yandex.ru/redirect/help/ --user-agent-info --web-ntp-url-for-renderer=https://webntp.yandex.ru/ --translate-security-origin=https://browser.translate.yandex.net/ --enable-instaserp --extensions-on-chrome-urls --no-pre-read-main-dll --video-capture-use-gpu-memory-buffer --lang=ru --device-scale-factor=1.25 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=98 --time-ticks-at-unix-epoch=-1756103762258322 --launch-time-ticks=886167839 --field-trial-handle=1928,i,13331809330070461085,13927758089240476913,262144 --variations-seed-version --mojo-platform-channel-handle=9456 /prefetch:1",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 15040,
+        "ppid": 19332,
+        "name": "insomnia-11.4.0.exe",
+        "exe_path": "C:\\Users\\PC\\AppData\\Local\\insomnia\\app-11.4.0\\insomnia-11.4.0.exe",
+        "cmdline": "\"C:\\Users\\PC\\AppData\\Local\\insomnia\\app-11.4.0\\insomnia-11.4.0.exe\" --type=utility --utility-sub-type=network.mojom.NetworkService --lang=ru --service-sandbox-type=none --user-data-dir=\"C:\\Users\\PC\\AppData\\Roaming\\Insomnia\" --standard-schemes=insomnia-event-source,https,http,insomnia-templating-worker-database --secure-schemes=insomnia-event-source,https,http,insomnia-templating-worker-database,sentry-ipc --bypasscsp-schemes=sentry-ipc --cors-schemes=sentry-ipc --fetch-schemes=insomnia-event-source,https,http,insomnia-templating-worker-database,sentry-ipc --streaming-schemes=insomnia-event-source --field-trial-handle=1936,i,7906818963516899276,5626562586678948742,262144 --enable-features=DocumentPolicyIncludeJSCallStacksInCrashReports,PdfUseShowSaveFilePicker --disable-features=SpareRendererForSitePerProcess,WinDelaySpellcheckServiceInit --variations-seed-version --mojo-platform-channel-handle=2172 /prefetch:3",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 15080,
+        "ppid": 19332,
+        "name": "insomnia-11.4.0.exe",
+        "exe_path": "C:\\Users\\PC\\AppData\\Local\\insomnia\\app-11.4.0\\insomnia-11.4.0.exe",
+        "cmdline": "C:\\Users\\PC\\AppData\\Local\\insomnia\\app-11.4.0\\insomnia-11.4.0.exe --type=crashpad-handler --user-data-dir=C:\\Users\\PC\\AppData\\Roaming\\Insomnia /prefetch:4 --no-rate-limit --monitor-self-annotation=ptype=crashpad-handler --database=C:\\Users\\PC\\AppData\\Roaming\\Insomnia\\Crashpad --url=https://f.a.k/e --annotation=_productName=Insomnia --annotation=_version=11.4.0 --annotation=plat=Win64 --annotation=prod=Electron --annotation=ver=35.1.5 --initial-client-data=0x4c4,0x4ec,0x54c,0x49c,0x544,0x7ff7304dcc24,0x7ff7304dcc30,0x7ff7304dcc40",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 15092,
+        "ppid": 7432,
+        "name": "Docker Desktop.exe",
+        "exe_path": "C:\\Program Files\\Docker\\Docker\\frontend\\Docker Desktop.exe",
+        "cmdline": "\"C:\\Program Files\\Docker\\Docker\\frontend\\Docker Desktop.exe\" --type=utility --utility-sub-type=network.mojom.NetworkService --lang=en-US --service-sandbox-type=none --user-data-dir=\"C:\\Users\\PC\\AppData\\Roaming\\Docker Desktop\" --standard-schemes=app --secure-schemes=app --fetch-schemes=dd --field-trial-handle=1900,i,12120762282310768315,13864470900024990863,262144 --enable-features=PdfUseShowSaveFilePicker --disable-features=SpareRendererForSitePerProcess,WinDelaySpellcheckServiceInit --variations-seed-version --mojo-platform-channel-handle=2188 /prefetch:3",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 15128,
+        "ppid": 480,
+        "name": "conhost.exe",
+        "exe_path": "C:\\Windows\\System32\\conhost.exe",
+        "cmdline": "\\\\?\\C:\\Windows\\system32\\conhost.exe --headless --width 80 --height 30 --signal 0x5d8 --server 0x5b0",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 15132,
+        "ppid": 11728,
+        "name": "Code.exe",
+        "exe_path": "C:\\Users\\PC\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe",
+        "cmdline": "\"C:\\Users\\PC\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe\" \"c:\\Users\\PC\\AppData\\Local\\Programs\\Microsoft VS Code\\resources\\app\\extensions\\html-language-features\\server\\dist\\node\\htmlServerMain\" --node-ipc --clientProcessId=11728",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 15160,
+        "ppid": 7432,
+        "name": "Docker Desktop.exe",
+        "exe_path": "C:\\Program Files\\Docker\\Docker\\frontend\\Docker Desktop.exe",
+        "cmdline": "\"C:\\Program Files\\Docker\\Docker\\frontend\\Docker Desktop.exe\" --type=gpu-process --user-data-dir=\"C:\\Users\\PC\\AppData\\Roaming\\Docker Desktop\" --gpu-preferences=UAAAAAAAAADgAAAEAAAAAAAAAAAAAAAAAABgAAEAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAEAAAAAAAAAAIAAAAAAAAAAgAAAAAAAAA --field-trial-handle=1900,i,12120762282310768315,13864470900024990863,262144 --enable-features=PdfUseShowSaveFilePicker --disable-features=SpareRendererForSitePerProcess,WinDelaySpellcheckServiceInit --variations-seed-version --mojo-platform-channel-handle=1864 /prefetch:2",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 15268,
+        "ppid": 6168,
+        "name": "browser.exe",
+        "exe_path": "C:\\Users\\PC\\AppData\\Local\\Yandex\\YandexBrowser\\Application\\browser.exe",
+        "cmdline": "\"C:\\Users\\PC\\AppData\\Local\\Yandex\\YandexBrowser\\Application\\browser.exe\" --type=renderer --user-id=B8085D8A-22E0-4945-8547-A653B2BE061C --brand-id=yandex --help-url=https://api.browser.yandex.ru/redirect/help/ --user-agent-info --web-ntp-url-for-renderer=https://webntp.yandex.ru/ --translate-security-origin=https://browser.translate.yandex.net/ --ya-custo-process --enable-instaserp --extensions-on-chrome-urls --no-pre-read-main-dll --video-capture-use-gpu-memory-buffer --lang=ru --device-scale-factor=1.25 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=46 --time-ticks-at-unix-epoch=-1756103762258322 --launch-time-ticks=29837907 --field-trial-handle=1928,i,13331809330070461085,13927758089240476913,262144 --variations-seed-version --mojo-platform-channel-handle=5756 /prefetch:1",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 15316,
+        "ppid": 15220,
+        "name": "RadeonSoftware.exe",
+        "exe_path": "C:\\Program Files\\WindowsApps\\AdvancedMicroDevicesInc-2.AMDRadeonSoftware_10.20.40028.0_x64__0a9344xs7nr4m\\radeonsoftware\\RadeonSoftware.exe",
+        "cmdline": "\"C:\\Program Files\\WindowsApps\\AdvancedMicroDevicesInc-2.AMDRadeonSoftware_10.20.40028.0_x64__0a9344xs7nr4m\\radeonsoftware\\RadeonSoftware.exe\" atlogon",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 15328,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 15420,
+        "ppid": 1176,
+        "name": "dllhost.exe",
+        "exe_path": "C:\\Windows\\System32\\dllhost.exe",
+        "cmdline": "C:\\Windows\\system32\\DllHost.exe /Processid:{DFB65C4C-B34F-435D-AFE9-A86218684AA8}",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 15728,
+        "ppid": 9684,
+        "name": "nekobox_core.exe",
+        "exe_path": "C:\\Users\\PC\\Desktop\\nekoray\\nekobox_core.exe",
+        "cmdline": "",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 15780,
+        "ppid": 3244,
+        "name": "AnyDesk.exe",
+        "exe_path": "C:\\Program Files (x86)\\AnyDesk\\AnyDesk.exe",
+        "cmdline": "\"C:\\Program Files (x86)\\AnyDesk\\AnyDesk.exe\"  --control",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 15792,
+        "ppid": 13932,
+        "name": "jusched.exe",
+        "exe_path": "C:\\Program Files (x86)\\Common Files\\Java\\Java Update\\jusched.exe",
+        "cmdline": "\"C:\\Program Files (x86)\\Common Files\\Java\\Java Update\\jusched.exe\" ",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 15844,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 16096,
+        "ppid": 11728,
+        "name": "Code.exe",
+        "exe_path": "C:\\Users\\PC\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe",
+        "cmdline": "\"C:\\Users\\PC\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe\" --max-old-space-size=3072 \"c:\\Users\\PC\\AppData\\Local\\Programs\\Microsoft VS Code\\resources\\app\\extensions\\node_modules\\typescript\\lib\\tsserver.js\" --serverMode partialSemantic --useInferredProjectPerProjectRoot --disableAutomaticTypingAcquisition --cancellationPipeName C:\\Users\\PC\\AppData\\Local\\Temp\\vscode-typescript\\9e4400bc3149febe683c\\tscancellation-3b00e2c364782d50efcc.tmp* --globalPlugins @vscode/copilot-typescript-server-plugin,vue-typescript-plugin-pack --pluginProbeLocations c:\\Users\\PC\\.vscode\\extensions\\github.copilot-chat-0.30.3,c:\\Users\\PC\\.vscode\\extensions\\vue.volar-3.0.6 --locale en --noGetErrOnBackgroundUpdate --canUseWatchEvents --validateDefaultNpmLocation --useNodeIpc",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 16140,
+        "ppid": 480,
+        "name": "conhost.exe",
+        "exe_path": "C:\\Windows\\System32\\conhost.exe",
+        "cmdline": "\\\\?\\C:\\Windows\\system32\\conhost.exe --headless --width 80 --height 30 --signal 0x558 --server 0x6fc",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 16188,
+        "ppid": 15728,
+        "name": "conhost.exe",
+        "exe_path": "C:\\Windows\\System32\\conhost.exe",
+        "cmdline": "",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 16196,
+        "ppid": 15844,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 16224,
+        "ppid": 16196,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 16512,
+        "ppid": 5812,
+        "name": "wslhost.exe",
+        "exe_path": "C:\\Program Files\\WSL\\wslhost.exe",
+        "cmdline": " --vm-id {7c017355-69f4-4a0f-90ff-05e648418869} --handle 1460",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 16532,
+        "ppid": 16512,
+        "name": "conhost.exe",
+        "exe_path": "C:\\Windows\\System32\\conhost.exe",
+        "cmdline": "\\??\\C:\\Windows\\system32\\conhost.exe 0x4",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 16576,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 16604,
+        "ppid": 16512,
+        "name": "msrdc.exe",
+        "exe_path": "C:\\Program Files\\WSL\\msrdc.exe",
+        "cmdline": "msrdc.exe /wslg /silent /v:7C017355-69F4-4A0F-90FF-05E648418869 /hvsocketserviceid:00000002-FACB-11E6-BD58-64006A7986D3 /plugin:WSLDVC_PACKAGE /wslgsharedmemorypath:WSL\\7C017355-69F4-4A0F-90FF-05E648418869\\wslg \"C:\\Program Files\\WSL\\wslg.rdp\"",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 16684,
+        "ppid": 8316,
+        "name": "conhost.exe",
+        "exe_path": "C:\\Windows\\System32\\conhost.exe",
+        "cmdline": "\\??\\C:\\Windows\\system32\\conhost.exe 0x4",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 16740,
+        "ppid": 5812,
+        "name": "wslhost.exe",
+        "exe_path": "C:\\Program Files\\WSL\\wslhost.exe",
+        "cmdline": " --vm-id {7c017355-69f4-4a0f-90ff-05e648418869} --handle 800",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 16776,
+        "ppid": 8368,
+        "name": "wslhost.exe",
+        "exe_path": "C:\\Program Files\\WSL\\wslhost.exe",
+        "cmdline": " --distro-id {e5088c7a-6fd4-4282-864d-37526f03228c} --vm-id {7c017355-69f4-4a0f-90ff-05e648418869} --handle 716 --event 744 --parent 748",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 16796,
+        "ppid": 6336,
+        "name": "wslhost.exe",
+        "exe_path": "C:\\Program Files\\WSL\\wslhost.exe",
+        "cmdline": " --distro-id {eefddcd5-73b6-463f-8c88-b75d4c410f22} --vm-id {7c017355-69f4-4a0f-90ff-05e648418869} --handle 728 --event 768 --parent 772",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 16812,
+        "ppid": 16740,
+        "name": "conhost.exe",
+        "exe_path": "C:\\Windows\\System32\\conhost.exe",
+        "cmdline": "\\??\\C:\\Windows\\system32\\conhost.exe 0x4",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 16848,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 16896,
+        "ppid": 16776,
+        "name": "conhost.exe",
+        "exe_path": "C:\\Windows\\System32\\conhost.exe",
+        "cmdline": "\\??\\C:\\Windows\\system32\\conhost.exe 0x4",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 16912,
+        "ppid": 10308,
+        "name": "wsl.exe",
+        "exe_path": "C:\\Windows\\System32\\wsl.exe",
+        "cmdline": "C:\\Windows\\System32\\wsl.exe -d podman-machine-default -u root -e /mnt/wsl/docker-desktop/docker-desktop-user-distro proxy --distro-name podman-machine-default --docker-desktop-root /mnt/wsl/docker-desktop \"C:\\Program Files\\Docker\\Docker\\resources\"",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 16916,
+        "ppid": 16796,
+        "name": "conhost.exe",
+        "exe_path": "C:\\Windows\\System32\\conhost.exe",
+        "cmdline": "\\??\\C:\\Windows\\system32\\conhost.exe 0x4",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 16960,
+        "ppid": 3812,
+        "name": "Podman Desktop.exe",
+        "exe_path": "C:\\Users\\PC\\AppData\\Local\\Programs\\Podman Desktop\\Podman Desktop.exe",
+        "cmdline": "\"C:\\Users\\PC\\AppData\\Local\\Programs\\Podman Desktop\\Podman Desktop.exe\" --type=utility --utility-sub-type=network.mojom.NetworkService --lang=ru --service-sandbox-type=none --user-data-dir=\"C:\\Users\\PC\\AppData\\Roaming\\Podman Desktop\" --field-trial-handle=1856,i,1563440876678912236,14739453800188618444,262144 --enable-features=EnableTransparentHwndEnlargement,PdfUseShowSaveFilePicker --disable-features=ScreenAIOCREnabled,SpareRendererForSitePerProcess,WinDelaySpellcheckServiceInit --variations-seed-version --mojo-platform-channel-handle=2220 /prefetch:3",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 16964,
+        "ppid": 11728,
+        "name": "Code.exe",
+        "exe_path": "C:\\Users\\PC\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe",
+        "cmdline": "\"C:\\Users\\PC\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe\" \"c:\\Users\\PC\\AppData\\Local\\Programs\\Microsoft VS Code\\resources\\app\\extensions\\markdown-language-features\\dist\\serverWorkerMain\" --node-ipc --clientProcessId=11728",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 16988,
+        "ppid": 3812,
+        "name": "Podman Desktop.exe",
+        "exe_path": "C:\\Users\\PC\\AppData\\Local\\Programs\\Podman Desktop\\Podman Desktop.exe",
+        "cmdline": "\"C:\\Users\\PC\\AppData\\Local\\Programs\\Podman Desktop\\Podman Desktop.exe\" --type=renderer --user-data-dir=\"C:\\Users\\PC\\AppData\\Roaming\\Podman Desktop\" --app-user-model-id=\"Podman Desktop\" --app-path=\"C:\\Users\\PC\\AppData\\Local\\Programs\\Podman Desktop\\resources\\app.asar\" --enable-sandbox --disable-gpu-compositing --video-capture-use-gpu-memory-buffer --lang=ru --device-scale-factor=1.25 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=4 --time-ticks-at-unix-epoch=-1756103762258321 --launch-time-ticks=43086150 --field-trial-handle=1856,i,1563440876678912236,14739453800188618444,262144 --enable-features=EnableTransparentHwndEnlargement,PdfUseShowSaveFilePicker --disable-features=ScreenAIOCREnabled,SpareRendererForSitePerProcess,WinDelaySpellcheckServiceInit --variations-seed-version --mojo-platform-channel-handle=2496 /prefetch:1",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 17248,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 17292,
+        "ppid": 16912,
+        "name": "wsl.exe",
+        "exe_path": "C:\\Program Files\\WSL\\wsl.exe",
+        "cmdline": "C:\\Windows\\System32\\wsl.exe -d podman-machine-default -u root -e /mnt/wsl/docker-desktop/docker-desktop-user-distro proxy --distro-name podman-machine-default --docker-desktop-root /mnt/wsl/docker-desktop \"C:\\Program Files\\Docker\\Docker\\resources\"",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 17420,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 17468,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 17488,
+        "ppid": 11728,
+        "name": "pet.exe",
+        "exe_path": "C:\\Users\\PC\\.vscode\\extensions\\ms-python.python-2025.12.0-win32-x64\\python-env-tools\\bin\\pet.exe",
+        "cmdline": "c:\\Users\\PC\\.vscode\\extensions\\ms-python.python-2025.12.0-win32-x64\\python-env-tools\\bin\\pet.exe server",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 17536,
+        "ppid": 6168,
+        "name": "browser.exe",
+        "exe_path": "C:\\Users\\PC\\AppData\\Local\\Yandex\\YandexBrowser\\Application\\browser.exe",
+        "cmdline": "\"C:\\Users\\PC\\AppData\\Local\\Yandex\\YandexBrowser\\Application\\browser.exe\" --type=renderer --user-id=B8085D8A-22E0-4945-8547-A653B2BE061C --brand-id=yandex --help-url=https://api.browser.yandex.ru/redirect/help/ --user-agent-info --web-ntp-url-for-renderer=https://webntp.yandex.ru/ --translate-security-origin=https://browser.translate.yandex.net/ --yagp --enable-ignition --enable-instaserp --extensions-on-chrome-urls --no-pre-read-main-dll --video-capture-use-gpu-memory-buffer --lang=ru --device-scale-factor=1.25 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=112 --time-ticks-at-unix-epoch=-1756103762258322 --launch-time-ticks=1280528426 --field-trial-handle=1928,i,13331809330070461085,13927758089240476913,262144 --variations-seed-version --mojo-platform-channel-handle=2276 /prefetch:1",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 17560,
+        "ppid": 480,
+        "name": "powershell.exe",
+        "exe_path": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "cmdline": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -noexit -command \"try { . \\\"c:\\Users\\PC\\AppData\\Local\\Programs\\Microsoft VS Code\\resources\\app\\out\\vs\\workbench\\contrib\\terminal\\common\\scripts\\shellIntegration.ps1\\\" } catch {}\"",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 17568,
+        "ppid": 18244,
+        "name": "wslhost.exe",
+        "exe_path": "C:\\Program Files\\WSL\\wslhost.exe",
+        "cmdline": " --distro-id {e5088c7a-6fd4-4282-864d-37526f03228c} --vm-id {7c017355-69f4-4a0f-90ff-05e648418869} --handle 704 --event 728 --parent 732",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 17616,
+        "ppid": 1176,
+        "name": "ApplicationFrameHost.exe",
+        "exe_path": "C:\\Windows\\System32\\ApplicationFrameHost.exe",
+        "cmdline": "C:\\Windows\\system32\\ApplicationFrameHost.exe -Embedding",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 17696,
+        "ppid": 16544,
+        "name": "win-sshproxy.exe",
+        "exe_path": "C:\\Program Files\\RedHat\\Podman\\win-sshproxy.exe",
+        "cmdline": "\"c:\\Program Files\\RedHat\\Podman\\win-sshproxy.exe\" podman-machine-default C:\\Users\\PC\\.local\\share\\containers\\podman\\machine\\wsl\\podman-machine-default npipe:////./pipe/podman-machine-default ssh://root@localhost:62824/run/podman/podman.sock C:\\Users\\PC\\.local\\share\\containers\\podman\\machine\\machine unix:///C:/Users/PC/AppData/Local/Temp/podman/podman-machine-default-api.sock ssh://root@localhost:62824/run/podman/podman.sock C:\\Users\\PC\\.local\\share\\containers\\podman\\machine\\machine",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 17712,
+        "ppid": 3244,
+        "name": "Code.exe",
+        "exe_path": "C:\\Users\\PC\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe",
+        "cmdline": "\"C:\\Users\\PC\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe\" ",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 17764,
+        "ppid": 17712,
+        "name": "Code.exe",
+        "exe_path": "C:\\Users\\PC\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe",
+        "cmdline": "\"C:\\Users\\PC\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe\" --type=crashpad-handler --user-data-dir=C:\\Users\\PC\\AppData\\Roaming\\Code /prefetch:4 --no-rate-limit --monitor-self-annotation=ptype=crashpad-handler --database=C:\\Users\\PC\\AppData\\Roaming\\Code\\Crashpad --url=appcenter://code?aid=a4e3233c-699c-46ec-b4f4-9c2a77254662\u0026uid=b6f78a1c-5a2f-479e-9fa4-584571a99213\u0026iid=b6f78a1c-5a2f-479e-9fa4-584571a99213\u0026sid=b6f78a1c-5a2f-479e-9fa4-584571a99213 --annotation=_companyName=Microsoft --annotation=_productName=VSCode --annotation=_version=1.103.2 --annotation=plat=Win64 --annotation=prod=Electron --annotation=ver=37.2.3 --initial-client-data=0x468,0x46c,0x470,0x464,0x474,0x7ff732c48e44,0x7ff732c48e50,0x7ff732c48e60",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 17792,
+        "ppid": 1176,
+        "name": "RuntimeBroker.exe",
+        "exe_path": "C:\\Windows\\System32\\RuntimeBroker.exe",
+        "cmdline": "C:\\Windows\\System32\\RuntimeBroker.exe -Embedding",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 17956,
+        "ppid": 17568,
+        "name": "conhost.exe",
+        "exe_path": "C:\\Windows\\System32\\conhost.exe",
+        "cmdline": "\\??\\C:\\Windows\\system32\\conhost.exe 0x4",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 17972,
+        "ppid": 17712,
+        "name": "Code.exe",
+        "exe_path": "C:\\Users\\PC\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe",
+        "cmdline": "\"C:\\Users\\PC\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe\" --type=gpu-process --user-data-dir=\"C:\\Users\\PC\\AppData\\Roaming\\Code\" --gpu-preferences=UAAAAAAAAADgAAAEAAAAAAAAAAAAAAAAAABgAAEAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAEAAAAAAAAAAIAAAAAAAAAAgAAAAAAAAA --field-trial-handle=1752,i,17828068653338241611,15298562903451463468,262144 --enable-features=DocumentPolicyIncludeJSCallStacksInCrashReports,EarlyEstablishGpuChannel,EnableTransparentHwndEnlargement,EstablishGpuChannelAsync --disable-features=CalculateNativeWinOcclusion,FontationsLinuxSystemFonts,ScreenAIOCREnabled,SpareRendererForSitePerProcess,WinDelaySpellcheckServiceInit --variations-seed-version --mojo-platform-channel-handle=1744 /prefetch:2",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 18108,
+        "ppid": 17712,
+        "name": "Code.exe",
+        "exe_path": "C:\\Users\\PC\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe",
+        "cmdline": "\"C:\\Users\\PC\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe\" --type=renderer --user-data-dir=\"C:\\Users\\PC\\AppData\\Roaming\\Code\" --standard-schemes=vscode-webview,vscode-file --enable-sandbox --secure-schemes=vscode-webview,vscode-file --cors-schemes=vscode-webview,vscode-file --fetch-schemes=vscode-webview,vscode-file --service-worker-schemes=vscode-webview --code-cache-schemes=vscode-webview,vscode-file --app-user-model-id=Microsoft.VisualStudioCode --app-path=\"C:\\Users\\PC\\AppData\\Local\\Programs\\Microsoft VS Code\\resources\\app\" --enable-sandbox --enable-blink-features=HighlightAPI --disable-blink-features=FontMatchingCTMigration,StandardizedBrowserZoom, --video-capture-use-gpu-memory-buffer --lang=en-US --device-scale-factor=1.25 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=4 --time-ticks-at-unix-epoch=-1756103762258320 --launch-time-ticks=94219235 --field-trial-handle=1752,i,17828068653338241611,15298562903451463468,262144 --enable-features=DocumentPolicyIncludeJSCallStacksInCrashReports,EarlyEstablishGpuChannel,EnableTransparentHwndEnlargement,EstablishGpuChannelAsync --disable-features=CalculateNativeWinOcclusion,FontationsLinuxSystemFonts,ScreenAIOCREnabled,SpareRendererForSitePerProcess,WinDelaySpellcheckServiceInit --variations-seed-version --mojo-platform-channel-handle=3220 --vscode-window-config=vscode:67dfadee-5f8b-4b46-bf24-0ba5f0ff8a92 /prefetch:1",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 18216,
+        "ppid": 11728,
+        "name": "Code.exe",
+        "exe_path": "C:\\Users\\PC\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe",
+        "cmdline": "\"C:\\Users\\PC\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe\" c:\\Users\\PC\\.vscode\\extensions\\ms-python.vscode-pylance-2025.7.1\\dist\\server.bundle.js --cancellationReceive=file:d8b23991be554a0f1074456a0fe23829c5c3e84f5f --node-ipc --clientProcessId=11728",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 18460,
+        "ppid": 11728,
+        "name": "Code.exe",
+        "exe_path": "C:\\Users\\PC\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe",
+        "cmdline": "\"C:\\Users\\PC\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe\" c:\\Users\\PC\\.vscode\\extensions\\ms-azuretools.vscode-containers-2.1.0\\dist\\compose-language-service\\lib\\server.js --node-ipc --node-ipc --clientProcessId=11728",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 18948,
+        "ppid": 6168,
+        "name": "browser.exe",
+        "exe_path": "C:\\Users\\PC\\AppData\\Local\\Yandex\\YandexBrowser\\Application\\browser.exe",
+        "cmdline": "\"C:\\Users\\PC\\AppData\\Local\\Yandex\\YandexBrowser\\Application\\browser.exe\" --type=utility --utility-sub-type=autofill.mojom.TflPredictionsService --lang=ru --service-sandbox-type=utility --video-capture-use-gpu-memory-buffer --user-id=B8085D8A-22E0-4945-8547-A653B2BE061C --brand-id=yandex --extensions-on-chrome-urls --no-pre-read-main-dll --process-name=\"Autofill Tfl Predictions\" --field-trial-handle=1928,i,13331809330070461085,13927758089240476913,262144 --variations-seed-version --mojo-platform-channel-handle=7032 --brver=25.8.0.1908 /prefetch:8",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 19032,
+        "ppid": 15792,
+        "name": "jucheck.exe",
+        "exe_path": "C:\\Program Files (x86)\\Common Files\\Java\\Java Update\\jucheck.exe",
+        "cmdline": "\"C:\\Program Files (x86)\\Common Files\\Java\\Java Update\\jucheck.exe\" -auto",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 19048,
+        "ppid": 11728,
+        "name": "Code.exe",
+        "exe_path": "C:\\Users\\PC\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe",
+        "cmdline": "\"C:\\Users\\PC\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe\" \"c:\\Users\\PC\\AppData\\Local\\Programs\\Microsoft VS Code\\resources\\app\\extensions\\json-language-features\\server\\dist\\node\\jsonServerMain\" --node-ipc --clientProcessId=11728",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 19164,
+        "ppid": 1016,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 19332,
+        "ppid": 4560,
+        "name": "insomnia-11.4.0.exe",
+        "exe_path": "C:\\Users\\PC\\AppData\\Local\\insomnia\\app-11.4.0\\insomnia-11.4.0.exe",
+        "cmdline": "C:\\Users\\PC\\AppData\\Local\\insomnia\\app-11.4.0\\insomnia-11.4.0.exe",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 19548,
+        "ppid": 17712,
+        "name": "Code.exe",
+        "exe_path": "C:\\Users\\PC\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe",
+        "cmdline": "\"C:\\Users\\PC\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe\" --type=renderer --user-data-dir=\"C:\\Users\\PC\\AppData\\Roaming\\Code\" --standard-schemes=vscode-webview,vscode-file --enable-sandbox --secure-schemes=vscode-webview,vscode-file --cors-schemes=vscode-webview,vscode-file --fetch-schemes=vscode-webview,vscode-file --service-worker-schemes=vscode-webview --code-cache-schemes=vscode-webview,vscode-file --app-user-model-id=Microsoft.VisualStudioCode --app-path=\"C:\\Users\\PC\\AppData\\Local\\Programs\\Microsoft VS Code\\resources\\app\" --enable-sandbox --enable-blink-features=HighlightAPI --disable-blink-features=FontMatchingCTMigration,StandardizedBrowserZoom, --video-capture-use-gpu-memory-buffer --lang=en-US --device-scale-factor=1.25 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=10 --time-ticks-at-unix-epoch=-1756103762258320 --launch-time-ticks=5300911813 --field-trial-handle=1752,i,17828068653338241611,15298562903451463468,262144 --enable-features=DocumentPolicyIncludeJSCallStacksInCrashReports,EarlyEstablishGpuChannel,EnableTransparentHwndEnlargement,EstablishGpuChannelAsync --disable-features=CalculateNativeWinOcclusion,FontationsLinuxSystemFonts,ScreenAIOCREnabled,SpareRendererForSitePerProcess,WinDelaySpellcheckServiceInit --variations-seed-version --mojo-platform-channel-handle=1120 --vscode-window-config=vscode:4b8b0508-eeab-4aa3-a294-482845ff4169 /prefetch:1",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 19552,
+        "ppid": 480,
+        "name": "powershell.exe",
+        "exe_path": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "cmdline": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -noexit -command \"try { . \\\"c:\\Users\\PC\\AppData\\Local\\Programs\\Microsoft VS Code\\resources\\app\\out\\vs\\workbench\\contrib\\terminal\\common\\scripts\\shellIntegration.ps1\\\" } catch {}\"",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 19660,
+        "ppid": 17712,
+        "name": "Code.exe",
+        "exe_path": "C:\\Users\\PC\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe",
+        "cmdline": "\"C:\\Users\\PC\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe\" --type=utility --utility-sub-type=node.mojom.NodeService --lang=en-US --service-sandbox-type=none --video-capture-use-gpu-memory-buffer --user-data-dir=\"C:\\Users\\PC\\AppData\\Roaming\\Code\" --standard-schemes=vscode-webview,vscode-file --enable-sandbox --secure-schemes=vscode-webview,vscode-file --cors-schemes=vscode-webview,vscode-file --fetch-schemes=vscode-webview,vscode-file --service-worker-schemes=vscode-webview --code-cache-schemes=vscode-webview,vscode-file --field-trial-handle=1752,i,17828068653338241611,15298562903451463468,262144 --enable-features=DocumentPolicyIncludeJSCallStacksInCrashReports,EarlyEstablishGpuChannel,EnableTransparentHwndEnlargement,EstablishGpuChannelAsync --disable-features=CalculateNativeWinOcclusion,FontationsLinuxSystemFonts,ScreenAIOCREnabled,SpareRendererForSitePerProcess,WinDelaySpellcheckServiceInit --variations-seed-version --mojo-platform-channel-handle=5992 /prefetch:8",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 20180,
+        "ppid": 6168,
+        "name": "browser.exe",
+        "exe_path": "C:\\Users\\PC\\AppData\\Local\\Yandex\\YandexBrowser\\Application\\browser.exe",
+        "cmdline": "\"C:\\Users\\PC\\AppData\\Local\\Yandex\\YandexBrowser\\Application\\browser.exe\" --type=renderer --user-id=B8085D8A-22E0-4945-8547-A653B2BE061C --brand-id=yandex --help-url=https://api.browser.yandex.ru/redirect/help/ --user-agent-info --web-ntp-url-for-renderer=https://webntp.yandex.ru/ --translate-security-origin=https://browser.translate.yandex.net/ --enable-instaserp --extensions-on-chrome-urls --no-pre-read-main-dll --video-capture-use-gpu-memory-buffer --lang=ru --device-scale-factor=1.25 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=189 --time-ticks-at-unix-epoch=-1756103762258322 --launch-time-ticks=21704997590 --field-trial-handle=1928,i,13331809330070461085,13927758089240476913,262144 --variations-seed-version --mojo-platform-channel-handle=13288 /prefetch:1",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 20352,
+        "ppid": 480,
+        "name": "conhost.exe",
+        "exe_path": "C:\\Windows\\System32\\conhost.exe",
+        "cmdline": "\\\\?\\C:\\Windows\\system32\\conhost.exe --headless --width 48 --height 20 --signal 0x3fc --server 0x498",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 20372,
+        "ppid": 12928,
+        "name": "chrome.exe",
+        "exe_path": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+        "cmdline": "\"C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe\" --type=utility --utility-sub-type=network.mojom.NetworkService --lang=ru --service-sandbox-type=none --no-pre-read-main-dll --metrics-shmem-handle=1648,i,12369406722761626324,9631530131823728677,524288 --field-trial-handle=1464,i,8309392995939714741,3063187248525716149,262144 --variations-seed-version=20250824-180049.414000 --mojo-platform-channel-handle=2220 /prefetch:3",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 20464,
+        "ppid": 480,
+        "name": "conhost.exe",
+        "exe_path": "C:\\Windows\\System32\\conhost.exe",
+        "cmdline": "\\\\?\\C:\\Windows\\system32\\conhost.exe --headless --width 80 --height 30 --signal 0x554 --server 0x51c",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 20684,
+        "ppid": 6168,
+        "name": "browser.exe",
+        "exe_path": "C:\\Users\\PC\\AppData\\Local\\Yandex\\YandexBrowser\\Application\\browser.exe",
+        "cmdline": "\"C:\\Users\\PC\\AppData\\Local\\Yandex\\YandexBrowser\\Application\\browser.exe\" --type=renderer --user-id=B8085D8A-22E0-4945-8547-A653B2BE061C --brand-id=yandex --help-url=https://api.browser.yandex.ru/redirect/help/ --user-agent-info --web-ntp-url-for-renderer=https://webntp.yandex.ru/ --translate-security-origin=https://browser.translate.yandex.net/ --enable-instaserp --extensions-on-chrome-urls --no-pre-read-main-dll --video-capture-use-gpu-memory-buffer --lang=ru --device-scale-factor=1.25 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=204 --time-ticks-at-unix-epoch=-1756103762258322 --launch-time-ticks=22817671641 --field-trial-handle=1928,i,13331809330070461085,13927758089240476913,262144 --variations-seed-version --mojo-platform-channel-handle=13252 /prefetch:1",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 20716,
+        "ppid": 19552,
+        "name": "uecp-agent.exe",
+        "exe_path": "C:\\Users\\PC\\Desktop\\test\\agent\\windows\\uecp-agent.exe",
+        "cmdline": "\"C:\\Users\\PC\\Desktop\\test\\agent\\windows\\uecp-agent.exe\" -config config.json -once -output test-real-event.json",
+        "username": "DESKTOP-HKR714G\\PC"
+      },
+      {
+        "pid": 20780,
+        "ppid": 3708,
+        "name": "audiodg.exe",
+        "exe_path": "C:\\Windows\\System32\\audiodg.exe",
+        "cmdline": "",
+        "username": ""
+      },
+      {
+        "pid": 21212,
+        "ppid": 0,
+        "name": "",
+        "exe_path": "",
+        "cmdline": "",
+        "username": ""
+      }
+    ],
+    "autoruns": {
+      "registry": [
+        {
+          "root": "HKLM",
+          "path": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run",
+          "name": "SecurityHealth",
+          "value": "%windir%\\system32\\SecurityHealthSystray.exe"
+        },
+        {
+          "root": "HKLM",
+          "path": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run",
+          "name": "AdobeAAMUpdater-1.0",
+          "value": "\"C:\\Program Files (x86)\\Common Files\\Adobe\\OOBE\\PDApp\\UWA\\UpdaterStartupUtility.exe\""
+        },
+        {
+          "root": "HKLM",
+          "path": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run",
+          "name": "AdobeGCInvoker-1.0",
+          "value": "\"C:\\Program Files (x86)\\Common Files\\Adobe\\AdobeGCClient\\AGCInvokerUtility.exe\""
+        },
+        {
+          "root": "HKLM",
+          "path": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run",
+          "name": "Eraser",
+          "value": "\"C:\\Program Files\\Eraser\\Eraser.exe\" -atRestart"
+        },
+        {
+          "root": "HKCU",
+          "path": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run",
+          "name": "OneDrive",
+          "value": "\"C:\\Users\\PC\\AppData\\Local\\Microsoft\\OneDrive\\OneDrive.exe\" /background"
+        },
+        {
+          "root": "HKCU",
+          "path": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run",
+          "name": "YandexBrowserAutoLaunch_EB3E2E35B88C8A18D33CFDE41B2483FE",
+          "value": "\"C:\\Users\\PC\\AppData\\Local\\Yandex\\YandexBrowser\\Application\\browser.exe\" --shutdown-if-not-closed-by-system-restart"
+        },
+        {
+          "root": "HKCU",
+          "path": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run",
+          "name": "MicrosoftEdgeAutoLaunch_B47356396DDD0FAAE76D0ED141F5CEA2",
+          "value": "\"C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe\" --no-startup-window --win-session-start"
+        },
+        {
+          "root": "HKCU",
+          "path": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run",
+          "name": "YandexDisk2",
+          "value": "C:\\Users\\PC\\AppData\\Roaming\\Yandex\\YandexDisk2\\3.2.43.5081\\YandexDisk2.exe -autostart"
+        },
+        {
+          "root": "HKCU",
+          "path": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run",
+          "name": "utweb",
+          "value": "\"C:\\Users\\PC\\AppData\\Roaming\\uTorrent Web\\utweb.exe\" /MINIMIZED"
+        },
+        {
+          "root": "HKCU",
+          "path": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run",
+          "name": "ut",
+          "value": "\"C:\\Users\\PC\\AppData\\Roaming\\utorrent\\uTorrent.exe\"  /MINIMIZED"
+        },
+        {
+          "root": "HKCU",
+          "path": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run",
+          "name": "nekobox",
+          "value": "\"C:\\Users\\PC\\Desktop\\nekoray\\nekobox.exe\" -tray"
+        },
+        {
+          "root": "HKCU",
+          "path": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run",
+          "name": "Docker Desktop",
+          "value": "C:\\Program Files\\Docker\\Docker\\Docker Desktop.exe"
+        }
+      ],
+      "startup_folders": [
+        {
+          "location": "C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\StartUp",
+          "file": "AnyDesk.lnk",
+          "target": "C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\StartUp\\AnyDesk.lnk"
+        },
+        {
+          "location": "C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\StartUp",
+          "file": "Network Server.lnk",
+          "target": "C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\StartUp\\Network Server.lnk"
+        },
+        {
+          "location": "C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\StartUp",
+          "file": "desktop.ini",
+          "target": "C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\StartUp\\desktop.ini"
+        },
+        {
+          "location": "C:\\Users\\PC\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup",
+          "file": "desktop.ini",
+          "target": "C:\\Users\\PC\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\desktop.ini"
+        },
+        {
+          "location": "C:\\Users\\PC\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup",
+          "file": "podman-desktop.vbs",
+          "target": "C:\\Users\\PC\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\podman-desktop.vbs"
+        }
+      ],
+      "services_auto": [
+        {
+          "name": "AdobeUpdateService",
+          "display_name": "AdobeUpdateService",
+          "path": "\"C:\\Program Files (x86)\\Common Files\\Adobe\\Adobe Desktop Common\\ElevationManager\\AdobeUpdateService.exe\"",
+          "start_mode": "Auto",
+          "state": "Running"
+        },
+        {
+          "name": "AGMService",
+          "display_name": "Adobe Genuine Software Monitor Service",
+          "path": "\"C:\\Program Files (x86)\\Common Files\\Adobe\\AdobeGCClient\\AGMService.exe\"",
+          "start_mode": "Auto",
+          "state": "Running"
+        },
+        {
+          "name": "AMD External Events Utility",
+          "display_name": "AMD External Events Utility",
+          "path": "C:\\Windows\\System32\\DriverStore\\FileRepository\\u0366790.inf_amd64_d775d276ecdcc11d\\B366405\\atiesrxx.exe",
+          "start_mode": "Auto",
+          "state": "Running"
+        },
+        {
+          "name": "AnyDesk",
+          "display_name": "AnyDesk Service",
+          "path": "\"C:\\Program Files (x86)\\AnyDesk\\AnyDesk.exe\" --service",
+          "start_mode": "Auto",
+          "state": "Running"
+        },
+        {
+          "name": "AudioEndpointBuilder",
+          "display_name": "�।�⢮ ����஥��� �������� ��祪 Windows Audio",
+          "path": "C:\\Windows\\System32\\svchost.exe -k LocalSystemNetworkRestricted -p",
+          "start_mode": "Auto",
+          "state": "Running"
+        },
+        {
+          "name": "Audiosrv",
+          "display_name": "Windows Audio",
+          "path": "C:\\Windows\\System32\\svchost.exe -k LocalServiceNetworkRestricted -p",
+          "start_mode": "Auto",
+          "state": "Running"
+        },
+        {
+          "name": "BFE",
+          "display_name": "��㦡� ������� 䨫����樨",
+          "path": "C:\\Windows\\system32\\svchost.exe -k LocalServiceNoNetworkFirewall -p",
+          "start_mode": "Auto",
+          "state": "Running"
+        },
+        {
+          "name": "BrokerInfrastructure",
+          "display_name": "��㦡� �������������� 䮭���� �����",
+          "path": "C:\\Windows\\system32\\svchost.exe -k DcomLaunch -p",
+          "start_mode": "Auto",
+          "state": "Running"
+        },
+        {
+          "name": "CDPSvc",
+          "display_name": "��㦡� ��������� ������祭��� ���ன���",
+          "path": "C:\\Windows\\system32\\svchost.exe -k LocalService -p",
+          "start_mode": "Auto",
+          "state": "Running"
+        },
+        {
+          "name": "ClickToRunSvc",
+          "display_name": "Microsoft Office Click-to-Run Service",
+          "path": "\"C:\\Program Files\\Common Files\\Microsoft Shared\\ClickToRun\\OfficeClickToRun.exe\" /service",
+          "start_mode": "Auto",
+          "state": "Running"
+        },
+        {
+          "name": "CoreMessagingRegistrar",
+          "display_name": "CoreMessaging",
+          "path": "C:\\Windows\\system32\\svchost.exe -k LocalServiceNoNetwork -p",
+          "start_mode": "Auto",
+          "state": "Running"
+        },
+        {
+          "name": "CryptSvc",
+          "display_name": "��㦡� �ਯ⮣��䨨",
+          "path": "C:\\Windows\\system32\\svchost.exe -k NetworkService -p",
+          "start_mode": "Auto",
+          "state": "Running"
+        },
+        {
+          "name": "DcomLaunch",
+          "display_name": "������ ����᪠ ������ᮢ DCOM-��ࢥ��",
+          "path": "C:\\Windows\\system32\\svchost.exe -k DcomLaunch -p",
+          "start_mode": "Auto",
+          "state": "Running"
+        },
+        {
+          "name": "DeviceAssociationService",
+          "display_name": "��㦡� ᮯ��⠢����� ���ன���",
+          "path": "C:\\Windows\\system32\\svchost.exe -k LocalSystemNetworkRestricted -p",
+          "start_mode": "Auto",
+          "state": "Running"
+        },
+        {
+          "name": "Dhcp",
+          "display_name": "DHCP-������",
+          "path": "C:\\Windows\\system32\\svchost.exe -k LocalServiceNetworkRestricted -p",
+          "start_mode": "Auto",
+          "state": "Running"
+        },
+        {
+          "name": "DiagTrack",
+          "display_name": "�㭪樮������� ����������� ��� ������祭��� ���짮��⥫�� � ⥫�������",
+          "path": "C:\\Windows\\System32\\svchost.exe -k utcsvc -p",
+          "start_mode": "Auto",
+          "state": "Running"
+        },
+        {
+          "name": "DispBrokerDesktopSvc",
+          "display_name": "��㦡� ����⨪� �⮡ࠦ����",
+          "path": "C:\\Windows\\system32\\svchost.exe -k LocalService -p",
+          "start_mode": "Auto",
+          "state": "Running"
+        },
+        {
+          "name": "Dnscache",
+          "display_name": "DNS-������",
+          "path": "C:\\Windows\\system32\\svchost.exe -k NetworkService -p",
+          "start_mode": "Auto",
+          "state": "Running"
+        },
+        {
+          "name": "DoSvc",
+          "display_name": "��⨬������ ���⠢��",
+          "path": "C:\\Windows\\System32\\svchost.exe -k NetworkService -p",
+          "start_mode": "Auto",
+          "state": "Stopped"
+        },
+        {
+          "name": "DPS",
+          "display_name": "��㦡� ����⨪� �������⨪�",
+          "path": "C:\\Windows\\System32\\svchost.exe -k LocalServiceNoNetwork -p",
+          "start_mode": "Auto",
+          "state": "Running"
+        },
+        {
+          "name": "DusmSvc",
+          "display_name": "�ᯮ�짮����� ������",
+          "path": "C:\\Windows\\System32\\svchost.exe -k LocalServiceNetworkRestricted -p",
+          "start_mode": "Auto",
+          "state": "Running"
+        },
+        {
+          "name": "EaseUS UPDATE SERVICE",
+          "display_name": "EaseUS UPDATE SERVICE",
+          "path": "C:\\Program Files (x86)\\EaseUS\\ENS\\ensserver.exe",
+          "start_mode": "Auto",
+          "state": "Running"
+        },
+        {
+          "name": "edgeupdate",
+          "display_name": "Microsoft Edge Update Service (edgeupdate)",
+          "path": "\"C:\\Program Files (x86)\\Microsoft\\EdgeUpdate\\MicrosoftEdgeUpdate.exe\" /svc",
+          "start_mode": "Auto",
+          "state": "Stopped"
+        },
+        {
+          "name": "EventLog",
+          "display_name": "��ୠ� ᮡ�⨩ Windows",
+          "path": "C:\\Windows\\System32\\svchost.exe -k LocalServiceNetworkRestricted -p",
+          "start_mode": "Auto",
+          "state": "Running"
+        },
+        {
+          "name": "EventSystem",
+          "display_name": "���⥬� ᮡ�⨩ COM+",
+          "path": "C:\\Windows\\system32\\svchost.exe -k LocalService -p",
+          "start_mode": "Auto",
+          "state": "Running"
+        },
+        {
+          "name": "Ext2Srv",
+          "display_name": "Ext2 Management Service",
+          "path": "C:\\Program Files\\Ext2Fsd\\Ext2Srv.exe",
+          "start_mode": "Auto",
+          "state": "Running"
+        },
+        {
+          "name": "FMAPOService",
+          "display_name": "Fortemedia APO Control Service",
+          "path": "C:\\Windows\\System32\\FMService64.exe",
+          "start_mode": "Auto",
+          "state": "Running"
+        },
+        {
+          "name": "FontCache",
+          "display_name": "��㦡� ���� ����⮢ Windows",
+          "path": "C:\\Windows\\system32\\svchost.exe -k LocalService -p",
+          "start_mode": "Auto",
+          "state": "Running"
+        },
+        {
+          "name": "GoogleUpdaterInternalService141.0.7340.0",
+          "display_name": "����७��� ��ࢨ� Google Updater (GoogleUpdaterInternalService141.0.7340.0)",
+          "path": "\"C:\\Program Files (x86)\\Google\\GoogleUpdater\\141.0.7340.0\\updater.exe\" --system --windows-service --service=update-internal",
+          "start_mode": "Auto",
+          "state": "Stopped"
+        },
+        {
+          "name": "GoogleUpdaterService141.0.7340.0",
+          "display_name": "��ࢨ� Google Updater (GoogleUpdaterService141.0.7340.0)",
+          "path": "\"C:\\Program Files (x86)\\Google\\GoogleUpdater\\141.0.7340.0\\updater.exe\" --system --windows-service --service=update",
+          "start_mode": "Auto",
+          "state": "Stopped"
+        },
+        {
+          "name": "gpsvc",
+          "display_name": "������ ��㯯���� ����⨪�",
+          "path": "C:\\Windows\\system32\\svchost.exe -k netsvcs -p",
+          "start_mode": "Auto",
+          "state": "Running"
+        },
+        {
+          "name": "IKEEXT",
+          "display_name": "���㫨 ���祩 IPsec ��� ������ ���砬� � ����୥�� � ���⮪��� IP � �஢�મ� �����������",
+          "path": "C:\\Windows\\system32\\svchost.exe -k netsvcs -p",
+          "start_mode": "Auto",
+          "state": "Running"
+        },
+        {
+          "name": "iphlpsvc",
+          "display_name": "�ᯮ����⥫쭠� ��㦡� IP",
+          "path": "C:\\Windows\\System32\\svchost.exe -k NetSvcs -p",
+          "start_mode": "Auto",
+          "state": "Running"
+        },
+        {
+          "name": "LanmanServer",
+          "display_name": "��ࢥ�",
+          "path": "C:\\Windows\\system32\\svchost.exe -k netsvcs -p",
+          "start_mode": "Auto",
+          "state": "Running"
+        },
+        {
+          "name": "LanmanWorkstation",
+          "display_name": "������� �⠭���",
+          "path": "C:\\Windows\\System32\\svchost.exe -k NetworkService -p",
+          "start_mode": "Auto",
+          "state": "Running"
+        },
+        {
+          "name": "LCD_Service",
+          "display_name": "HONOR LCD_Service",
+          "path": "\"C:\\Program Files\\HONOR\\HnLcdEnhancement\\LCD_Service.exe\"",
+          "start_mode": "Auto",
+          "state": "Running"
+        },
+        {
+          "name": "MapsBroker",
+          "display_name": "��ᯥ���� ᪠砭��� ����",
+          "path": "C:\\Windows\\System32\\svchost.exe -k NetworkService -p",
+          "start_mode": "Auto",
+          "state": "Stopped"
+        },
+        {
+          "name": "MBAMainService",
+          "display_name": "HONOR PCManager Windows Service",
+          "path": "\"C:\\Program Files\\HONOR\\PCManager\\PCManagerMainService.exe\"",
+          "start_mode": "Auto",
+          "state": "Running"
+        },
+        {
+          "name": "MDCoreSvc",
+          "display_name": "�᭮���� ��㦡� Microsoft Defender",
+          "path": "\"C:\\ProgramData\\Microsoft\\Windows Defender\\Platform\\4.18.25070.5-0\\MpDefenderCoreService.exe\"",
+          "start_mode": "Auto",
+          "state": "Running"
+        },
+        {
+          "name": "mpssvc",
+          "display_name": "�࠭������ ����⭨�� Windows",
+          "path": "C:\\Windows\\system32\\svchost.exe -k LocalServiceNoNetworkFirewall -p",
+          "start_mode": "Auto",
+          "state": "Running"
+        },
+        {
+          "name": "NlaSvc",
+          "display_name": "��㦡� ᢥ����� � ������祭��� �����",
+          "path": "C:\\Windows\\System32\\svchost.exe -k NetworkService -p",
+          "start_mode": "Auto",
+          "state": "Running"
+        },
+        {
+          "name": "nsi",
+          "display_name": "��㦡� �����䥩�� ���࠭���� ����",
+          "path": "C:\\Windows\\system32\\svchost.exe -k LocalService -p",
+          "start_mode": "Auto",
+          "state": "Running"
+        },
+        {
+          "name": "Power",
+          "display_name": "��⠭��",
+          "path": "C:\\Windows\\system32\\svchost.exe -k DcomLaunch -p",
+          "start_mode": "Auto",
+          "state": "Running"
+        },
+        {
+          "name": "ProfSvc",
+          "display_name": "��㦡� ���䨫�� ���짮��⥫��",
+          "path": "C:\\Windows\\system32\\svchost.exe -k netsvcs -p",
+          "start_mode": "Auto",
+          "state": "Running"
+        },
+        {
+          "name": "RasMan",
+          "display_name": "��ᯥ���� ������祭�� 㤠������� ����㯠",
+          "path": "C:\\Windows\\System32\\svchost.exe -k netsvcs",
+          "start_mode": "Auto",
+          "state": "Running"
+        },
+        {
+          "name": "RpcEptMapper",
+          "display_name": "�����⠢�⥫� �������� ��祪 RPC",
+          "path": "C:\\Windows\\system32\\svchost.exe -k RPCSS -p",
+          "start_mode": "Auto",
+          "state": "Running"
+        },
+        {
+          "name": "RpcSs",
+          "display_name": "��������� �맮� ���楤�� (RPC)",
+          "path": "C:\\Windows\\system32\\svchost.exe -k rpcss -p",
+          "start_mode": "Auto",
+          "state": "Running"
+        },
+        {
+          "name": "RvControlSvc",
+          "display_name": "Radmin VPN Control Service",
+          "path": "\"C:\\Program Files (x86)\\Radmin VPN\\RvControlSvc.exe\" /service",
+          "start_mode": "Auto",
+          "state": "Running"
+        },
+        {
+          "name": "SamSs",
+          "display_name": "��ᯥ���� ������� ����ᥩ ������᭮���",
+          "path": "C:\\Windows\\system32\\lsass.exe",
+          "start_mode": "Auto",
+          "state": "Running"
+        },
+        {
+          "name": "Schedule",
+          "display_name": "�����஢騪 �����",
+          "path": "C:\\Windows\\system32\\svchost.exe -k netsvcs -p",
+          "start_mode": "Auto",
+          "state": "Running"
+        },
+        {
+          "name": "SenaryAudioApp.Svc",
+          "display_name": "SenaryAudioApp.Svc",
+          "path": "\"C:\\Windows\\System32\\DriverStore\\FileRepository\\audioservice.inf_amd64_4d0ef0d4b2be8f0b\\SenaryAudioApp.Svc.exe\"",
+          "start_mode": "Auto",
+          "state": "Running"
+        },
+        {
+          "name": "SENS",
+          "display_name": "��㦡� 㢥�������� � ���⥬��� ᮡ�����",
+          "path": "C:\\Windows\\system32\\svchost.exe -k netsvcs -p",
+          "start_mode": "Auto",
+          "state": "Running"
+        },
+        {
+          "name": "SessionSvc",
+          "display_name": "Session Detection",
+          "path": "C:\\Windows\\System32\\drivers\\SessionService.exe",
+          "start_mode": "Auto",
+          "state": "Running"
+        },
+        {
+          "name": "ShellHWDetection",
+          "display_name": "��।������ ����㤮����� �����窨",
+          "path": "C:\\Windows\\System32\\svchost.exe -k netsvcs -p",
+          "start_mode": "Auto",
+          "state": "Running"
+        },
+        {
+          "name": "Spooler",
+          "display_name": "��ᯥ���� ������",
+          "path": "C:\\Windows\\System32\\spoolsv.exe",
+          "start_mode": "Auto",
+          "state": "Running"
+        },
+        {
+          "name": "sppsvc",
+          "display_name": "������ �ணࠬ����� ���ᯥ祭��",
+          "path": "C:\\Windows\\system32\\sppsvc.exe",
+          "start_mode": "Auto",
+          "state": "Stopped"
+        },
+        {
+          "name": "SQLWriter",
+          "display_name": "SQL Server VSS Writer",
+          "path": "\"C:\\Program Files\\Microsoft SQL Server\\90\\Shared\\sqlwriter.exe\"",
+          "start_mode": "Auto",
+          "state": "Running"
+        },
+        {
+          "name": "stisvc",
+          "display_name": "��㦡� ����㧪� ����ࠦ���� Windows (WIA)",
+          "path": "C:\\Windows\\system32\\svchost.exe -k imgsvc",
+          "start_mode": "Auto",
+          "state": "Running"
+        },
+        {
+          "name": "StorSvc",
+          "display_name": "��㦡� �࠭�����",
+          "path": "C:\\Windows\\System32\\svchost.exe -k LocalSystemNetworkRestricted -p",
+          "start_mode": "Auto",
+          "state": "Running"
+        },
+        {
+          "name": "SysMain",
+          "display_name": "SysMain",
+          "path": "C:\\Windows\\system32\\svchost.exe -k LocalSystemNetworkRestricted -p",
+          "start_mode": "Auto",
+          "state": "Running"
+        },
+        {
+          "name": "SystemEventsBroker",
+          "display_name": "�ப�� ���⥬��� ᮡ�⨩",
+          "path": "C:\\Windows\\system32\\svchost.exe -k DcomLaunch -p",
+          "start_mode": "Auto",
+          "state": "Running"
+        },
+        {
+          "name": "Themes",
+          "display_name": "����",
+          "path": "C:\\Windows\\System32\\svchost.exe -k netsvcs -p",
+          "start_mode": "Auto",
+          "state": "Running"
+        },
+        {
+          "name": "TrkWks",
+          "display_name": "������ ��᫥������� ������������ ��痢�",
+          "path": "C:\\Windows\\System32\\svchost.exe -k LocalSystemNetworkRestricted -p",
+          "start_mode": "Auto",
+          "state": "Running"
+        },
+        {
+          "name": "UserManager",
+          "display_name": "��ᯥ���� ���짮��⥫��",
+          "path": "C:\\Windows\\system32\\svchost.exe -k netsvcs -p",
+          "start_mode": "Auto",
+          "state": "Running"
+        },
+        {
+          "name": "UsoSvc",
+          "display_name": "��㦡� �થ�������� ����������",
+          "path": "C:\\Windows\\system32\\svchost.exe -k netsvcs -p",
+          "start_mode": "Auto",
+          "state": "Running"
+        },
+        {
+          "name": "WbioSrvc",
+          "display_name": "����������᪠� ��㦡� Windows",
+          "path": "C:\\Windows\\system32\\svchost.exe -k WbioSvcGroup",
+          "start_mode": "Auto",
+          "state": "Running"
+        },
+        {
+          "name": "Wcmsvc",
+          "display_name": "��ᯥ���� ������祭�� Windows",
+          "path": "C:\\Windows\\system32\\svchost.exe -k LocalServiceNetworkRestricted -p",
+          "start_mode": "Auto",
+          "state": "Running"
+        },
+        {
+          "name": "WinDefend",
+          "display_name": "��㦡� ��⨢���᭮� �ணࠬ�� Microsoft Defender",
+          "path": "\"C:\\ProgramData\\Microsoft\\Windows Defender\\Platform\\4.18.25070.5-0\\MsMpEng.exe\"",
+          "start_mode": "Auto",
+          "state": "Running"
+        },
+        {
+          "name": "Winmgmt",
+          "display_name": "�����㬥���਩ ��ࠢ����� Windows",
+          "path": "C:\\Windows\\system32\\svchost.exe -k netsvcs -p",
+          "start_mode": "Auto",
+          "state": "Running"
+        },
+        {
+          "name": "WkSvw32.exe",
+          "display_name": "WibuKey Server",
+          "path": "C:\\Program Files (x86)\\WIBUKEY\\Server\\WkSvw32.exe",
+          "start_mode": "Auto",
+          "state": "Running"
+        },
+        {
+          "name": "WlanSvc",
+          "display_name": "��㦡� ��⮭���ன�� WLAN",
+          "path": "C:\\Windows\\system32\\svchost.exe -k LocalSystemNetworkRestricted -p",
+          "start_mode": "Auto",
+          "state": "Running"
+        },
+        {
+          "name": "WpnService",
+          "display_name": "��㦡� ���⥬� push-㢥�������� Windows",
+          "path": "C:\\Windows\\system32\\svchost.exe -k netsvcs -p",
+          "start_mode": "Auto",
+          "state": "Running"
+        },
+        {
+          "name": "wscsvc",
+          "display_name": "����� ���ᯥ祭�� ������᭮���",
+          "path": "C:\\Windows\\System32\\svchost.exe -k LocalServiceNetworkRestricted -p",
+          "start_mode": "Auto",
+          "state": "Running"
+        },
+        {
+          "name": "WSearch",
+          "display_name": "Windows Search",
+          "path": "C:\\Windows\\system32\\SearchIndexer.exe /Embedding",
+          "start_mode": "Auto",
+          "state": "Running"
+        },
+        {
+          "name": "WslInstaller",
+          "display_name": "������⥬� Windows ��� Linux",
+          "path": "C:\\Program Files\\WindowsApps\\MicrosoftCorporationII.WindowsSubsystemForLinux_2.5.10.0_x64__8wekyb3d8bbwe\\wslinstaller.exe",
+          "start_mode": "Auto",
+          "state": "Stopped"
+        },
+        {
+          "name": "WSLService",
+          "display_name": "WSL Service",
+          "path": "\"C:\\Program Files\\WSL\\wslservice.exe\"",
+          "start_mode": "Auto",
+          "state": "Running"
+        },
+        {
+          "name": "YandexBrowserService",
+          "display_name": "Yandex.Browser Update Service",
+          "path": "\"C:\\Program Files (x86)\\Yandex\\YandexBrowser\\25.8.0.1908\\service_update.exe\" --run-as-service",
+          "start_mode": "Auto",
+          "state": "Running"
+        },
+        {
+          "name": "Zabbix Agent",
+          "display_name": "Zabbix Agent",
+          "path": "\"C:\\Program Files\\Zabbix Agent\\zabbix_agentd.exe\" --config \"C:\\Program Files\\Zabbix Agent\\zabbix_agentd.conf\"",
+          "start_mode": "Auto",
+          "state": "Running"
+        },
+        {
+          "name": "CDPUserSvc_86d94",
+          "display_name": "��㦡� ���짮��⥫� ��������� ������祭��� ���ன���_86d94",
+          "path": "C:\\Windows\\system32\\svchost.exe -k UnistackSvcGroup",
+          "start_mode": "Auto",
+          "state": "Running"
+        },
+        {
+          "name": "OneSyncSvc_86d94",
+          "display_name": "����஭������ 㧫�_86d94",
+          "path": "C:\\Windows\\system32\\svchost.exe -k UnistackSvcGroup",
+          "start_mode": "Auto",
+          "state": "Running"
+        },
+        {
+          "name": "WpnUserService_86d94",
+          "display_name": "���짮��⥫�᪠� ��㦡� push-㢥�������� Windows_86d94",
+          "path": "C:\\Windows\\system32\\svchost.exe -k UnistackSvcGroup",
+          "start_mode": "Auto",
+          "state": "Running"
+        }
+      ],
+      "scheduled_tasks": [
+        {
+          "task_name": "Adobe-Genuine-Software-Integrity-Scheduler-1.0",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "C:\\Program Files (x86)\\Common Files\\Adobe\\AdobeGCClient\\AGSService.exe",
+          "status": "Ready"
+        },
+        {
+          "task_name": "AdobeGCInvoker-1.0",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "C:\\Program Files (x86)\\Common Files\\Adobe\\AdobeGCClient\\AGCInvokerUtility.exe -mode=scheduled",
+          "status": "Ready"
+        },
+        {
+          "task_name": "OneDrive Reporting Task-S-1-5-21-1073619418-423767101-3130262350-1001",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "%localappdata%\\Microsoft\\OneDrive\\OneDriveStandaloneUpdater.exe /reporting",
+          "status": "Ready"
+        },
+        {
+          "task_name": "OneDrive Standalone Update Task-S-1-5-21-1073619418-423767101-3130262350-1001",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "%localappdata%\\Microsoft\\OneDrive\\OneDriveStandaloneUpdater.exe",
+          "status": "Ready"
+        },
+        {
+          "task_name": "OneDrive Startup Task-S-1-5-21-1073619418-423767101-3130262350-1001",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "C:\\Users\\PC\\AppData\\Local\\Microsoft\\OneDrive\\25.140.0720.0001\\OneDriveLauncher.exe /startInstances",
+          "status": "Ready"
+        },
+        {
+          "task_name": "���������� ���㧥�� ������",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "C:\\Users\\PC\\AppData\\Local\\Yandex\\YandexBrowser\\Application\\browser.exe --background-update --noerrdialogs",
+          "status": "Ready"
+        },
+        {
+          "task_name": "Office Actions Server",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "C:\\Program Files\\Microsoft Office\\root\\VFS\\ProgramFilesCommonX64\\Microsoft Shared\\Office16\\ActionsServer\\ActionsServer.exe availabilitycheck",
+          "status": "Ready"
+        },
+        {
+          "task_name": "Office Automatic Updates 2.0",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "C:\\Program Files\\Common Files\\Microsoft Shared\\ClickToRun\\OfficeC2RClient.exe /frequentupdate SCHEDULEDTASK displaylevel=False",
+          "status": "Ready"
+        },
+        {
+          "task_name": "Office Background Push Maintenance",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "C:\\Program Files\\Microsoft Office\\root\\vfs\\ProgramFilesCommonx64\\Microsoft Shared\\Office16\\opushutil.exe /pushregistration",
+          "status": "Ready"
+        },
+        {
+          "task_name": "Office ClickToRun Service Monitor",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "C:\\Program Files\\Common Files\\Microsoft Shared\\ClickToRun\\OfficeC2RClient.exe /WatchService",
+          "status": "Ready"
+        },
+        {
+          "task_name": "Office Feature Updates",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "C:\\Program Files\\Microsoft Office\\root\\Office16\\sdxhelper.exe",
+          "status": "Ready"
+        },
+        {
+          "task_name": "Office Feature Updates Logon",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "C:\\Program Files\\Microsoft Office\\root\\Office16\\sdxhelper.exe /onlogon",
+          "status": "Ready"
+        },
+        {
+          "task_name": "Office Performance Monitor",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "C:\\Program Files\\Microsoft Office\\root\\VFS\\ProgramFilesCommonX64\\Microsoft Shared\\Office16\\operfmon.exe",
+          "status": "Ready"
+        },
+        {
+          "task_name": "BackgroundDownload",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "C:\\Program Files (x86)\\Microsoft Visual Studio\\Installer\\resources\\app\\ServiceHub\\Services\\Microsoft.VisualStudio.Setup.Service\\BackgroundDownload.exe",
+          "status": "Ready"
+        },
+        {
+          "task_name": ".NET Framework NGEN v4.0.30319",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "",
+          "status": "Ready"
+        },
+        {
+          "task_name": ".NET Framework NGEN v4.0.30319 64",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "",
+          "status": "Ready"
+        },
+        {
+          "task_name": "AD RMS Rights Policy Template Management (Manual)",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "",
+          "status": "Ready"
+        },
+        {
+          "task_name": "MareBackup",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "%windir%\\system32\\compattelrunner.exe -m:aeinv.dll -f:UpdateSoftwareInventoryW invsvc",
+          "status": "Ready"
+        },
+        {
+          "task_name": "Microsoft Compatibility Appraiser",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "%windir%\\system32\\compattelrunner.exe",
+          "status": "Ready"
+        },
+        {
+          "task_name": "PcaPatchDbTask",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "%windir%\\system32\\rundll32.exe %windir%\\system32\\PcaSvc.dll,PcaPatchSdbTask",
+          "status": "Ready"
+        },
+        {
+          "task_name": "PcaWallpaperAppDetect",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "%windir%\\system32\\rundll32.exe %windir%\\system32\\PcaSvc.dll,PcaWallpaperAppDetect",
+          "status": "Ready"
+        },
+        {
+          "task_name": "ProgramDataUpdater",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "%windir%\\system32\\compattelrunner.exe -maintenance",
+          "status": "Ready"
+        },
+        {
+          "task_name": "StartupAppTask",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "%windir%\\system32\\rundll32.exe Startupscan.dll,SusRunTask",
+          "status": "Ready"
+        },
+        {
+          "task_name": "appuriverifierdaily",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "%windir%\\system32\\AppHostRegistrationVerifier.exe",
+          "status": "Ready"
+        },
+        {
+          "task_name": "appuriverifierinstall",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "%windir%\\system32\\AppHostRegistrationVerifier.exe",
+          "status": "Ready"
+        },
+        {
+          "task_name": "CleanupTemporaryState",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "%windir%\\system32\\rundll32.exe Windows.Storage.ApplicationData.dll,CleanupTemporaryState",
+          "status": "Ready"
+        },
+        {
+          "task_name": "DsSvcCleanup",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "%windir%\\system32\\dstokenclean.exe",
+          "status": "Ready"
+        },
+        {
+          "task_name": "Backup",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "",
+          "status": "Ready"
+        },
+        {
+          "task_name": "BackupNonMaintenance",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "",
+          "status": "Ready"
+        },
+        {
+          "task_name": "Proxy",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "%windir%\\system32\\rundll32.exe /d acproxy.dll,PerformAutochkOperations",
+          "status": "Ready"
+        },
+        {
+          "task_name": "BitLocker Encrypt All Drives",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "",
+          "status": "Ready"
+        },
+        {
+          "task_name": "BitLocker MDM policy Refresh",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "",
+          "status": "Ready"
+        },
+        {
+          "task_name": "UninstallDeviceTask",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "BthUdTask.exe $(Arg0)",
+          "status": "Ready"
+        },
+        {
+          "task_name": "BgTaskRegistrationMaintenanceTask",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "",
+          "status": "Ready"
+        },
+        {
+          "task_name": "UserTask",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "",
+          "status": "Ready"
+        },
+        {
+          "task_name": "UserTask-Roam",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "",
+          "status": "Ready"
+        },
+        {
+          "task_name": "ProactiveScan",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "",
+          "status": "Ready"
+        },
+        {
+          "task_name": "SyspartRepair",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "%windir%\\system32\\bcdboot.exe %windir% /sysrepair",
+          "status": "Ready"
+        },
+        {
+          "task_name": "ClipESUConsumer",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "%SystemRoot%\\system32\\ClipESUConsumer.exe -evaluateEligibility",
+          "status": "Ready"
+        },
+        {
+          "task_name": "CreateObjectTask",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "",
+          "status": "Ready"
+        },
+        {
+          "task_name": "Backup",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "",
+          "status": "Ready"
+        },
+        {
+          "task_name": "UnifiedConsentSyncTask",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "",
+          "status": "Ready"
+        },
+        {
+          "task_name": "Consolidator",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "%SystemRoot%\\System32\\wsqmcons.exe",
+          "status": "Ready"
+        },
+        {
+          "task_name": "UsbCeip",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "",
+          "status": "Ready"
+        },
+        {
+          "task_name": "Data Integrity Check And Scan",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "",
+          "status": "Ready"
+        },
+        {
+          "task_name": "Data Integrity Scan",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "",
+          "status": "Ready"
+        },
+        {
+          "task_name": "Data Integrity Scan for Crash Recovery",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "",
+          "status": "Ready"
+        },
+        {
+          "task_name": "ScheduledDefrag",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "%windir%\\system32\\defrag.exe -c -h -o -$",
+          "status": "Ready"
+        },
+        {
+          "task_name": "Device",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "%windir%\\system32\\devicecensus.exe SystemCxt",
+          "status": "Ready"
+        },
+        {
+          "task_name": "Device User",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "%windir%\\system32\\devicecensus.exe UserCxt",
+          "status": "Ready"
+        },
+        {
+          "task_name": "RecommendedTroubleshootingScanner",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "",
+          "status": "Ready"
+        },
+        {
+          "task_name": "Scheduled",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "",
+          "status": "Ready"
+        },
+        {
+          "task_name": "DirectXDatabaseUpdater",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "%windir%\\system32\\directxdatabaseupdater.exe",
+          "status": "Ready"
+        },
+        {
+          "task_name": "DXGIAdapterCache",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "%windir%\\system32\\dxgiadaptercache.exe",
+          "status": "Ready"
+        },
+        {
+          "task_name": "SilentCleanup",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "%windir%\\system32\\cleanmgr.exe /autoclean /d %systemdrive%",
+          "status": "Ready"
+        },
+        {
+          "task_name": "Diagnostics",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "%windir%\\system32\\disksnapshot.exe -z",
+          "status": "Ready"
+        },
+        {
+          "task_name": "StorageSense",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "",
+          "status": "Ready"
+        },
+        {
+          "task_name": "dusmtask",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "%SystemRoot%\\System32\\dusmtask.exe",
+          "status": "Ready"
+        },
+        {
+          "task_name": "EDP App Launch Task",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "",
+          "status": "Ready"
+        },
+        {
+          "task_name": "EDP Auth Task",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "",
+          "status": "Ready"
+        },
+        {
+          "task_name": "EDP Inaccessible Credentials Task",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "",
+          "status": "Ready"
+        },
+        {
+          "task_name": "StorageCardEncryption Task",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "",
+          "status": "Ready"
+        },
+        {
+          "task_name": "ExploitGuard MDM policy Refresh",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "",
+          "status": "Ready"
+        },
+        {
+          "task_name": "DmClient",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "%windir%\\system32\\dmclient.exe",
+          "status": "Ready"
+        },
+        {
+          "task_name": "DmClientOnScenarioDownload",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "%windir%\\system32\\dmclient.exe utcwnf",
+          "status": "Ready"
+        },
+        {
+          "task_name": "File History (maintenance mode)",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "",
+          "status": "Ready"
+        },
+        {
+          "task_name": "ReconcileFeatures",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "",
+          "status": "Ready"
+        },
+        {
+          "task_name": "UsageDataFlushing",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "",
+          "status": "Ready"
+        },
+        {
+          "task_name": "UsageDataReporting",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "",
+          "status": "Ready"
+        },
+        {
+          "task_name": "RefreshCache",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "",
+          "status": "Ready"
+        },
+        {
+          "task_name": "LocalUserSyncDataAvailable",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "",
+          "status": "Ready"
+        },
+        {
+          "task_name": "MouseSyncDataAvailable",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "",
+          "status": "Ready"
+        },
+        {
+          "task_name": "PenSyncDataAvailable",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "",
+          "status": "Ready"
+        },
+        {
+          "task_name": "TouchpadSyncDataAvailable",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "",
+          "status": "Ready"
+        },
+        {
+          "task_name": "ScanForUpdates",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "",
+          "status": "Ready"
+        },
+        {
+          "task_name": "ScanForUpdatesAsUser",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "",
+          "status": "Ready"
+        },
+        {
+          "task_name": "Synchronize Language Settings",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "",
+          "status": "Ready"
+        },
+        {
+          "task_name": "Installation",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "",
+          "status": "Ready"
+        },
+        {
+          "task_name": "ReconcileLanguageResources",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "",
+          "status": "Ready"
+        },
+        {
+          "task_name": "Notifications",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "%windir%\\System32\\LocationNotificationWindows.exe",
+          "status": "Ready"
+        },
+        {
+          "task_name": "WindowsActionDialog",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "%windir%\\System32\\WindowsActionDialog.exe",
+          "status": "Ready"
+        },
+        {
+          "task_name": "WinSAT",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "",
+          "status": "Ready"
+        },
+        {
+          "task_name": "Cellular",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "%windir%\\system32\\ProvTool.exe /turn 7 /source CellStateChangeTask",
+          "status": "Ready"
+        },
+        {
+          "task_name": "Logon",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "%windir%\\system32\\ProvTool.exe /turn 5 /source LogonIdleTask",
+          "status": "Ready"
+        },
+        {
+          "task_name": "MapsToastTask",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "",
+          "status": "Ready"
+        },
+        {
+          "task_name": "MapsUpdateTask",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "",
+          "status": "Ready"
+        },
+        {
+          "task_name": "ProcessMemoryDiagnosticEvents",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "",
+          "status": "Ready"
+        },
+        {
+          "task_name": "MNO Metadata Parser",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "%SystemRoot%\\System32\\MbaeParserTask.exe",
+          "status": "Ready"
+        },
+        {
+          "task_name": "LPRemove",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "%windir%\\system32\\lpremove.exe",
+          "status": "Ready"
+        },
+        {
+          "task_name": "GatherNetworkInfo",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "%windir%\\system32\\gatherNetworkInfo.vbs",
+          "status": "Ready"
+        },
+        {
+          "task_name": "WiFiTask",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "%SystemRoot%\\System32\\WiFiTask.exe nla",
+          "status": "Ready"
+        },
+        {
+          "task_name": "Device Install Group Policy",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "",
+          "status": "Ready"
+        },
+        {
+          "task_name": "Device Install Reboot Required",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "",
+          "status": "Ready"
+        },
+        {
+          "task_name": "Sysprep Generalize Drivers",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "%SystemRoot%\\System32\\drvinst.exe 6",
+          "status": "Ready"
+        },
+        {
+          "task_name": "AnalyzeSystem",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "",
+          "status": "Ready"
+        },
+        {
+          "task_name": "EduPrintProv",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "%windir%\\system32\\eduprintprov.exe",
+          "status": "Ready"
+        },
+        {
+          "task_name": "PrinterCleanupTask",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "",
+          "status": "Ready"
+        },
+        {
+          "task_name": "RegIdleBackup",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "",
+          "status": "Ready"
+        },
+        {
+          "task_name": "StartComponentCleanup",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "",
+          "status": "Ready"
+        },
+        {
+          "task_name": "BackgroundUploadTask",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "",
+          "status": "Ready"
+        },
+        {
+          "task_name": "CreateObjectTask",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "",
+          "status": "Ready"
+        },
+        {
+          "task_name": "FamilySafetyMonitor",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "%windir%\\System32\\wpcmon.exe",
+          "status": "Ready"
+        },
+        {
+          "task_name": "FamilySafetyRefreshTask",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "",
+          "status": "Ready"
+        },
+        {
+          "task_name": "IndexerAutomaticMaintenance",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "",
+          "status": "Ready"
+        },
+        {
+          "task_name": "ThemesSyncedImageDownload",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "",
+          "status": "Ready"
+        },
+        {
+          "task_name": "SpaceAgentTask",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "%windir%\\system32\\SpaceAgent.exe",
+          "status": "Ready"
+        },
+        {
+          "task_name": "SpaceManagerTask",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "%windir%\\system32\\spaceman.exe /Work",
+          "status": "Ready"
+        },
+        {
+          "task_name": "MaintenanceTasks",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "%windir%\\system32\\rundll32.exe %windir%\\system32\\Windows.StateRepositoryClient.dll,StateRepositoryDoMaintenanceTasks",
+          "status": "Ready"
+        },
+        {
+          "task_name": "Storage Tiers Management Initialization",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "",
+          "status": "Ready"
+        },
+        {
+          "task_name": "EnableLicenseAcquisition",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "%SystemRoot%\\system32\\ClipRenew.exe -e",
+          "status": "Ready"
+        },
+        {
+          "task_name": "ResPriStaticDbSync",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "",
+          "status": "Ready"
+        },
+        {
+          "task_name": "WsSwapAssessmentTask",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "%windir%\\system32\\rundll32.exe sysmain.dll,PfSvWsSwapAssessmentTask",
+          "status": "Ready"
+        },
+        {
+          "task_name": "SR",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "%windir%\\system32\\srtasks.exe ExecuteScheduledSPPCreation",
+          "status": "Ready"
+        },
+        {
+          "task_name": "Interactive",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "",
+          "status": "Ready"
+        },
+        {
+          "task_name": "MsCtfMonitor",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "",
+          "status": "Ready"
+        },
+        {
+          "task_name": "ForceSynchronizeTime",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "",
+          "status": "Ready"
+        },
+        {
+          "task_name": "SynchronizeTime",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "%windir%\\system32\\sc.exe start w32time task_started",
+          "status": "Ready"
+        },
+        {
+          "task_name": "SynchronizeTimeZone",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "%windir%\\system32\\tzsync.exe",
+          "status": "Ready"
+        },
+        {
+          "task_name": "UPnPHostConfig",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "sc.exe config upnphost start= auto",
+          "status": "Ready"
+        },
+        {
+          "task_name": "Usb-Notifications",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "",
+          "status": "Ready"
+        },
+        {
+          "task_name": "WiFiTask",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "%SystemRoot%\\System32\\WiFiTask.exe",
+          "status": "Ready"
+        },
+        {
+          "task_name": "ResolutionHost",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "",
+          "status": "Ready"
+        },
+        {
+          "task_name": "Windows Defender Cache Maintenance",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "C:\\ProgramData\\Microsoft\\Windows Defender\\Platform\\4.18.25070.5-0\\MpCmdRun.exe -IdleTask -TaskName WdCacheMaintenance",
+          "status": "Ready"
+        },
+        {
+          "task_name": "Windows Defender Cleanup",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "C:\\ProgramData\\Microsoft\\Windows Defender\\Platform\\4.18.25070.5-0\\MpCmdRun.exe -IdleTask -TaskName WdCleanup",
+          "status": "Ready"
+        },
+        {
+          "task_name": "Windows Defender Scheduled Scan",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "C:\\ProgramData\\Microsoft\\Windows Defender\\Platform\\4.18.25070.5-0\\MpCmdRun.exe Scan -ScheduleJob -ScanTrigger 55 -IdleScheduledJob",
+          "status": "Ready"
+        },
+        {
+          "task_name": "Windows Defender Verification",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "C:\\ProgramData\\Microsoft\\Windows Defender\\Platform\\4.18.25070.5-0\\MpCmdRun.exe -IdleTask -TaskName WdVerification",
+          "status": "Ready"
+        },
+        {
+          "task_name": "QueueReporting",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "%windir%\\system32\\wermgr.exe -upload",
+          "status": "Ready"
+        },
+        {
+          "task_name": "BfeOnServiceStartTypeChange",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "%windir%\\system32\\rundll32.exe bfe.dll,BfeOnServiceStartTypeChange",
+          "status": "Ready"
+        },
+        {
+          "task_name": "UpdateLibrary",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "\"%ProgramFiles%\\Windows Media Player\\wmpnscfg.exe\"",
+          "status": "Ready"
+        },
+        {
+          "task_name": "Calibration Loader",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "",
+          "status": "Ready"
+        },
+        {
+          "task_name": "Scheduled Start",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "C:\\Windows\\system32\\sc.exe start wuauserv",
+          "status": "Ready"
+        },
+        {
+          "task_name": "CDSSync",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "",
+          "status": "Ready"
+        },
+        {
+          "task_name": "Work Folders Logon Synchronization",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "",
+          "status": "Ready"
+        },
+        {
+          "task_name": "Work Folders Maintenance Work",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "",
+          "status": "Ready"
+        },
+        {
+          "task_name": "NotificationTask",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "%SystemRoot%\\System32\\WiFiTask.exe wwan",
+          "status": "Ready"
+        },
+        {
+          "task_name": "OobeDiscovery",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "",
+          "status": "Ready"
+        },
+        {
+          "task_name": "XblGameSaveTask",
+          "run_as": "система",
+          "trigger": "автозапуск",
+          "action": "%windir%\\System32\\XblGameSaveTask.exe standby",
+          "status": "Ready"
+        }
+      ]
+    }
+  },
+  "security": {
+    "defender": {
+      "realtime_enabled": true,
+      "antivirus_enabled": true,
+      "engine_version": "неизвестно",
+      "signature_age_days": 0
+    },
+    "firewall": {
+      "domain": null,
+      "private": null,
+      "public": null
+    },
+    "uac": {
+      "enabled": true
+    },
+    "rdp": {
+      "enabled": false,
+      "nla": false
+    },
+    "bitlocker": {
+      "system_drive_protected": false,
+      "permission": "denied"
+    },
+    "smb1": {
+      "enabled": false,
+      "permission": "denied"
+    }
+  },
+  "findings": [
+    {
+      "rule_id": "AUTORUN_MISSING_FILE",
+      "severity": "medium",
+      "message_ru": "Обнаружена ссылка на несуществующий файл в автозагрузке",
+      "evidence": "Реестр HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run: YandexDisk2 -\u003e C:\\Users\\PC\\AppData\\Roaming\\Yandex\\YandexDisk2\\3.2.43.5081\\YandexDisk2.exe (файл не найден)"
+    }
+  ],
+  "metadata": {
+    "collector": "win_agent_basic_posture",
+    "schema_version": "1.0"
+  }
+}

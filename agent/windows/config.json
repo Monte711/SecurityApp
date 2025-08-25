@@ -1,5 +1,5 @@
 {
-  "ingest_url": "http://localhost:8000/ingest",
+  "ingest_url": "http://localhost:8000/ingest/host-posture",
   "agent_id": "win-agent-001",
   "agent_version": "0.1.0",
   "collect_hashes": false,
