@@ -185,7 +185,9 @@ class ApiClient {
             events: filteredEvents.slice(start, end),
             total: filteredEvents.length,
             page,
-            size: Math.min(limit, filteredEvents.length - start)
+            size: Math.min(limit, filteredEvents.length - start),
+            limit,
+            has_more: end < filteredEvents.length
           });
         }, 200);
       });
@@ -199,7 +201,10 @@ class ApiClient {
       if (filters?.page) params.append('page', filters.page.toString());
       if (filters?.event_type) params.append('event_type', filters.event_type);
       if (filters?.severity) params.append('severity', filters.severity);
-      if (filters?.host_id) params.append('host_id', filters.host_id);
+      if (filters?.host_id) {
+        // Поиск по host_id может быть как точным совпадением, так и поиском по hostname
+        params.append('host_id', filters.host_id);
+      }
 
       const url = `${this.baseUrl}/events?${params.toString()}`;
       console.log('=== API CLIENT DEBUG ===');
@@ -230,7 +235,9 @@ class ApiClient {
         events: result.events || [],
         total: result.total || 0,
         page: result.page || 1,
-        size: result.size || 0
+        size: result.size || 0,
+        limit: filters?.limit || 50,
+        has_more: (result.page || 1) * (filters?.limit || 50) < (result.total || 0)
       };
 
     } catch (error) {
@@ -239,7 +246,9 @@ class ApiClient {
         events: [], 
         total: 0, 
         page: 1, 
-        size: 0 
+        size: 0,
+        limit: filters?.limit || 50,
+        has_more: false
       };
     }
   }

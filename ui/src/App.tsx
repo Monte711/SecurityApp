@@ -1,12 +1,13 @@
 import React from 'react';
+import { HostDashboard } from './components/HostDashboard';
 import { Dashboard } from './components/Dashboard';
 import { AlertsTable } from './components/AlertsTable';
 import { SimpleEventsList } from './components/SimpleEventsList';
 import { ConfigPanel } from './components/ConfigPanel';
-import { Settings, Bell, Home, Activity, Monitor } from 'lucide-react';
+import { Settings, Bell, Home, Activity, Monitor, Shield } from 'lucide-react';
 
 const App: React.FC = () => {
-  const [activeTab, setActiveTab] = React.useState('monitoring');
+  const [activeTab, setActiveTab] = React.useState('hosts');
 
   // Handler for API mode changes (used by ConfigPanel)
   const handleApiModeChange = (mode: 'mock' | 'real') => {
@@ -15,6 +16,7 @@ const App: React.FC = () => {
   };
 
   const navigation = [
+    { id: 'hosts', name: 'Управление хостами', icon: Shield },
     { id: 'dashboard', name: 'Панель управления', icon: Home },
     { id: 'monitoring', name: 'Мониторинг', icon: Monitor },
     { id: 'events', name: 'События (расширенные)', icon: Bell },
@@ -24,6 +26,8 @@ const App: React.FC = () => {
 
   const renderContent = () => {
     switch (activeTab) {
+      case 'hosts':
+        return <HostDashboard />;
       case 'dashboard':
         return <Dashboard />;
       case 'monitoring':
@@ -56,7 +60,7 @@ const App: React.FC = () => {
           </div>
         );
       default:
-        return <Dashboard />;
+        return <HostDashboard />;
     }
   };
 
