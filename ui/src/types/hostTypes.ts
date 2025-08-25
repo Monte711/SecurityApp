@@ -105,7 +105,8 @@ export interface HostPostureEvent {
   format_type: string;
   severity: string;
   host_info: HostInfo;
-  inventory: InventoryData;
+  telemetry: InventoryData; // Изменено с inventory на telemetry (согласно реальной структуре)
+  inventory: InventoryData; // Реальная структура данных от агента
   security: SecurityData;
   findings: Finding[];
   metadata: Metadata;
@@ -116,20 +117,14 @@ export interface HostSummary {
   hostname: string;
   status: 'ok' | 'warning' | 'critical';
   last_seen: string;
-  findings_count: {
+  findings_count: number;
+  severity_counts: {
     critical: number;
     high: number;
     medium: number;
     low: number;
-    total: number;
   };
-  uptime_seconds: number;
-  os: {
-    name: string;
-    version: string;
-  };
-  processes_count: number;
-  security_score?: number; // 0-100
+  os?: string; // Упрощено для API response
 }
 
 export interface HostsListResponse {

@@ -157,13 +157,46 @@ class GoInventoryInfo(BaseModel):
     processes: Optional[List[GoProcessInfo]] = Field(None, description="Список процессов")
     autoruns: Optional[GoAutorunsInfo] = Field(None, description="Автозапуски")
 
-class GoSecurityModule(BaseModel):
-    name: str = Field(..., description="Название модуля")
-    status: str = Field(..., description="Статус")
-    details: Optional[Dict[str, Any]] = Field(None, description="Детали")
+class GoDefenderInfo(BaseModel):
+    realtime_enabled: Optional[bool] = Field(None, description="Режим реального времени включен")
+    antivirus_enabled: Optional[bool] = Field(None, description="Антивирус включен") 
+    engine_version: Optional[str] = Field(None, description="Версия движка")
+    signature_age_days: Optional[int] = Field(None, description="Возраст сигнатур в днях")
+    permission: Optional[str] = Field(None, description="Права доступа")
+
+class GoFirewallProfile(BaseModel):
+    enabled: Optional[bool] = Field(None, description="Включен")
+    default_inbound: Optional[str] = Field(None, description="Входящий трафик по умолчанию")
+
+class GoFirewallInfo(BaseModel):
+    domain: Optional[GoFirewallProfile] = Field(None, description="Профиль домена")
+    private: Optional[GoFirewallProfile] = Field(None, description="Частный профиль") 
+    public: Optional[GoFirewallProfile] = Field(None, description="Общественный профиль")
+    permission: Optional[str] = Field(None, description="Права доступа")
+
+class GoUACInfo(BaseModel):
+    enabled: Optional[bool] = Field(None, description="UAC включен")
+    permission: Optional[str] = Field(None, description="Права доступа")
+
+class GoRDPInfo(BaseModel):
+    enabled: Optional[bool] = Field(None, description="RDP включен")
+    permission: Optional[str] = Field(None, description="Права доступа")
+
+class GoBitLockerInfo(BaseModel):
+    enabled: Optional[bool] = Field(None, description="BitLocker включен")
+    permission: Optional[str] = Field(None, description="Права доступа")
+
+class GoSMB1Info(BaseModel):
+    enabled: Optional[bool] = Field(None, description="SMB1 включен")
+    permission: Optional[str] = Field(None, description="Права доступа")
 
 class GoSecurityInfo(BaseModel):
-    modules: Optional[List[GoSecurityModule]] = Field(None, description="Модули безопасности")
+    defender: Optional[GoDefenderInfo] = Field(None, description="Windows Defender")
+    firewall: Optional[GoFirewallInfo] = Field(None, description="Брандмауэр Windows")
+    uac: Optional[GoUACInfo] = Field(None, description="Контроль учетных записей")
+    rdp: Optional[GoRDPInfo] = Field(None, description="Удаленный рабочий стол")
+    bitlocker: Optional[GoBitLockerInfo] = Field(None, description="BitLocker")
+    smb1: Optional[GoSMB1Info] = Field(None, description="Протокол SMB1")
 
 class GoFinding(BaseModel):
     rule_id: str = Field(..., description="ID правила")
@@ -1267,6 +1300,151 @@ async def simple_clear():
         return {"status": "cleared", "message": "Data cleared successfully"}
     except Exception as e:
         return {"status": "error", "message": str(e)}
+
+@app.get("/api/hosts")
+async def get_hosts():
+    """Получить список всех хостов с последней активностью"""
+    try:
+        # Поиск уникальных хостов в OpenSearch
+        query = {
+            "size": 0,
+            "aggs": {
+                "hosts": {
+                    "terms": {
+                        "field": "host_info.host_id.keyword",
+                        "size": 1000
+                    },
+                    "aggs": {
+                        "latest": {
+                            "top_hits": {
+                                "size": 1,
+                                "sort": [{"received_at": {"order": "desc"}}],
+                                "_source": ["host_info", "received_at", "findings", "security", "telemetry"]
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        result = await opensearch_client.search(
+            index="agent-events-*",
+            body=query
+        )
+        
+        hosts = []
+        if 'aggregations' in result and 'hosts' in result['aggregations']:
+            for bucket in result["aggregations"]["hosts"]["buckets"]:
+                if bucket["latest"]["hits"]["hits"]:
+                    host_data = bucket["latest"]["hits"]["hits"][0]["_source"]
+                    host_info = host_data.get("host_info", {})
+                    
+                    # Подсчет findings по severity
+                    findings = host_data.get("findings", [])
+                    severity_counts = {"critical": 0, "high": 0, "medium": 0, "low": 0}
+                    for finding in findings:
+                        severity = finding.get("severity", "").lower()
+                        if severity in severity_counts:
+                            severity_counts[severity] += 1
+                    
+                    # Определение статуса хоста
+                    if severity_counts["critical"] > 0:
+                        status = "critical"
+                    elif severity_counts["high"] > 0:
+                        status = "warning"
+                    elif severity_counts["medium"] > 0:
+                        status = "warning"
+                    else:
+                        status = "ok"
+                    
+                    hosts.append({
+                        "host_id": bucket["key"],
+                        "hostname": host_info.get("hostname", bucket["key"]),
+                        "last_seen": host_data.get("received_at"),
+                        "os": host_info.get("os", {}).get("name", "Unknown"),
+                        "status": status,
+                        "findings_count": sum(severity_counts.values()),
+                        "severity_counts": severity_counts
+                    })
+        
+        return {"hosts": hosts, "total": len(hosts)}
+    except Exception as e:
+        logger.error(f"Error getting hosts: {e}")
+        return {"hosts": [], "total": 0}
+
+@app.get("/api/host/{host_id}/posture/latest")
+async def get_host_latest_posture(host_id: str):
+    """Получить последние данные host_posture для конкретного хоста"""
+    try:
+        query = {
+            "query": {
+                "term": {"host.host_id.keyword": host_id}
+            },
+            "sort": [{"received_at": {"order": "desc"}}],
+            "size": 1
+        }
+        
+        result = await opensearch_client.search(
+            index="agent-events-*",
+            body=query
+        )
+        
+        if result["hits"]["total"]["value"] > 0:
+            return result["hits"]["hits"][0]["_source"]
+        else:
+            raise HTTPException(status_code=404, detail="Host not found")
+            
+    except Exception as e:
+        logger.error(f"Error getting host posture: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/api/host/{host_id}/processes")
+async def get_host_processes(host_id: str):
+    """Получить процессы для конкретного хоста"""
+    try:
+        posture = await get_host_latest_posture(host_id)
+        return posture.get("inventory", {}).get("processes", [])
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error getting host processes: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/api/host/{host_id}/autoruns")
+async def get_host_autoruns(host_id: str):
+    """Получить автозапуски для конкретного хоста"""
+    try:
+        posture = await get_host_latest_posture(host_id)
+        return posture.get("inventory", {}).get("autoruns", {})
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error getting host autoruns: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/api/host/{host_id}/security")
+async def get_host_security(host_id: str):
+    """Получить параметры безопасности для конкретного хоста"""
+    try:
+        posture = await get_host_latest_posture(host_id)
+        return posture.get("security", {})
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error getting host security: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/api/host/{host_id}/findings")
+async def get_host_findings(host_id: str):
+    """Получить findings для конкретного хоста"""
+    try:
+        posture = await get_host_latest_posture(host_id)
+        return posture.get("findings", [])
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error getting host findings: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
 
 # Точка входа для запуска
 if __name__ == "__main__":

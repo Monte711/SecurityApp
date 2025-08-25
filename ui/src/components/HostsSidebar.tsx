@@ -85,13 +85,6 @@ export const HostsSidebar: React.FC<HostsSidebarProps> = ({
     }
   };
 
-  const formatUptime = (seconds: number) => {
-    if (seconds < 60) return `${seconds}с`;
-    if (seconds < 3600) return `${Math.floor(seconds / 60)}м`;
-    if (seconds < 86400) return `${Math.floor(seconds / 3600)}ч`;
-    return `${Math.floor(seconds / 86400)}д`;
-  };
-
   const formatLastSeen = (timestamp: string) => {
     const date = new Date(timestamp);
     const now = new Date();
@@ -195,9 +188,9 @@ export const HostsSidebar: React.FC<HostsSidebarProps> = ({
                       {host.hostname}
                     </span>
                   </div>
-                  {host.findings_count.total > 0 && (
+                  {host.findings_count > 0 && (
                     <span className="bg-red-100 dark:bg-red-900/50 text-red-800 dark:text-red-200 text-xs px-2 py-0.5 rounded-full">
-                      {host.findings_count.total}
+                      {host.findings_count}
                     </span>
                   )}
                 </div>
@@ -206,17 +199,12 @@ export const HostsSidebar: React.FC<HostsSidebarProps> = ({
                 <div className="text-xs text-gray-600 dark:text-gray-400 space-y-1">
                   <div className="flex justify-between">
                     <span>ОС:</span>
-                    <span className="truncate ml-2">{host.os.name}</span>
+                    <span className="truncate ml-2">{host.os || 'Unknown'}</span>
                   </div>
                   
                   <div className="flex justify-between">
-                    <span>Процессов:</span>
-                    <span>{host.processes_count}</span>
-                  </div>
-                  
-                  <div className="flex justify-between">
-                    <span>Аптайм:</span>
-                    <span>{formatUptime(host.uptime_seconds)}</span>
+                    <span>Findings:</span>
+                    <span>{host.findings_count}</span>
                   </div>
                   
                   <div className="flex justify-between items-center">
@@ -227,41 +215,22 @@ export const HostsSidebar: React.FC<HostsSidebarProps> = ({
                     </div>
                   </div>
 
-                  {/* Security Score */}
-                  {host.security_score !== undefined && (
-                    <div className="flex justify-between">
-                      <span>Безопасность:</span>
-                      <div className="flex items-center gap-1">
-                        <div className="w-8 h-1 bg-gray-200 dark:bg-gray-700 rounded">
-                          <div 
-                            className={`h-full rounded ${
-                              host.security_score >= 80 ? 'bg-green-500' :
-                              host.security_score >= 60 ? 'bg-yellow-500' : 'bg-red-500'
-                            }`}
-                            style={{ width: `${host.security_score}%` }}
-                          />
-                        </div>
-                        <span className="text-xs">{host.security_score}%</span>
-                      </div>
-                    </div>
-                  )}
-
                   {/* Findings breakdown */}
-                  {host.findings_count.total > 0 && (
+                  {host.findings_count > 0 && (
                     <div className="flex justify-between text-xs">
                       <span>Рекомендации:</span>
                       <div className="flex gap-1">
-                        {host.findings_count.critical > 0 && (
-                          <span className="text-red-600 dark:text-red-400">{host.findings_count.critical}К</span>
+                        {host.severity_counts.critical > 0 && (
+                          <span className="text-red-600 dark:text-red-400">{host.severity_counts.critical}К</span>
                         )}
-                        {host.findings_count.high > 0 && (
-                          <span className="text-orange-600 dark:text-orange-400">{host.findings_count.high}В</span>
+                        {host.severity_counts.high > 0 && (
+                          <span className="text-orange-600 dark:text-orange-400">{host.severity_counts.high}В</span>
                         )}
-                        {host.findings_count.medium > 0 && (
-                          <span className="text-yellow-600 dark:text-yellow-400">{host.findings_count.medium}С</span>
+                        {host.severity_counts.medium > 0 && (
+                          <span className="text-yellow-600 dark:text-yellow-400">{host.severity_counts.medium}С</span>
                         )}
-                        {host.findings_count.low > 0 && (
-                          <span className="text-blue-600 dark:text-blue-400">{host.findings_count.low}Н</span>
+                        {host.severity_counts.low > 0 && (
+                          <span className="text-blue-600 dark:text-blue-400">{host.severity_counts.low}Н</span>
                         )}
                       </div>
                     </div>
