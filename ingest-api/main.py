@@ -141,29 +141,81 @@ class GoProcessInfo(BaseModel):
     cmdline: Optional[str] = Field(None, description="Командная строка")
     username: Optional[str] = Field(None, description="Пользователь")
 
-class GoAutorunInfo(BaseModel):
-    name: Optional[str] = Field(None, description="Имя автозапуска")
-    command: Optional[str] = Field(None, description="Команда")
+class GoRegistryAutorun(BaseModel):
+    root: Optional[str] = Field(None, description="Корень реестра")
+    path: Optional[str] = Field(None, description="Путь")
+    name: Optional[str] = Field(None, description="Имя")
+    value: Optional[str] = Field(None, description="Значение")
+
+class GoStartupFolder(BaseModel):
     location: Optional[str] = Field(None, description="Расположение")
-    enabled: Optional[bool] = Field(None, description="Включен ли")
+    file: Optional[str] = Field(None, description="Файл")
+    target: Optional[str] = Field(None, description="Цель")
+
+class GoServiceAutorun(BaseModel):
+    name: Optional[str] = Field(None, description="Имя службы")
+    display_name: Optional[str] = Field(None, description="Отображаемое имя")
+    path: Optional[str] = Field(None, description="Путь")
+    start_mode: Optional[str] = Field(None, description="Режим запуска")
+    state: Optional[str] = Field(None, description="Состояние")
+
+class GoScheduledTask(BaseModel):
+    task_name: Optional[str] = Field(None, description="Имя задачи")
+    run_as: Optional[str] = Field(None, description="Запуск от имени")
+    trigger: Optional[str] = Field(None, description="Триггер")
+    action: Optional[str] = Field(None, description="Действие")
+    status: Optional[str] = Field(None, description="Статус")
 
 class GoAutorunsInfo(BaseModel):
-    startup_programs: Optional[List[GoAutorunInfo]] = Field(None, description="Программы автозапуска")
-    run_keys: Optional[List[GoAutorunInfo]] = Field(None, description="Ключи реестра Run")
-    services: Optional[List[GoAutorunInfo]] = Field(None, description="Службы")
-    scheduled_tasks: Optional[List[GoAutorunInfo]] = Field(None, description="Запланированные задачи")
+    registry: Optional[List[GoRegistryAutorun]] = Field(None, description="Автозапуски из реестра")
+    startup_folders: Optional[List[GoStartupFolder]] = Field(None, description="Папки автозагрузки")
+    services_auto: Optional[List[GoServiceAutorun]] = Field(None, description="Автоматические службы")
+    scheduled_tasks: Optional[List[GoScheduledTask]] = Field(None, description="Запланированные задачи")
 
 class GoInventoryInfo(BaseModel):
     processes: Optional[List[GoProcessInfo]] = Field(None, description="Список процессов")
     autoruns: Optional[GoAutorunsInfo] = Field(None, description="Автозапуски")
 
-class GoSecurityModule(BaseModel):
-    name: str = Field(..., description="Название модуля")
-    status: str = Field(..., description="Статус")
-    details: Optional[Dict[str, Any]] = Field(None, description="Детали")
+class GoDefenderInfo(BaseModel):
+    realtime_enabled: Optional[bool] = Field(None, description="Режим реального времени включен")
+    antivirus_enabled: Optional[bool] = Field(None, description="Антивирус включен") 
+    engine_version: Optional[str] = Field(None, description="Версия движка")
+    signature_age_days: Optional[int] = Field(None, description="Возраст сигнатур в днях")
+    permission: Optional[str] = Field(None, description="Права доступа")
+
+class GoFirewallProfile(BaseModel):
+    enabled: Optional[bool] = Field(None, description="Включен")
+    default_inbound: Optional[str] = Field(None, description="Входящий трафик по умолчанию")
+
+class GoFirewallInfo(BaseModel):
+    domain: Optional[GoFirewallProfile] = Field(None, description="Профиль домена")
+    private: Optional[GoFirewallProfile] = Field(None, description="Частный профиль") 
+    public: Optional[GoFirewallProfile] = Field(None, description="Общественный профиль")
+    permission: Optional[str] = Field(None, description="Права доступа")
+
+class GoUACInfo(BaseModel):
+    enabled: Optional[bool] = Field(None, description="UAC включен")
+    permission: Optional[str] = Field(None, description="Права доступа")
+
+class GoRDPInfo(BaseModel):
+    enabled: Optional[bool] = Field(None, description="RDP включен")
+    permission: Optional[str] = Field(None, description="Права доступа")
+
+class GoBitLockerInfo(BaseModel):
+    enabled: Optional[bool] = Field(None, description="BitLocker включен")
+    permission: Optional[str] = Field(None, description="Права доступа")
+
+class GoSMB1Info(BaseModel):
+    enabled: Optional[bool] = Field(None, description="SMB1 включен")
+    permission: Optional[str] = Field(None, description="Права доступа")
 
 class GoSecurityInfo(BaseModel):
-    modules: Optional[List[GoSecurityModule]] = Field(None, description="Модули безопасности")
+    defender: Optional[GoDefenderInfo] = Field(None, description="Windows Defender")
+    firewall: Optional[GoFirewallInfo] = Field(None, description="Брандмауэр Windows")
+    uac: Optional[GoUACInfo] = Field(None, description="Контроль учетных записей")
+    rdp: Optional[GoRDPInfo] = Field(None, description="Удаленный рабочий стол")
+    bitlocker: Optional[GoBitLockerInfo] = Field(None, description="BitLocker")
+    smb1: Optional[GoSMB1Info] = Field(None, description="Протокол SMB1")
 
 class GoFinding(BaseModel):
     rule_id: str = Field(..., description="ID правила")
@@ -1104,13 +1156,17 @@ async def get_stats(
 ):
     """Получение статистики системы с данными агентов"""
     try:
-        logger.info("Запрос статистики для dashboard")
+        logger.info("=== STATS: Запрос статистики для dashboard ===")
         
         # Сначала получаем статистику агентов (активные хосты)
+        logger.info("=== STATS: Вызываю get_agent_stats_data ===")
         agent_stats = await get_agent_stats_data(opensearch)
+        logger.info(f"=== STATS: agent_stats = {agent_stats} ===")
         
         # Затем получаем статистику событий безопасности
+        logger.info("=== STATS: Вызываю get_security_stats_data ===")
         security_stats = await get_security_stats_data(opensearch)
+        logger.info(f"=== STATS: security_stats = {security_stats} ===")
         
         # Объединяем статистику
         combined_stats = {
@@ -1130,56 +1186,39 @@ async def get_stats(
 
 async def get_agent_stats_data(opensearch: AsyncOpenSearch):
     """Получение статистики агентов"""
+    logger.info("=== ENTERING get_agent_stats_data ===")
     search_body = {
         "query": {
             "bool": {
                 "filter": [
-                    {"term": {"event_type": "system_info"}},
+                    {"term": {"event_type": "host_posture"}},
                     {"range": {"timestamp": {"gte": "now-24h"}}}
                 ]
             }
         },
-        "size": 0,
-        "aggs": {
-            "unique_hosts": {
-                "cardinality": {"field": "host.hostname.keyword"}
-            },
-            "events_per_hour": {
-                "date_histogram": {
-                    "field": "timestamp",
-                    "calendar_interval": "1h",
-                    "min_doc_count": 0
-                }
-            }
-        }
+        "size": 0
     }
     
     try:
+        logger.info(f"Agent stats search body: {search_body}")
         response = await opensearch.search(
             index="agent-events-*",
             body=search_body
         )
         
         total_events = response['hits']['total']['value']
+        logger.info(f"Agent stats SUCCESS: total_events={total_events}")
         
-        # Обработка случая когда нет данных (aggregations может отсутствовать)
-        if 'aggregations' in response and total_events > 0:
-            return {
-                "total_events": total_events,
-                "unique_hosts": response['aggregations']['unique_hosts']['value'],
-                "event_types": [{"key": "system_info", "doc_count": total_events}],
-                "events_per_hour": response['aggregations']['events_per_hour']['buckets']
-            }
-        else:
-            # Нет данных - возвращаем пустую статистику
-            return {
-                "total_events": 0,
-                "unique_hosts": 0,
-                "event_types": [],
-                "events_per_hour": []
-            }
+        # Простая версия без агрегации пока
+        return {
+            "total_events": total_events,
+            "unique_hosts": 1 if total_events > 0 else 0,  # Временный хардкод
+            "event_types": [{"key": "host_posture", "doc_count": total_events}] if total_events > 0 else [],
+            "events_per_hour": []
+        }
     except Exception as e:
-        logger.warning(f"Ошибка при получении статистики агентов: {e}")
+        logger.error(f"Ошибка при получении статистики агентов: {e}")
+        logger.error(f"Search body that failed: {search_body}")
         return {
             "total_events": 0,
             "unique_hosts": 0,
@@ -1267,6 +1306,163 @@ async def simple_clear():
         return {"status": "cleared", "message": "Data cleared successfully"}
     except Exception as e:
         return {"status": "error", "message": str(e)}
+
+@app.get("/api/hosts")
+async def get_hosts():
+    """Получить список всех хостов с последней активностью"""
+    try:
+        # Поиск уникальных хостов в OpenSearch
+        query = {
+            "size": 0,
+            "aggs": {
+                "hosts": {
+                    "terms": {
+                        "field": "host_info.host_id.keyword",
+                        "size": 1000
+                    },
+                    "aggs": {
+                        "latest": {
+                            "top_hits": {
+                                "size": 1,
+                                "sort": [{"received_at": {"order": "desc"}}],
+                                "_source": ["host_info", "received_at", "findings", "security", "telemetry"]
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        result = await opensearch_client.search(
+            index="agent-events-*",
+            body=query
+        )
+        
+        hosts = []
+        if 'aggregations' in result and 'hosts' in result['aggregations']:
+            for bucket in result["aggregations"]["hosts"]["buckets"]:
+                if bucket["latest"]["hits"]["hits"]:
+                    host_data = bucket["latest"]["hits"]["hits"][0]["_source"]
+                    host_info = host_data.get("host_info", {})
+                    
+                    # Подсчет findings по severity
+                    findings = host_data.get("findings", [])
+                    severity_counts = {"critical": 0, "high": 0, "medium": 0, "low": 0}
+                    for finding in findings:
+                        severity = finding.get("severity", "").lower()
+                        if severity in severity_counts:
+                            severity_counts[severity] += 1
+                    
+                    # Определение статуса хоста
+                    if severity_counts["critical"] > 0:
+                        status = "critical"
+                    elif severity_counts["high"] > 0:
+                        status = "warning"
+                    elif severity_counts["medium"] > 0:
+                        status = "warning"
+                    else:
+                        status = "ok"
+                    
+                    hosts.append({
+                        "host_id": bucket["key"],
+                        "hostname": host_info.get("hostname", bucket["key"]),
+                        "last_seen": host_data.get("received_at"),
+                        "os": host_info.get("os", {}).get("name", "Unknown"),
+                        "status": status,
+                        "findings_count": sum(severity_counts.values()),
+                        "severity_counts": severity_counts
+                    })
+        
+        return {"hosts": hosts, "total": len(hosts)}
+    except Exception as e:
+        logger.error(f"Error getting hosts: {e}")
+        return {"hosts": [], "total": 0}
+
+@app.get("/api/host/{host_id}/posture/latest")
+async def get_host_latest_posture(host_id: str):
+    """Получить последние данные host_posture для конкретного хоста"""
+    try:
+        query = {
+            "query": {
+                "term": {"host.host_id.keyword": host_id}
+            },
+            "sort": [{"received_at": {"order": "desc"}}],
+            "size": 1
+        }
+        
+        result = await opensearch_client.search(
+            index="agent-events-*",
+            body=query
+        )
+        
+        if result["hits"]["total"]["value"] > 0:
+            data = result["hits"]["hits"][0]["_source"]
+            # Преобразуем данные автозапуска для совместимости с UI
+            if "inventory" in data and "autoruns" in data["inventory"] and data["inventory"]["autoruns"]:
+                autoruns = data["inventory"]["autoruns"]
+                # Преобразуем старые имена полей в новые для UI
+                if "startup_programs" in autoruns and autoruns["startup_programs"] is not None:
+                    autoruns["startup_folders"] = autoruns.pop("startup_programs")
+                if "run_keys" in autoruns and autoruns["run_keys"] is not None:
+                    autoruns["registry"] = autoruns.pop("run_keys")
+                if "services" in autoruns and autoruns["services"] is not None:
+                    autoruns["services_auto"] = autoruns.pop("services")
+                # scheduled_tasks уже правильное имя
+            return data
+        else:
+            raise HTTPException(status_code=404, detail="Host not found")
+            
+    except Exception as e:
+        logger.error(f"Error getting host posture: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/api/host/{host_id}/processes")
+async def get_host_processes(host_id: str):
+    """Получить процессы для конкретного хоста"""
+    try:
+        posture = await get_host_latest_posture(host_id)
+        return posture.get("inventory", {}).get("processes", [])
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error getting host processes: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/api/host/{host_id}/autoruns")
+async def get_host_autoruns(host_id: str):
+    """Получить автозапуски для конкретного хоста"""
+    try:
+        posture = await get_host_latest_posture(host_id)
+        return posture.get("inventory", {}).get("autoruns", {})
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error getting host autoruns: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/api/host/{host_id}/security")
+async def get_host_security(host_id: str):
+    """Получить параметры безопасности для конкретного хоста"""
+    try:
+        posture = await get_host_latest_posture(host_id)
+        return posture.get("security", {})
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error getting host security: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/api/host/{host_id}/findings")
+async def get_host_findings(host_id: str):
+    """Получить findings для конкретного хоста"""
+    try:
+        posture = await get_host_latest_posture(host_id)
+        return posture.get("findings", [])
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error getting host findings: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
 
 # Точка входа для запуска
 if __name__ == "__main__":

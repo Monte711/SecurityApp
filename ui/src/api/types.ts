@@ -74,12 +74,8 @@ export interface TelemetryEvent {
   details?: Record<string, any>;
 }
 
-export interface EventsResponse {
-  events: TelemetryEvent[];
-  total: number;
-  page: number;
-  size: number;
-}
+// Export host types
+export * from '../types/hostTypes';
 
 export interface IngestResponse {
   event_id: string;
@@ -104,4 +100,13 @@ export interface DashboardStats {
   event_types: Array<{key: string; doc_count: number}>;
   severity_levels: Array<{key: string; doc_count: number}>;
   events_per_hour: Array<{key: number; doc_count: number}>;
+}
+
+export interface EventsResponse {
+  events: TelemetryEvent[];
+  total: number;
+  size: number;
+  page: number;
+  limit: number;
+  has_more: boolean;
 }

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Security Data Debug Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .result { background: #f5f5f5; padding: 10px; margin: 10px 0; border-radius: 5px; }
+        .error { background: #ffebee; border: 1px solid #f44336; }
+        .success { background: #e8f5e9; border: 1px solid #4caf50; }
+        pre { background: #fff; padding: 10px; border: 1px solid #ddd; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h1>Security Data Debug Test</h1>
+    
+    <div id="test-results">
+        <div class="result">
+            <h3>Тест 1: Проверка подключения к API</h3>
+            <div id="api-test">Тестирование...</div>
+        </div>
+        
+        <div class="result">
+            <h3>Тест 2: Получение данных безопасности</h3>
+            <div id="security-test">Тестирование...</div>
+        </div>
+        
+        <div class="result">
+            <h3>Тест 3: Анализ данных по модулям</h3>
+            <div id="modules-test">Тестирование...</div>
+        </div>
+    </div>
+
+    <script>
+        const HOST_ID = "57d9d3b6-10ae-4fd4-8486-703a1d26717e";
+        
+        // Функция для логирования результатов
+        function logResult(elementId, isSuccess, message, data = null) {
+            const element = document.getElementById(elementId);
+            element.className = isSuccess ? 'success' : 'error';
+            element.innerHTML = `
+                <strong>${isSuccess ? '✅ УСПЕХ' : '❌ ОШИБКА'}:</strong> ${message}
+                ${data ? `<pre>${JSON.stringify(data, null, 2)}</pre>` : ''}
+            `;
+        }
+        
+        // Тест 1: Проверка API подключения
+        async function testApiConnection() {
+            try {
+                const response = await fetch('/api/hosts');
+                if (response.ok) {
+                    const data = await response.json();
+                    logResult('api-test', true, `API доступен. Найдено хостов: ${data.hosts?.length || 0}`, data);
+                } else {
+                    logResult('api-test', false, `HTTP ${response.status}: ${response.statusText}`);
+                }
+            } catch (error) {
+                logResult('api-test', false, `Ошибка соединения: ${error.message}`);
+            }
+        }
+        
+        // Тест 2: Получение данных безопасности
+        async function testSecurityData() {
+            try {
+                const response = await fetch(`/api/host/${HOST_ID}/security`);
+                if (response.ok) {
+                    const data = await response.json();
+                    logResult('security-test', true, 'Данные безопасности получены', data);
+                    
+                    // Запускаем анализ модулей
+                    analyzeSecurityModules(data);
+                } else {
+                    logResult('security-test', false, `HTTP ${response.status}: ${response.statusText}`);
+                }
+            } catch (error) {
+                logResult('security-test', false, `Ошибка получения данных: ${error.message}`);
+            }
+        }
+        
+        // Тест 3: Анализ модулей безопасности
+        function analyzeSecurityModules(securityData) {
+            const analysis = {
+                defender: null,
+                firewall: null,
+                uac: null,
+                rdp: null,
+                bitlocker: null,
+                smb1: null
+            };
+            
+            // Анализ Defender
+            if (securityData.defender) {
+                const def = securityData.defender;
+                const antivirusEnabled = def.antivirus_enabled;
+                const realtimeEnabled = def.realtime_enabled;
+                
+                let status = 'unknown';
+                let expectedStatus = 'unknown';
+                
+                if (!antivirusEnabled) {
+                    status = 'critical';
+                    expectedStatus = 'critical (антивирус отключен)';
+                } else if (antivirusEnabled && !realtimeEnabled) {
+                    status = 'warning';
+                    expectedStatus = 'warning (антивирус включен, но защита в реальном времени отключена)';
+                } else {
+                    status = 'ok';
+                    expectedStatus = 'ok (антивирус и защита в реальном времени включены)';
+                }
+                
+                analysis.defender = {
+                    status: status,
+                    antivirus_enabled: antivirusEnabled,
+                    realtime_enabled: realtimeEnabled,
+                    expected: expectedStatus,
+                    isCorrect: status === 'warning' // При текущих данных должен быть warning
+                };
+            }
+            
+            // Анализ Firewall
+            if (securityData.firewall) {
+                const fw = securityData.firewall;
+                
+                let status = 'unknown';
+                let expectedStatus = 'unknown';
+                
+                // Проверяем есть ли данные
+                const domainEnabled = fw.domain?.enabled;
+                const privateEnabled = fw.private?.enabled;
+                const publicEnabled = fw.public?.enabled;
+                
+                const hasData = domainEnabled !== null && domainEnabled !== undefined ||
+                                privateEnabled !== null && privateEnabled !== undefined ||
+                                publicEnabled !== null && publicEnabled !== undefined;
+                
+                if (!hasData) {
+                    status = 'unknown';
+                    expectedStatus = 'unknown (все профили null - нет прав доступа)';
+                } else {
+                    const enabledProfiles = [domainEnabled, privateEnabled, publicEnabled].filter(p => p === true).length;
+                    const totalProfiles = [domainEnabled, privateEnabled, publicEnabled].filter(p => p !== null && p !== undefined).length;
+                    
+                    if (enabledProfiles === totalProfiles && totalProfiles > 0) {
+                        status = 'ok';
+                        expectedStatus = 'ok (все профили включены)';
+                    } else if (enabledProfiles > 0) {
+                        status = 'warning';
+                        expectedStatus = 'warning (некоторые профили выключены)';
+                    } else {
+                        status = 'critical';
+                        expectedStatus = 'critical (все профили выключены)';
+                    }
+                }
+                
+                analysis.firewall = {
+                    status: status,
+                    domain: domainEnabled,
+                    private: privateEnabled,
+                    public: publicEnabled,
+                    hasData: hasData,
+                    expected: expectedStatus,
+                    isCorrect: status === 'unknown' // При текущих данных должен быть unknown
+                };
+            }
+            
+            // Анализ остальных модулей
+            ['uac', 'rdp', 'bitlocker', 'smb1'].forEach(module => {
+                if (securityData[module]) {
+                    const moduleData = securityData[module];
+                    
+                    let status = 'unknown';
+                    let expectedStatus = 'unknown';
+                    let isCorrect = false;
+                    
+                    if (module === 'uac') {
+                        status = moduleData.enabled ? 'ok' : 'critical';
+                        expectedStatus = moduleData.enabled ? 'ok (UAC включен)' : 'critical (UAC отключен)';
+                        isCorrect = status === 'ok'; // При enabled=true должен быть ok
+                    } else if (module === 'rdp') {
+                        status = moduleData.enabled ? 'warning' : 'ok';
+                        expectedStatus = moduleData.enabled ? 'warning (RDP включен)' : 'ok (RDP отключен)';
+                        isCorrect = status === 'ok'; // При enabled=false должен быть ok
+                    } else if (module === 'bitlocker') {
+                        if (moduleData.enabled === null || moduleData.enabled === undefined) {
+                            status = 'unknown';
+                            expectedStatus = 'unknown (нет прав для проверки)';
+                            isCorrect = true; // При enabled=null должен быть unknown
+                        } else {
+                            status = moduleData.enabled ? 'ok' : 'warning';
+                            expectedStatus = moduleData.enabled ? 'ok (BitLocker включен)' : 'warning (BitLocker отключен)';
+                        }
+                    } else if (module === 'smb1') {
+                        if (moduleData.permission === "denied" || moduleData.enabled === null || moduleData.enabled === undefined) {
+                            status = 'unknown';
+                            expectedStatus = 'unknown (нет прав для проверки)';
+                            isCorrect = true; // При permission="denied" должен быть unknown
+                        } else {
+                            status = moduleData.enabled ? 'critical' : 'ok';
+                            expectedStatus = moduleData.enabled ? 'critical (SMB1 включен)' : 'ok (SMB1 отключен)';
+                        }
+                    }
+                    
+                    analysis[module] = {
+                        enabled: moduleData.enabled,
+                        permission: moduleData.permission,
+                        status: status,
+                        expected: expectedStatus,
+                        isCorrect: isCorrect,
+                        raw_data: moduleData
+                    };
+                }
+            });
+            
+            logResult('modules-test', true, 'Анализ модулей безопасности завершен', analysis);
+        }
+        
+        // Запуск тестов
+        async function runAllTests() {
+            await testApiConnection();
+            await testSecurityData();
+        }
+        
+        // Запуск при загрузке страницы
+        runAllTests();
+    </script>
+</body>
+</html>

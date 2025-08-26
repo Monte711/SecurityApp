@@ -31,7 +31,7 @@ $scriptPath = Split-Path -Parent $MyInvocation.MyCommand.Path
 
 # Stop all containers
 Write-Host "`nStopping all UECP containers..." -ForegroundColor Yellow
-Set-Location "$scriptPath\INFRA"
+Set-Location "$scriptPath"
 docker-compose down --remove-orphans --volumes
 
 # Stop module-specific containers
@@ -55,7 +55,7 @@ docker system prune -af --volumes
 
 # Rebuild infrastructure
 Write-Host "`nRebuilding core infrastructure..." -ForegroundColor Cyan
-Set-Location "$scriptPath\INFRA"
+Set-Location "$scriptPath"
 docker-compose build --no-cache --parallel
 
 # Rebuild modules

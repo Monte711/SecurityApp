@@ -10,7 +10,7 @@ WORKDIR /app
 
 # Копирование и установка Python зависимостей
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir fastapi uvicorn[standard] pydantic redis opensearch-py aiohttp python-multipart python-json-logger httpx click
 
 # Копирование исходного кода
 COPY . .
