@@ -10,7 +10,7 @@ try {
         Write-Host $containers -ForegroundColor White
     } else {
         Write-Host "No UECP containers running" -ForegroundColor Red
-        Write-Host "Run .\start.ps1 to start the platform" -ForegroundColor Yellow
+        Write-Host "Run INFRA\uecp-agent.exe to start the platform" -ForegroundColor Yellow
         exit 0
     }
 } catch {
