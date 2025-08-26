@@ -4,7 +4,7 @@
   "agent_version": "0.1.0",
   "collect_hashes": false,
   "run_mode": "daemon",
-  "interval_seconds": 60,
+  "interval_seconds": 30,
   "spool_dir": "C:\\ProgramData\\UECP\\spool",
   "log_file": "C:\\ProgramData\\UECP\\logs\\agent.log",
   "log_level": "debug",

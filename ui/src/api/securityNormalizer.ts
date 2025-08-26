@@ -159,13 +159,17 @@ export class SecurityDataNormalizer {
     let recommendations: string[] = [];
 
     if (rdpInfo.enabled === true) {
-      status = 'enabled';
-      details.rdp = 'RDP включен';
-      recommendations.push('Убедитесь, что RDP используется только при необходимости');
-      recommendations.push('Используйте сильные пароли и ограничьте доступ по IP');
-    } else if (rdpInfo.enabled === false) {
+      // RDP включен - это плохо для безопасности (красный)
       status = 'disabled';
+      details.rdp = 'RDP включен';
+      recommendations.push('Рекомендуется отключить RDP если он не используется');
+      recommendations.push('Если RDP необходим, используйте сильные пароли и ограничьте доступ по IP');
+      recommendations.push('Рассмотрите использование VPN для удаленного доступа');
+    } else if (rdpInfo.enabled === false) {
+      // RDP отключен - это хорошо для безопасности (зелёный)
+      status = 'enabled';
       details.rdp = 'RDP отключен';
+      recommendations.push('Отлично! RDP отключен, что повышает безопасность системы');
     } else {
       status = 'no_data';
       details.rdp = 'Данные недоступны';
@@ -228,12 +232,16 @@ export class SecurityDataNormalizer {
     let recommendations: string[] = [];
 
     if (smb1Info.enabled === false) {
-      status = 'disabled';
-      details.smb1 = 'SMB v1 отключен';
-    } else if (smb1Info.enabled === true) {
+      // SMB1 отключен - это хорошо для безопасности (зелёный)
       status = 'enabled';
+      details.smb1 = 'SMB v1 отключен';
+      recommendations.push('Отлично! SMB v1 отключен, что повышает безопасность системы');
+    } else if (smb1Info.enabled === true) {
+      // SMB1 включен - это плохо для безопасности (красный)
+      status = 'disabled';
       details.smb1 = 'SMB v1 включен';
-      recommendations.push('Отключите SMB v1 - это устаревший и небезопасный протокол');
+      recommendations.push('Критично! Отключите SMB v1 - это устаревший и небезопасный протокол');
+      recommendations.push('SMB v1 имеет множество уязвимостей и должен быть отключен');
     } else {
       status = 'no_data';
       details.smb1 = 'Данные недоступны';
@@ -260,17 +268,17 @@ export class SecurityDataNormalizer {
         defender: 'Антивирус активен и обеспечивает защиту системы',
         firewall: 'Брандмауэр активен и блокирует несанкционированные подключения',
         uac: 'Контроль учетных записей активен',
-        rdp: 'Удаленный доступ включен - требует внимания',
+        rdp: 'Удаленный доступ отключен - система защищена',
         bitlocker: 'Диск зашифрован и защищен',
-        smb1: 'Устаревший протокол включен - требует отключения'
+        smb1: 'Устаревший протокол отключен - система защищена'
       },
       disabled: {
         defender: 'Антивирус отключен - система уязвима',
         firewall: 'Брандмауэр отключен - система уязвима',
         uac: 'Контроль учетных записей отключен',
-        rdp: 'Удаленный доступ отключен',
+        rdp: 'Удаленный доступ включен - потенциальная угроза безопасности',
         bitlocker: 'Диск не зашифрован',
-        smb1: 'Устаревший протокол отключен'
+        smb1: 'Устаревший протокол включен - критическая угроза безопасности'
       },
       no_data: {
         defender: 'Данные о состоянии антивируса недоступны',

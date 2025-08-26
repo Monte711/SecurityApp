@@ -33,38 +33,42 @@ body {
   text-align: left;
 }
 
+/* Security status card theme */
+@layer components {
+  .security-card {
+    @apply bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm dark:shadow-gray-900/10;
+  }
+  
+  .security-card-header {
+    @apply text-gray-900 dark:text-gray-100;
+  }
+  
+  .security-card-text {
+    @apply text-gray-600 dark:text-gray-300;
+  }
+  
+  .security-card-muted {
+    @apply text-gray-500 dark:text-gray-400;
+  }
+  
+  .security-button {
+    @apply bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-800 hover:bg-blue-100 dark:hover:bg-blue-900/30;
+  }
+}
+
 /* Custom severity colors */
 .severity-low {
-  @apply text-green-600 bg-green-50;
+  @apply text-green-600 bg-green-50 dark:text-green-400 dark:bg-green-900/20;
 }
 
 .severity-medium {
-  @apply text-yellow-600 bg-yellow-50;
+  @apply text-yellow-600 bg-yellow-50 dark:text-yellow-400 dark:bg-yellow-900/20;
 }
 
 .severity-high {
-  @apply text-orange-600 bg-orange-50;
+  @apply text-orange-600 bg-orange-50 dark:text-orange-400 dark:bg-orange-900/20;
 }
 
 .severity-critical {
-  @apply text-red-600 bg-red-50;
-}
-
-/* Dark mode overrides */
-@media (prefers-color-scheme: dark) {
-  .severity-low {
-    @apply text-green-400 bg-green-900/20;
-  }
-  
-  .severity-medium {
-    @apply text-yellow-400 bg-yellow-900/20;
-  }
-  
-  .severity-high {
-    @apply text-orange-400 bg-orange-900/20;
-  }
-  
-  .severity-critical {
-    @apply text-red-400 bg-red-900/20;
-  }
+  @apply text-red-600 bg-red-50 dark:text-red-400 dark:bg-red-900/20;
 }
