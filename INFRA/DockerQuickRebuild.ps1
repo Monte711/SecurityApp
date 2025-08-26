@@ -32,7 +32,7 @@ if ($Modules.Count -eq 0) {
 
 # Stop only application containers (preserve data containers)
 Write-Host "`nStopping application containers..." -ForegroundColor Yellow
-Set-Location "$scriptPath\INFRA"
+Set-Location "$scriptPath"
 docker-compose stop ingest_api ui
 
 foreach ($module in $Modules) {
@@ -76,7 +76,7 @@ foreach ($module in $Modules) {
     
     if ($module -eq "ingest-api" -or $module -eq "ui") {
         # Infrastructure modules
-        Set-Location "$scriptPath\INFRA"
+        Set-Location "$scriptPath"
         docker-compose build --no-cache $($module.Replace("-", "_"))
     } else {
         # Standalone modules
@@ -90,7 +90,7 @@ foreach ($module in $Modules) {
 
 # Restart services
 Write-Host "`nRestarting services..." -ForegroundColor Green
-Set-Location "$scriptPath\INFRA"
+Set-Location "$scriptPath"
 
 # Start infrastructure services
 docker-compose up -d opensearch redis opensearch_dashboards
@@ -118,10 +118,10 @@ if ($Modules -contains "ingest-api") {
     try {
         $response = Invoke-WebRequest -Uri "http://localhost:8000/health" -UseBasicParsing -TimeoutSec 10
         if ($response.StatusCode -eq 200) {
-            Write-Host "✓ Ingest API is healthy" -ForegroundColor Green
+            Write-Host " Ingest API is healthy" -ForegroundColor Green
         }
     } catch {
-        Write-Host "⚠ Ingest API health check failed" -ForegroundColor Yellow
+        Write-Host " Ingest API health check failed" -ForegroundColor Yellow
     }
 }
 
@@ -129,10 +129,10 @@ if ($Modules -contains "ui") {
     try {
         $response = Invoke-WebRequest -Uri "http://localhost:3000" -UseBasicParsing -TimeoutSec 10
         if ($response.StatusCode -eq 200) {
-            Write-Host "✓ UI Dashboard is healthy" -ForegroundColor Green
+            Write-Host " UI Dashboard is healthy" -ForegroundColor Green
         }
     } catch {
-        Write-Host "⚠ UI Dashboard health check failed" -ForegroundColor Yellow
+        Write-Host " UI Dashboard health check failed" -ForegroundColor Yellow
     }
 }
 
@@ -141,6 +141,6 @@ Write-Host "Use '.\status.ps1' to check all services" -ForegroundColor Gray
 
 # Usage examples
 Write-Host "`nUsage examples:" -ForegroundColor Yellow
-Write-Host "  .\rebuild-quick.ps1                    # Rebuild all modules" -ForegroundColor Gray
-Write-Host "  .\rebuild-quick.ps1 -Modules ui        # Rebuild only UI" -ForegroundColor Gray
-Write-Host "  .\rebuild-quick.ps1 -SkipTests         # Skip tests" -ForegroundColor Gray
+Write-Host "  .\DockerQuickRebuild.ps1                    # Rebuild all modules" -ForegroundColor Gray
+Write-Host "  .\DockerQuickRebuild.ps1 -Modules ui        # Rebuild only UI" -ForegroundColor Gray
+Write-Host "  .\DockerQuickRebuild.ps1 -SkipTests         # Skip tests" -ForegroundColor Gray
