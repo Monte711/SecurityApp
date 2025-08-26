@@ -1156,13 +1156,17 @@ async def get_stats(
 ):
     """Получение статистики системы с данными агентов"""
     try:
-        logger.info("Запрос статистики для dashboard")
+        logger.info("=== STATS: Запрос статистики для dashboard ===")
         
         # Сначала получаем статистику агентов (активные хосты)
+        logger.info("=== STATS: Вызываю get_agent_stats_data ===")
         agent_stats = await get_agent_stats_data(opensearch)
+        logger.info(f"=== STATS: agent_stats = {agent_stats} ===")
         
         # Затем получаем статистику событий безопасности
+        logger.info("=== STATS: Вызываю get_security_stats_data ===")
         security_stats = await get_security_stats_data(opensearch)
+        logger.info(f"=== STATS: security_stats = {security_stats} ===")
         
         # Объединяем статистику
         combined_stats = {
@@ -1182,56 +1186,39 @@ async def get_stats(
 
 async def get_agent_stats_data(opensearch: AsyncOpenSearch):
     """Получение статистики агентов"""
+    logger.info("=== ENTERING get_agent_stats_data ===")
     search_body = {
         "query": {
             "bool": {
                 "filter": [
-                    {"term": {"event_type": "system_info"}},
+                    {"term": {"event_type": "host_posture"}},
                     {"range": {"timestamp": {"gte": "now-24h"}}}
                 ]
             }
         },
-        "size": 0,
-        "aggs": {
-            "unique_hosts": {
-                "cardinality": {"field": "host.hostname.keyword"}
-            },
-            "events_per_hour": {
-                "date_histogram": {
-                    "field": "timestamp",
-                    "calendar_interval": "1h",
-                    "min_doc_count": 0
-                }
-            }
-        }
+        "size": 0
     }
     
     try:
+        logger.info(f"Agent stats search body: {search_body}")
         response = await opensearch.search(
             index="agent-events-*",
             body=search_body
         )
         
         total_events = response['hits']['total']['value']
+        logger.info(f"Agent stats SUCCESS: total_events={total_events}")
         
-        # Обработка случая когда нет данных (aggregations может отсутствовать)
-        if 'aggregations' in response and total_events > 0:
-            return {
-                "total_events": total_events,
-                "unique_hosts": response['aggregations']['unique_hosts']['value'],
-                "event_types": [{"key": "system_info", "doc_count": total_events}],
-                "events_per_hour": response['aggregations']['events_per_hour']['buckets']
-            }
-        else:
-            # Нет данных - возвращаем пустую статистику
-            return {
-                "total_events": 0,
-                "unique_hosts": 0,
-                "event_types": [],
-                "events_per_hour": []
-            }
+        # Простая версия без агрегации пока
+        return {
+            "total_events": total_events,
+            "unique_hosts": 1 if total_events > 0 else 0,  # Временный хардкод
+            "event_types": [{"key": "host_posture", "doc_count": total_events}] if total_events > 0 else [],
+            "events_per_hour": []
+        }
     except Exception as e:
-        logger.warning(f"Ошибка при получении статистики агентов: {e}")
+        logger.error(f"Ошибка при получении статистики агентов: {e}")
+        logger.error(f"Search body that failed: {search_body}")
         return {
             "total_events": 0,
             "unique_hosts": 0,

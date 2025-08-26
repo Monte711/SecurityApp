@@ -8,7 +8,7 @@ class ApiClient {
   private logs = [...mockLogs];
 
   constructor() {
-    this.baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+    this.baseUrl = window.location.origin;
     this.useMock = import.meta.env.VITE_USE_MOCK_DATA === 'true';
     console.log('ApiClient initialized:', { baseUrl: this.baseUrl, useMock: this.useMock });
   }

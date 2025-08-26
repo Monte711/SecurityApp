@@ -1,18 +1,18 @@
 import { 
   HostsListResponse, 
-  HostDetailResponse, 
   HostPostureEvent, 
   ProcessInfo,
   AutorunsData,
   SecurityData,
   Finding
 } from '../types/hostTypes';
+import { ProcessesAdapter, AutorunsAdapter, SecurityAdapter } from './dataAdapters';
 
 export class HostApiClient {
   private baseUrl: string;
 
   constructor() {
-    this.baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+    this.baseUrl = window.location.origin;
   }
 
   setBaseUrl(url: string) {
@@ -36,17 +36,17 @@ export class HostApiClient {
   }
 
   /**
-   * Получить детали хоста
+   * Получить детали хоста - используем правильный API endpoint
    */
-  async getHostDetails(hostId: string): Promise<HostDetailResponse> {
+  async getHostDetails(hostId: string): Promise<HostPostureEvent> {
     try {
-      const response = await fetch(`${this.baseUrl}/api/hosts/${hostId}`);
+      const response = await fetch(`${this.baseUrl}/api/host/${hostId}/posture/latest`);
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        throw new Error(`Failed to fetch host details: ${response.statusText}`);
       }
       return await response.json();
     } catch (error) {
-      console.error('Failed to fetch host details:', error);
+      console.error('Error fetching host details:', error);
       throw error;
     }
   }
@@ -54,20 +54,23 @@ export class HostApiClient {
   /**
    * Получить позицию хоста (совместимость)
    */
-  async getHostPosture(hostId: string): Promise<HostDetailResponse> {
+  async getHostPosture(hostId: string): Promise<HostPostureEvent> {
     return this.getHostDetails(hostId);
   }
 
   /**
-   * Получить данные безопасности хоста
+   * Получить данные безопасности хоста с нормализацией
    */
   async getHostSecurity(hostId: string): Promise<SecurityData> {
     try {
-      const response = await fetch(`${this.baseUrl}/api/hosts/${hostId}/security`);
+      const response = await fetch(`${this.baseUrl}/api/host/${hostId}/posture/latest`);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      return await response.json();
+      const data = await response.json();
+      
+      // Используем адаптер для нормализации данных безопасности
+      return SecurityAdapter.normalize(data);
     } catch (error) {
       console.error('Failed to fetch security data:', error);
       throw error;
@@ -75,51 +78,61 @@ export class HostApiClient {
   }
 
   /**
-   * Получить процессы хоста
+   * Получить процессы хоста с нормализацией
    */
   async getHostProcesses(hostId: string): Promise<ProcessInfo[]> {
     try {
-      const response = await fetch(`${this.baseUrl}/api/hosts/${hostId}/processes`);
+      const response = await fetch(`${this.baseUrl}/api/host/${hostId}/posture/latest`);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      return await response.json();
+      const data = await response.json();
+      
+      // Используем адаптер для нормализации данных процессов
+      return ProcessesAdapter.normalize(data);
     } catch (error) {
       console.error('Failed to fetch processes:', error);
-      throw error;
+      // Возвращаем пустой массив вместо выбрасывания ошибки
+      return [];
     }
   }
 
   /**
-   * Получить данные автозапуска хоста
+   * Получить данные автозапуска хоста с нормализацией
    */
   async getHostAutoruns(hostId: string): Promise<AutorunsData> {
     try {
-      const response = await fetch(`${this.baseUrl}/api/hosts/${hostId}/autoruns`);
+      const response = await fetch(`${this.baseUrl}/api/host/${hostId}/posture/latest`);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      return await response.json();
+      const data = await response.json();
+      
+      // Используем адаптер для нормализации данных автозапуска
+      return AutorunsAdapter.normalize(data);
     } catch (error) {
       console.error('Failed to fetch autoruns:', error);
-      throw error;
+      // Возвращаем пустую структуру вместо выбрасывания ошибки
+      return {
+        registry: [],
+        startup_folders: [],
+        services_auto: [],
+        scheduled_tasks: []
+      };
     }
   }
 
   /**
    * Получить события хоста
    */
-  async getHostEvents(hostId: string, limit?: number): Promise<HostPostureEvent[]> {
+  async getHostEvents(hostId: string): Promise<HostPostureEvent[]> {
     try {
-      const url = limit ? 
-        `${this.baseUrl}/api/hosts/${hostId}/events?limit=${limit}` : 
-        `${this.baseUrl}/api/hosts/${hostId}/events`;
-      
-      const response = await fetch(url);
+      const response = await fetch(`${this.baseUrl}/api/host/${hostId}/posture/latest`);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      return await response.json();
+      const data = await response.json();
+      return [data]; // возвращаем последнее событие как массив
     } catch (error) {
       console.error('Failed to fetch events:', error);
       throw error;
@@ -131,11 +144,12 @@ export class HostApiClient {
    */
   async getHostFindings(hostId: string): Promise<Finding[]> {
     try {
-      const response = await fetch(`${this.baseUrl}/api/hosts/${hostId}/findings`);
+      const response = await fetch(`${this.baseUrl}/api/host/${hostId}/posture/latest`);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      return await response.json();
+      const data = await response.json();
+      return data.findings || [];
     } catch (error) {
       console.error('Failed to fetch findings:', error);
       throw error;

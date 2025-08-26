@@ -1,430 +1,307 @@
-import { 
-  SecurityData,
-  NormalizedSecurityData,
-  SecurityStatus,
-  SecurityStatusType
-} from '../types/hostTypes';
-import { hostApiClient } from './hostApi';
+import { SecurityData, NormalizedSecurityData, SecurityStatus, SecurityStatusType } from '../types/hostTypes';
 
 export class SecurityDataNormalizer {
-  /**
-   * Получить нормализованные данные безопасности для хоста
-   */
   async getNormalizedHostSecurity(hostId: string): Promise<NormalizedSecurityData> {
-    try {
-      const rawData = await hostApiClient.getHostSecurity(hostId);
-      return this.normalizeSecurityData(rawData);
-    } catch (error) {
-      console.error('Failed to fetch normalized host security:', error);
-      return this.getEmptySecurityData();
-    }
+    // Получаем данные через dataAdapters
+    const { getHostSecurity } = await import('./dataAdapters');
+    const rawData = await getHostSecurity(hostId);
+    return this.normalizeSecurityData(rawData);
   }
 
-  /**
-   * Строгая нормализация данных безопасности
-   */
-  private normalizeSecurityData(rawData: SecurityData): NormalizedSecurityData {
-    const now = new Date().toISOString();
-    
+  normalizeSecurityData(data: SecurityData): NormalizedSecurityData {
     return {
-      defender: this.normalizeDefenderStatus(rawData.defender, now),
-      firewall: this.normalizeFirewallStatus(rawData.firewall, now),
-      uac: this.normalizeUACStatus(rawData.uac, now),
-      rdp: this.normalizeRDPStatus(rawData.rdp, now),
-      bitlocker: this.normalizeBitLockerStatus(rawData.bitlocker, now),
-      smb1: this.normalizeSMB1Status(rawData.smb1, now),
-      lastUpdated: now
+      defender: this.getDefenderStatus(data),
+      firewall: this.getFirewallStatus(data),
+      uac: this.getUacStatus(data),
+      rdp: this.getRdpStatus(data),
+      bitlocker: this.getBitlockerStatus(data),
+      smb1: this.getSmb1Status(data),
+      lastUpdated: new Date().toISOString()
     };
   }
 
-  private normalizeDefenderStatus(data: any, timestamp: string): SecurityStatus {
-    if (!data) {
-      return {
-        status: 'no_data',
-        displayName: 'Windows Defender',
-        description: 'Данные о Windows Defender недоступны',
-        source: 'API',
-        lastUpdated: timestamp,
-        details: {},
-        recommendations: ['Проверьте подключение к агенту']
-      };
-    }
-
-    if (data.permission === 'denied' || data.permission === 'access_denied') {
-      return {
-        status: 'access_denied',
-        displayName: 'Windows Defender',
-        description: 'Недостаточно прав для проверки Windows Defender',
-        source: 'Agent',
-        lastUpdated: timestamp,
-        details: { 'Права доступа': data.permission },
-        recommendations: ['Запустите агент с правами администратора']
-      };
-    }
-
-    const antivirusEnabled = data.antivirus_enabled;
-    const realtimeEnabled = data.realtime_enabled;
-
-    // Строгая проверка значений
-    if (antivirusEnabled === null || antivirusEnabled === undefined ||
-        realtimeEnabled === null || realtimeEnabled === undefined) {
-      return {
-        status: 'unknown',
-        displayName: 'Windows Defender',
-        description: 'Неопределённое состояние Windows Defender',
-        source: 'Agent',
-        lastUpdated: timestamp,
-        details: {
-          'Антивирус': antivirusEnabled === null ? 'null' : String(antivirusEnabled),
-          'Защита в реальном времени': realtimeEnabled === null ? 'null' : String(realtimeEnabled)
-        },
-        recommendations: ['Обратитесь к администратору']
-      };
-    }
-
-    // Определяем статус на основе данных
-    let status: SecurityStatusType;
+  private getDefenderStatus(data: SecurityData): SecurityStatus {
+    const defenderInfo = data.defender || {};
+    
+    let status: SecurityStatusType = 'unknown';
+    let details: Record<string, any> = {};
     let recommendations: string[] = [];
 
-    if (!antivirusEnabled) {
-      status = 'disabled';
-      recommendations.push('Включите Windows Defender для базовой защиты');
-    } else if (!realtimeEnabled) {
-      status = 'disabled'; // Считаем отключенным если нет защиты в реальном времени
-      recommendations.push('Включите защиту в реальном времени');
-    } else {
+    // Анализ статуса Windows Defender
+    if (defenderInfo.antivirus_enabled === true) {
       status = 'enabled';
+      details.antivirus = 'Антивирус включен';
+    } else if (defenderInfo.antivirus_enabled === false) {
+      status = 'disabled';
+      details.antivirus = 'Антивирус отключен';
+      recommendations.push('Включите Windows Defender Antivirus');
+    } else {
+      status = 'no_data';
+      details.antivirus = 'Данные недоступны';
+    }
+
+    if (defenderInfo.realtime_enabled === true) {
+      details.realtime = 'Защита в реальном времени активна';
+    } else if (defenderInfo.realtime_enabled === false) {
+      if (status === 'enabled') status = 'disabled';
+      details.realtime = 'Защита в реальном времени отключена';
+      recommendations.push('Включите защиту в реальном времени');
+    }
+
+    if (defenderInfo.engine_version) {
+      details.version = `Версия движка: ${defenderInfo.engine_version}`;
+    }
+
+    if (defenderInfo.signature_age_days !== undefined) {
+      details.signatures = `Возраст сигнатур: ${defenderInfo.signature_age_days} дней`;
+      if (defenderInfo.signature_age_days > 7) {
+        recommendations.push('Обновите сигнатуры антивируса');
+      }
     }
 
     return {
       status,
       displayName: 'Windows Defender',
-      description: 'Антивирусная защита Windows',
-      source: 'Agent',
-      lastUpdated: timestamp,
-      details: {
-        'Антивирус': antivirusEnabled ? 'Включен' : 'Отключен',
-        'Защита в реальном времени': realtimeEnabled ? 'Включена' : 'Отключена',
-        'Версия движка': data.engine_version || 'Неизвестно'
-      },
+      description: this.getStatusDescription(status, 'defender'),
+      source: 'API',
+      lastUpdated: new Date().toISOString(),
+      details,
       recommendations
     };
   }
 
-  private normalizeFirewallStatus(data: any, timestamp: string): SecurityStatus {
-    if (!data) {
-      return {
-        status: 'no_data',
-        displayName: 'Брандмауэр Windows',
-        description: 'Данные о брандмауэре недоступны',
-        source: 'API',
-        lastUpdated: timestamp,
-        details: {},
-        recommendations: ['Проверьте подключение к агенту']
-      };
-    }
-
-    if (data.permission === 'denied' || data.permission === 'access_denied') {
-      return {
-        status: 'access_denied',
-        displayName: 'Брандмауэр Windows',
-        description: 'Недостаточно прав для проверки брандмауэра',
-        source: 'Agent',
-        lastUpdated: timestamp,
-        details: { 'Права доступа': data.permission },
-        recommendations: ['Запустите агент с правами администратора']
-      };
-    }
-
-    // Проверяем наличие данных о профилях
-    const domainEnabled = data.domain?.enabled;
-    const privateEnabled = data.private?.enabled;
-    const publicEnabled = data.public?.enabled;
-
-    const hasData = domainEnabled !== null && domainEnabled !== undefined ||
-                    privateEnabled !== null && privateEnabled !== undefined ||
-                    publicEnabled !== null && publicEnabled !== undefined;
-
-    if (!hasData) {
-      return {
-        status: 'no_data',
-        displayName: 'Брандмауэр Windows',
-        description: 'Данные о профилях брандмауэра недоступны',
-        source: 'Agent',
-        lastUpdated: timestamp,
-        details: {
-          'Доменный профиль': 'Недоступно',
-          'Частный профиль': 'Недоступно',
-          'Публичный профиль': 'Недоступно'
-        },
-        recommendations: ['Проверьте права агента для доступа к настройкам брандмауэра']
-      };
-    }
-
-    // Подсчитываем включённые профили
-    const profiles = [domainEnabled, privateEnabled, publicEnabled];
-    const enabledCount = profiles.filter(p => p === true).length;
-    const totalCount = profiles.filter(p => p !== null && p !== undefined).length;
-
-    let status: SecurityStatusType;
+  private getFirewallStatus(data: SecurityData): SecurityStatus {
+    const firewallInfo = data.firewall || {};
+    
+    let status: SecurityStatusType = 'unknown';
+    let details: Record<string, any> = {};
     let recommendations: string[] = [];
 
-    if (enabledCount === totalCount && totalCount > 0) {
+    // Анализ брандмауэра по профилям
+    const profiles = ['domain', 'private', 'public'] as const;
+    let enabledProfiles = 0;
+    let totalProfiles = 0;
+
+    profiles.forEach(profile => {
+      const profileInfo = firewallInfo[profile];
+      if (profileInfo !== undefined) {
+        totalProfiles++;
+        if (profileInfo.enabled === true) {
+          enabledProfiles++;
+          details[`${profile}_profile`] = `${profile.charAt(0).toUpperCase() + profile.slice(1)} профиль активен`;
+        } else if (profileInfo.enabled === false) {
+          details[`${profile}_profile`] = `${profile.charAt(0).toUpperCase() + profile.slice(1)} профиль отключен`;
+          recommendations.push(`Включите брандмауэр для ${profile} профиля`);
+        }
+      }
+    });
+
+    if (totalProfiles === 0) {
+      status = 'no_data';
+    } else if (enabledProfiles === totalProfiles) {
       status = 'enabled';
-    } else if (enabledCount === 0) {
+    } else if (enabledProfiles === 0) {
       status = 'disabled';
-      recommendations.push('Включите брандмауэр для защиты от сетевых угроз');
     } else {
-      status = 'disabled'; // Частично включён = считаем отключенным
-      recommendations.push('Включите брандмауэр для всех сетевых профилей');
+      status = 'disabled'; // Частично включен считаем как отключен
     }
 
     return {
       status,
       displayName: 'Брандмауэр Windows',
-      description: 'Сетевая защита Windows',
-      source: 'Agent',
-      lastUpdated: timestamp,
-      details: {
-        'Доменный профиль': domainEnabled !== null && domainEnabled !== undefined ? (domainEnabled ? 'Включен' : 'Отключен') : 'Недоступно',
-        'Частный профиль': privateEnabled !== null && privateEnabled !== undefined ? (privateEnabled ? 'Включен' : 'Отключен') : 'Недоступно',
-        'Публичный профиль': publicEnabled !== null && publicEnabled !== undefined ? (publicEnabled ? 'Включен' : 'Отключен') : 'Недоступно'
-      },
+      description: this.getStatusDescription(status, 'firewall'),
+      source: 'API',
+      lastUpdated: new Date().toISOString(),
+      details,
       recommendations
     };
   }
 
-  private normalizeUACStatus(data: any, timestamp: string): SecurityStatus {
-    if (!data) {
-      return {
-        status: 'no_data',
-        displayName: 'Контроль учётных записей (UAC)',
-        description: 'Данные о UAC недоступны',
-        source: 'API',
-        lastUpdated: timestamp,
-        details: {},
-        recommendations: ['Проверьте подключение к агенту']
-      };
+  private getUacStatus(data: SecurityData): SecurityStatus {
+    const uacInfo = data.uac || {};
+    
+    let status: SecurityStatusType = 'unknown';
+    let details: Record<string, any> = {};
+    let recommendations: string[] = [];
+
+    if (uacInfo.enabled === true) {
+      status = 'enabled';
+      details.uac = 'UAC включен';
+    } else if (uacInfo.enabled === false) {
+      status = 'disabled';
+      details.uac = 'UAC отключен';
+      recommendations.push('Включите UAC для защиты от несанкционированных изменений');
+    } else {
+      status = 'no_data';
+      details.uac = 'Данные недоступны';
     }
 
-    if (data.permission === 'denied' || data.permission === 'access_denied') {
-      return {
-        status: 'access_denied',
-        displayName: 'Контроль учётных записей (UAC)',
-        description: 'Недостаточно прав для проверки UAC',
-        source: 'Agent',
-        lastUpdated: timestamp,
-        details: { 'Права доступа': data.permission },
-        recommendations: ['Запустите агент с правами администратора']
-      };
-    }
-
-    const enabled = data.enabled;
-
-    if (enabled === null || enabled === undefined) {
-      return {
-        status: 'unknown',
-        displayName: 'Контроль учётных записей (UAC)',
-        description: 'Неопределённое состояние UAC',
-        source: 'Agent',
-        lastUpdated: timestamp,
-        details: { 'Состояние': 'null' },
-        recommendations: ['Обратитесь к администратору']
-      };
+    if (uacInfo.permission) {
+      details.permission = `Права доступа: ${uacInfo.permission}`;
     }
 
     return {
-      status: enabled ? 'enabled' : 'disabled',
-      displayName: 'Контроль учётных записей (UAC)',
-      description: 'Контроль повышения привилегий',
-      source: 'Agent',
-      lastUpdated: timestamp,
-      details: { 'Состояние': enabled ? 'Включен' : 'Отключен' },
-      recommendations: enabled ? [] : ['Включите UAC для защиты от несанкционированного повышения привилегий']
-    };
-  }
-
-  private normalizeRDPStatus(data: any, timestamp: string): SecurityStatus {
-    if (!data) {
-      return {
-        status: 'no_data',
-        displayName: 'Удалённый рабочий стол (RDP)',
-        description: 'Данные о RDP недоступны',
-        source: 'API',
-        lastUpdated: timestamp,
-        details: {},
-        recommendations: ['Проверьте подключение к агенту']
-      };
-    }
-
-    if (data.permission === 'denied' || data.permission === 'access_denied') {
-      return {
-        status: 'access_denied',
-        displayName: 'Удалённый рабочий стол (RDP)',
-        description: 'Недостаточно прав для проверки RDP',
-        source: 'Agent',
-        lastUpdated: timestamp,
-        details: { 'Права доступа': data.permission },
-        recommendations: ['Запустите агент с правами администратора']
-      };
-    }
-
-    const enabled = data.enabled;
-
-    if (enabled === null || enabled === undefined) {
-      return {
-        status: 'unknown',
-        displayName: 'Удалённый рабочий стол (RDP)',
-        description: 'Неопределённое состояние RDP',
-        source: 'Agent',
-        lastUpdated: timestamp,
-        details: { 'Состояние': 'null' },
-        recommendations: ['Обратитесь к администратору']
-      };
-    }
-
-    // Для RDP: включён = потенциальный риск, отключён = безопасно
-    return {
-      status: enabled ? 'enabled' : 'disabled',
-      displayName: 'Удалённый рабочий стол (RDP)',
-      description: 'Служба удалённого доступа',
-      source: 'Agent',
-      lastUpdated: timestamp,
-      details: { 'Состояние': enabled ? 'Включен' : 'Отключен' },
-      recommendations: enabled ? [
-        'RDP включён - убедитесь в необходимости удалённого доступа',
-        'Используйте сильные пароли и ограничьте доступ по IP',
-        'Рассмотрите возможность смены стандартного порта 3389'
-      ] : []
-    };
-  }
-
-  private normalizeBitLockerStatus(data: any, timestamp: string): SecurityStatus {
-    if (!data) {
-      return {
-        status: 'no_data',
-        displayName: 'BitLocker',
-        description: 'Данные о BitLocker недоступны',
-        source: 'API',
-        lastUpdated: timestamp,
-        details: {},
-        recommendations: ['Проверьте подключение к агенту']
-      };
-    }
-
-    if (data.permission === 'denied' || data.permission === 'access_denied') {
-      return {
-        status: 'access_denied',
-        displayName: 'BitLocker',
-        description: 'Недостаточно прав для проверки BitLocker',
-        source: 'Agent',
-        lastUpdated: timestamp,
-        details: { 'Права доступа': data.permission },
-        recommendations: ['Запустите агент с правами администратора']
-      };
-    }
-
-    const enabled = data.enabled;
-
-    if (enabled === null || enabled === undefined) {
-      return {
-        status: 'unknown',
-        displayName: 'BitLocker',
-        description: 'Неопределённое состояние BitLocker',
-        source: 'Agent',
-        lastUpdated: timestamp,
-        details: { 'Состояние': 'null' },
-        recommendations: ['Обратитесь к администратору']
-      };
-    }
-
-    return {
-      status: enabled ? 'enabled' : 'disabled',
-      displayName: 'BitLocker',
-      description: 'Шифрование дисков',
-      source: 'Agent',
-      lastUpdated: timestamp,
-      details: { 'Состояние системного диска': enabled ? 'Зашифрован' : 'Не зашифрован' },
-      recommendations: enabled ? [] : ['Включите BitLocker для защиты данных на диске']
-    };
-  }
-
-  private normalizeSMB1Status(data: any, timestamp: string): SecurityStatus {
-    if (!data) {
-      return {
-        status: 'no_data',
-        displayName: 'Протокол SMB1',
-        description: 'Данные о SMB1 недоступны',
-        source: 'API',
-        lastUpdated: timestamp,
-        details: {},
-        recommendations: ['Проверьте подключение к агенту']
-      };
-    }
-
-    if (data.permission === 'denied' || data.permission === 'access_denied') {
-      return {
-        status: 'access_denied',
-        displayName: 'Протокол SMB1',
-        description: 'Недостаточно прав для проверки SMB1',
-        source: 'Agent',
-        lastUpdated: timestamp,
-        details: { 'Права доступа': data.permission },
-        recommendations: ['Запустите агент с правами администратора']
-      };
-    }
-
-    const enabled = data.enabled;
-
-    if (enabled === null || enabled === undefined) {
-      return {
-        status: 'unknown',
-        displayName: 'Протокол SMB1',
-        description: 'Неопределённое состояние SMB1',
-        source: 'Agent',
-        lastUpdated: timestamp,
-        details: { 'Состояние': 'null' },
-        recommendations: ['Обратитесь к администратору']
-      };
-    }
-
-    // Для SMB1: включён = критично (уязвимость), отключён = безопасно
-    return {
-      status: enabled ? 'enabled' : 'disabled',
-      displayName: 'Протокол SMB1',
-      description: 'Устаревший сетевой протокол',
-      source: 'Agent',
-      lastUpdated: timestamp,
-      details: { 'Состояние': enabled ? 'Включен' : 'Отключен' },
-      recommendations: enabled ? [
-        'Отключите SMB1 - это устаревший и небезопасный протокол',
-        'SMB1 подвержен множественным уязвимостям безопасности'
-      ] : []
-    };
-  }
-
-  private getEmptySecurityData(): NormalizedSecurityData {
-    const now = new Date().toISOString();
-    const noDataStatus: SecurityStatus = {
-      status: 'no_data',
-      displayName: 'Неизвестный модуль',
-      description: 'Данные недоступны',
+      status,
+      displayName: 'Контроль учетных записей (UAC)',
+      description: this.getStatusDescription(status, 'uac'),
       source: 'API',
-      lastUpdated: now,
-      details: {},
-      recommendations: ['Проверьте подключение к системе']
+      lastUpdated: new Date().toISOString(),
+      details,
+      recommendations
     };
+  }
+
+  private getRdpStatus(data: SecurityData): SecurityStatus {
+    const rdpInfo = data.rdp || {};
+    
+    let status: SecurityStatusType = 'unknown';
+    let details: Record<string, any> = {};
+    let recommendations: string[] = [];
+
+    if (rdpInfo.enabled === true) {
+      status = 'enabled';
+      details.rdp = 'RDP включен';
+      recommendations.push('Убедитесь, что RDP используется только при необходимости');
+      recommendations.push('Используйте сильные пароли и ограничьте доступ по IP');
+    } else if (rdpInfo.enabled === false) {
+      status = 'disabled';
+      details.rdp = 'RDP отключен';
+    } else {
+      status = 'no_data';
+      details.rdp = 'Данные недоступны';
+    }
+
+    if (rdpInfo.permission) {
+      details.permission = `Права доступа: ${rdpInfo.permission}`;
+    }
 
     return {
-      defender: { ...noDataStatus, displayName: 'Windows Defender' },
-      firewall: { ...noDataStatus, displayName: 'Брандмауэр Windows' },
-      uac: { ...noDataStatus, displayName: 'Контроль учётных записей (UAC)' },
-      rdp: { ...noDataStatus, displayName: 'Удалённый рабочий стол (RDP)' },
-      bitlocker: { ...noDataStatus, displayName: 'BitLocker' },
-      smb1: { ...noDataStatus, displayName: 'Протокол SMB1' },
-      lastUpdated: now
+      status,
+      displayName: 'Удаленный рабочий стол (RDP)',
+      description: this.getStatusDescription(status, 'rdp'),
+      source: 'API',
+      lastUpdated: new Date().toISOString(),
+      details,
+      recommendations
     };
+  }
+
+  private getBitlockerStatus(data: SecurityData): SecurityStatus {
+    const bitlockerInfo = data.bitlocker || {};
+    
+    let status: SecurityStatusType = 'unknown';
+    let details: Record<string, any> = {};
+    let recommendations: string[] = [];
+
+    if (bitlockerInfo.enabled === true) {
+      status = 'enabled';
+      details.bitlocker = 'BitLocker включен';
+    } else if (bitlockerInfo.enabled === false) {
+      status = 'disabled';
+      details.bitlocker = 'BitLocker отключен';
+      recommendations.push('Включите шифрование BitLocker для защиты данных');
+    } else {
+      status = 'no_data';
+      details.bitlocker = 'Данные недоступны';
+    }
+
+    if (bitlockerInfo.permission) {
+      details.permission = `Права доступа: ${bitlockerInfo.permission}`;
+    }
+
+    return {
+      status,
+      displayName: 'Шифрование диска BitLocker',
+      description: this.getStatusDescription(status, 'bitlocker'),
+      source: 'API',
+      lastUpdated: new Date().toISOString(),
+      details,
+      recommendations
+    };
+  }
+
+  private getSmb1Status(data: SecurityData): SecurityStatus {
+    const smb1Info = data.smb1 || {};
+    
+    let status: SecurityStatusType = 'unknown';
+    let details: Record<string, any> = {};
+    let recommendations: string[] = [];
+
+    if (smb1Info.enabled === false) {
+      status = 'disabled';
+      details.smb1 = 'SMB v1 отключен';
+    } else if (smb1Info.enabled === true) {
+      status = 'enabled';
+      details.smb1 = 'SMB v1 включен';
+      recommendations.push('Отключите SMB v1 - это устаревший и небезопасный протокол');
+    } else {
+      status = 'no_data';
+      details.smb1 = 'Данные недоступны';
+    }
+
+    if (smb1Info.permission) {
+      details.permission = `Права доступа: ${smb1Info.permission}`;
+    }
+
+    return {
+      status,
+      displayName: 'Протокол SMB v1',
+      description: this.getStatusDescription(status, 'smb1'),
+      source: 'API',
+      lastUpdated: new Date().toISOString(),
+      details,
+      recommendations
+    };
+  }
+
+  private getStatusDescription(status: SecurityStatusType, module: string): string {
+    const descriptions: Record<SecurityStatusType, Record<string, string>> = {
+      enabled: {
+        defender: 'Антивирус активен и обеспечивает защиту системы',
+        firewall: 'Брандмауэр активен и блокирует несанкционированные подключения',
+        uac: 'Контроль учетных записей активен',
+        rdp: 'Удаленный доступ включен - требует внимания',
+        bitlocker: 'Диск зашифрован и защищен',
+        smb1: 'Устаревший протокол включен - требует отключения'
+      },
+      disabled: {
+        defender: 'Антивирус отключен - система уязвима',
+        firewall: 'Брандмауэр отключен - система уязвима',
+        uac: 'Контроль учетных записей отключен',
+        rdp: 'Удаленный доступ отключен',
+        bitlocker: 'Диск не зашифрован',
+        smb1: 'Устаревший протокол отключен'
+      },
+      no_data: {
+        defender: 'Данные о состоянии антивируса недоступны',
+        firewall: 'Данные о состоянии брандмауэра недоступны',
+        uac: 'Данные о состоянии UAC недоступны',
+        rdp: 'Данные о состоянии RDP недоступны',
+        bitlocker: 'Данные о состоянии BitLocker недоступны',
+        smb1: 'Данные о состоянии SMB v1 недоступны'
+      },
+      access_denied: {
+        defender: 'Нет прав для получения данных об антивирусе',
+        firewall: 'Нет прав для получения данных о брандмауэре',
+        uac: 'Нет прав для получения данных о UAC',
+        rdp: 'Нет прав для получения данных о RDP',
+        bitlocker: 'Нет прав для получения данных о BitLocker',
+        smb1: 'Нет прав для получения данных о SMB v1'
+      },
+      unknown: {
+        defender: 'Неизвестное состояние антивируса',
+        firewall: 'Неизвестное состояние брандмауэра',
+        uac: 'Неизвестное состояние UAC',
+        rdp: 'Неизвестное состояние RDP',
+        bitlocker: 'Неизвестное состояние BitLocker',
+        smb1: 'Неизвестное состояние SMB v1'
+      }
+    };
+
+    return descriptions[status]?.[module] || 'Неизвестное состояние';
   }
 }
 
+// Create and export singleton instance
 export const securityDataNormalizer = new SecurityDataNormalizer();
+export default securityDataNormalizer;

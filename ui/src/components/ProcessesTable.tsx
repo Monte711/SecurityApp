@@ -24,6 +24,7 @@ export const ProcessesTable: React.FC<ProcessesTableProps> = ({
 }) => {
   const [processes, setProcesses] = useState<ProcessInfo[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [filterSigned, setFilterSigned] = useState<'all' | 'signed' | 'unsigned'>('all');
   const [filterSuspicious, setFilterSuspicious] = useState(false);
@@ -33,11 +34,14 @@ export const ProcessesTable: React.FC<ProcessesTableProps> = ({
 
   const loadProcesses = async () => {
     setLoading(true);
+    setError(null);
     try {
       const data = await hostApiClient.getHostProcesses(hostId);
       setProcesses(data);
     } catch (error) {
       console.error('Failed to load processes:', error);
+      setError(error instanceof Error ? error.message : 'Ошибка загрузки процессов');
+      setProcesses([]); // Сбрасываем список процессов при ошибке
     } finally {
       setLoading(false);
     }
@@ -239,6 +243,16 @@ export const ProcessesTable: React.FC<ProcessesTableProps> = ({
           <div className="p-6 text-center">
             <RefreshCw className="h-6 w-6 animate-spin mx-auto mb-2 text-gray-400" />
             <div className="text-gray-500 dark:text-gray-400">Загрузка процессов...</div>
+          </div>
+        ) : error ? (
+          <div className="p-6 text-center">
+            <div className="text-red-500 dark:text-red-400 mb-2">{error}</div>
+            <button
+              onClick={loadProcesses}
+              className="px-3 py-2 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800"
+            >
+              Повторить попытку
+            </button>
           </div>
         ) : filteredProcesses.length === 0 ? (
           <div className="p-6 text-center text-gray-500 dark:text-gray-400">
