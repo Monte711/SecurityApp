@@ -13,26 +13,35 @@ import {
   Copy
 } from 'lucide-react';
 import { hostApiClient } from '../api/hostApi';
-import { AutorunsData, AutorunItem } from '../types/hostTypes';
+import { AutorunsData } from '../types/hostTypes';
 
 interface AutorunsTableProps {
   hostId: string;
   className?: string;
 }
 
-interface AutorunWithType extends AutorunItem {
-  type: 'startup_programs' | 'run_keys' | 'services' | 'scheduled_tasks';
-  key?: string;
+interface AutorunWithType {
+  type: 'registry' | 'startup_folders' | 'services_auto' | 'scheduled_tasks';
+  name: string;
+  command?: string;
+  location?: string;
+  enabled?: boolean;
+  details: Record<string, string>;
 }
 
 export const AutorunsTable: React.FC<AutorunsTableProps> = ({ 
   hostId, 
   className = '' 
 }) => {
-  const [autorunsData, setAutorunsData] = useState<AutorunsData>({});
+  const [autorunsData, setAutorunsData] = useState<AutorunsData>({
+    registry: [],
+    startup_folders: [],
+    services_auto: [],
+    scheduled_tasks: []
+  });
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
-  const [filterType, setFilterType] = useState<'all' | 'startup_programs' | 'run_keys' | 'services' | 'scheduled_tasks'>('all');
+  const [filterType, setFilterType] = useState<'all' | 'registry' | 'startup_folders' | 'services_auto' | 'scheduled_tasks'>('all');
   const [filterRisk, setFilterRisk] = useState(false);
   const [selectedAutorun, setSelectedAutorun] = useState<AutorunWithType | null>(null);
 
@@ -58,27 +67,78 @@ export const AutorunsTable: React.FC<AutorunsTableProps> = ({
   const allAutoruns: AutorunWithType[] = React.useMemo(() => {
     const items: AutorunWithType[] = [];
     
-    if (autorunsData.startup_programs) {
-      autorunsData.startup_programs.forEach((item, index) => {
-        items.push({ ...item, type: 'startup_programs', key: `startup_${index}` });
+    // Registry autoruns
+    if (autorunsData.registry) {
+      autorunsData.registry.forEach((item) => {
+        items.push({
+          type: 'registry',
+          name: item.name || 'без названия',
+          command: item.value || '',
+          location: `${item.root}\\${item.path}`,
+          details: {
+            'Корень': item.root || '',
+            'Путь': item.path || '',
+            'Название': item.name || '',
+            'Значение': item.value || ''
+          }
+        });
       });
     }
     
-    if (autorunsData.run_keys) {
-      autorunsData.run_keys.forEach((item, index) => {
-        items.push({ ...item, type: 'run_keys', key: `run_${index}` });
+    // Startup folders
+    if (autorunsData.startup_folders) {
+      autorunsData.startup_folders.forEach((item) => {
+        items.push({
+          type: 'startup_folders',
+          name: item.file || 'без названия',
+          command: item.target || '',
+          location: item.location || '',
+          details: {
+            'Расположение': item.location || '',
+            'Файл': item.file || '',
+            'Цель': item.target || ''
+          }
+        });
       });
     }
     
-    if (autorunsData.services) {
-      autorunsData.services.forEach((item, index) => {
-        items.push({ ...item, type: 'services', key: `service_${index}` });
+    // Service autoruns
+    if (autorunsData.services_auto) {
+      autorunsData.services_auto.forEach((item) => {
+        items.push({
+          type: 'services_auto',
+          name: item.display_name || item.name || 'без названия',
+          command: item.path || '',
+          location: 'Службы Windows',
+          enabled: item.state === 'Running',
+          details: {
+            'Имя службы': item.name || '',
+            'Отображаемое имя': item.display_name || '',
+            'Путь': item.path || '',
+            'Режим запуска': item.start_mode || '',
+            'Состояние': item.state || ''
+          }
+        });
       });
     }
     
+    // Scheduled tasks
     if (autorunsData.scheduled_tasks) {
-      autorunsData.scheduled_tasks.forEach((item, index) => {
-        items.push({ ...item, type: 'scheduled_tasks', key: `task_${index}` });
+      autorunsData.scheduled_tasks.forEach((item) => {
+        items.push({
+          type: 'scheduled_tasks',
+          name: item.task_name || 'без названия',
+          command: item.action || '',
+          location: 'Планировщик заданий',
+          enabled: item.status === 'Ready',
+          details: {
+            'Имя задачи': item.task_name || '',
+            'Запуск от имени': item.run_as || '',
+            'Триггер': item.trigger || '',
+            'Действие': item.action || '',
+            'Статус': item.status || ''
+          }
+        });
       });
     }
     
@@ -138,11 +198,11 @@ export const AutorunsTable: React.FC<AutorunsTableProps> = ({
 
   const getTypeLabel = (type: AutorunWithType['type']) => {
     switch (type) {
-      case 'startup_programs':
-        return 'Автозапуск';
-      case 'run_keys':
+      case 'registry':
         return 'Реестр';
-      case 'services':
+      case 'startup_folders':
+        return 'Автозапуск';
+      case 'services_auto':
         return 'Службы';
       case 'scheduled_tasks':
         return 'Планировщик';
@@ -153,11 +213,11 @@ export const AutorunsTable: React.FC<AutorunsTableProps> = ({
 
   const getTypeIcon = (type: AutorunWithType['type']) => {
     switch (type) {
-      case 'startup_programs':
-        return <FolderOpen className="h-4 w-4 text-blue-500" />;
-      case 'run_keys':
+      case 'registry':
         return <Database className="h-4 w-4 text-purple-500" />;
-      case 'services':
+      case 'startup_folders':
+        return <FolderOpen className="h-4 w-4 text-blue-500" />;
+      case 'services_auto':
         return <Settings className="h-4 w-4 text-green-500" />;
       case 'scheduled_tasks':
         return <Calendar className="h-4 w-4 text-orange-500" />;
@@ -243,9 +303,9 @@ export const AutorunsTable: React.FC<AutorunsTableProps> = ({
             className="px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           >
             <option value="all">Все типы</option>
-            <option value="startup_programs">Автозапуск</option>
-            <option value="run_keys">Реестр</option>
-            <option value="services">Службы</option>
+            <option value="registry">Реестр</option>
+            <option value="startup_folders">Автозапуск</option>
+            <option value="services_auto">Службы</option>
             <option value="scheduled_tasks">Планировщик</option>
           </select>
 
@@ -263,9 +323,9 @@ export const AutorunsTable: React.FC<AutorunsTableProps> = ({
           {/* Статистика */}
           <div className="text-sm text-gray-600 dark:text-gray-400">
             <div className="grid grid-cols-2 gap-1 text-xs">
-              <div>Автозапуск: {(autorunsData.startup_programs?.length || 0)}</div>
-              <div>Реестр: {(autorunsData.run_keys?.length || 0)}</div>
-              <div>Службы: {(autorunsData.services?.length || 0)}</div>
+              <div>Реестр: {(autorunsData.registry?.length || 0)}</div>
+              <div>Автозапуск: {(autorunsData.startup_folders?.length || 0)}</div>
+              <div>Службы: {(autorunsData.services_auto?.length || 0)}</div>
               <div>Планировщик: {(autorunsData.scheduled_tasks?.length || 0)}</div>
             </div>
           </div>
@@ -313,7 +373,7 @@ export const AutorunsTable: React.FC<AutorunsTableProps> = ({
             </thead>
             <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
               {filteredAutoruns.map((item, index) => (
-                <tr key={item.key || index} className="hover:bg-gray-50 dark:hover:bg-gray-700">
+                <tr key={`${item.type}_${index}`} className="hover:bg-gray-50 dark:hover:bg-gray-700">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center gap-2">
                       {getTypeIcon(item.type)}

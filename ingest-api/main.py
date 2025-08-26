@@ -141,17 +141,36 @@ class GoProcessInfo(BaseModel):
     cmdline: Optional[str] = Field(None, description="Командная строка")
     username: Optional[str] = Field(None, description="Пользователь")
 
-class GoAutorunInfo(BaseModel):
-    name: Optional[str] = Field(None, description="Имя автозапуска")
-    command: Optional[str] = Field(None, description="Команда")
+class GoRegistryAutorun(BaseModel):
+    root: Optional[str] = Field(None, description="Корень реестра")
+    path: Optional[str] = Field(None, description="Путь")
+    name: Optional[str] = Field(None, description="Имя")
+    value: Optional[str] = Field(None, description="Значение")
+
+class GoStartupFolder(BaseModel):
     location: Optional[str] = Field(None, description="Расположение")
-    enabled: Optional[bool] = Field(None, description="Включен ли")
+    file: Optional[str] = Field(None, description="Файл")
+    target: Optional[str] = Field(None, description="Цель")
+
+class GoServiceAutorun(BaseModel):
+    name: Optional[str] = Field(None, description="Имя службы")
+    display_name: Optional[str] = Field(None, description="Отображаемое имя")
+    path: Optional[str] = Field(None, description="Путь")
+    start_mode: Optional[str] = Field(None, description="Режим запуска")
+    state: Optional[str] = Field(None, description="Состояние")
+
+class GoScheduledTask(BaseModel):
+    task_name: Optional[str] = Field(None, description="Имя задачи")
+    run_as: Optional[str] = Field(None, description="Запуск от имени")
+    trigger: Optional[str] = Field(None, description="Триггер")
+    action: Optional[str] = Field(None, description="Действие")
+    status: Optional[str] = Field(None, description="Статус")
 
 class GoAutorunsInfo(BaseModel):
-    startup_programs: Optional[List[GoAutorunInfo]] = Field(None, description="Программы автозапуска")
-    run_keys: Optional[List[GoAutorunInfo]] = Field(None, description="Ключи реестра Run")
-    services: Optional[List[GoAutorunInfo]] = Field(None, description="Службы")
-    scheduled_tasks: Optional[List[GoAutorunInfo]] = Field(None, description="Запланированные задачи")
+    registry: Optional[List[GoRegistryAutorun]] = Field(None, description="Автозапуски из реестра")
+    startup_folders: Optional[List[GoStartupFolder]] = Field(None, description="Папки автозагрузки")
+    services_auto: Optional[List[GoServiceAutorun]] = Field(None, description="Автоматические службы")
+    scheduled_tasks: Optional[List[GoScheduledTask]] = Field(None, description="Запланированные задачи")
 
 class GoInventoryInfo(BaseModel):
     processes: Optional[List[GoProcessInfo]] = Field(None, description="Список процессов")
@@ -1390,7 +1409,19 @@ async def get_host_latest_posture(host_id: str):
         )
         
         if result["hits"]["total"]["value"] > 0:
-            return result["hits"]["hits"][0]["_source"]
+            data = result["hits"]["hits"][0]["_source"]
+            # Преобразуем данные автозапуска для совместимости с UI
+            if "inventory" in data and "autoruns" in data["inventory"] and data["inventory"]["autoruns"]:
+                autoruns = data["inventory"]["autoruns"]
+                # Преобразуем старые имена полей в новые для UI
+                if "startup_programs" in autoruns and autoruns["startup_programs"] is not None:
+                    autoruns["startup_folders"] = autoruns.pop("startup_programs")
+                if "run_keys" in autoruns and autoruns["run_keys"] is not None:
+                    autoruns["registry"] = autoruns.pop("run_keys")
+                if "services" in autoruns and autoruns["services"] is not None:
+                    autoruns["services_auto"] = autoruns.pop("services")
+                # scheduled_tasks уже правильное имя
+            return data
         else:
             raise HTTPException(status_code=404, detail="Host not found")
             

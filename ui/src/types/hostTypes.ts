@@ -24,6 +24,35 @@ export interface ProcessInfo {
   };
 }
 
+export interface RegistryAutorun {
+  root?: string;
+  path?: string;
+  name?: string;
+  value?: string;
+}
+
+export interface StartupFolder {
+  location?: string;
+  file?: string;
+  target?: string;
+}
+
+export interface ServiceAutorun {
+  name?: string;
+  display_name?: string;
+  path?: string;
+  start_mode?: string;
+  state?: string;
+}
+
+export interface ScheduledTask {
+  task_name?: string;
+  run_as?: string;
+  trigger?: string;
+  action?: string;
+  status?: string;
+}
+
 export interface AutorunItem {
   name?: string;
   command?: string;
@@ -32,10 +61,10 @@ export interface AutorunItem {
 }
 
 export interface AutorunsData {
-  startup_programs?: AutorunItem[];
-  run_keys?: AutorunItem[];
-  services?: AutorunItem[];
-  scheduled_tasks?: AutorunItem[];
+  registry?: RegistryAutorun[];
+  startup_folders?: StartupFolder[];
+  services_auto?: ServiceAutorun[];
+  scheduled_tasks?: ScheduledTask[];
 }
 
 export interface SecurityModule {
@@ -47,34 +76,70 @@ export interface SecurityModule {
   config?: Record<string, any>;
 }
 
+// Строгие типы для статусов безопасности
+export type SecurityStatusType = 'enabled' | 'disabled' | 'no_data' | 'access_denied' | 'unknown';
+
+export interface SecurityStatus {
+  status: SecurityStatusType;
+  displayName: string;
+  description: string;
+  source: string;           // "API", "Cache", "Agent"
+  lastUpdated: string;      // ISO timestamp
+  details: Record<string, any>;
+  recommendations: string[];
+}
+
 export interface SecurityData {
-  modules: SecurityModule[] | null;
+  modules?: SecurityModule[] | null;
   defender?: {
-    enabled: boolean;
-    status: string;
-    signatures_age_days?: number;
-    real_time_protection?: boolean;
+    realtime_enabled?: boolean;
+    antivirus_enabled?: boolean;
+    engine_version?: string;
+    signature_age_days?: number;
+    permission?: string;
   };
   firewall?: {
-    domain_profile?: boolean;
-    private_profile?: boolean;
-    public_profile?: boolean;
+    domain?: {
+      enabled?: boolean;
+      default_inbound?: string;
+    };
+    private?: {
+      enabled?: boolean;
+      default_inbound?: string;
+    };
+    public?: {
+      enabled?: boolean;
+      default_inbound?: string;
+    };
+    permission?: string;
   };
   uac?: {
-    level: string;
-    enabled: boolean;
+    enabled?: boolean;
+    permission?: string;
   };
   rdp?: {
-    enabled: boolean;
-    port: number;
+    enabled?: boolean;
+    permission?: string;
   };
   bitlocker?: {
-    status: string;
-    encryption_method?: string;
+    enabled?: boolean;
+    permission?: string;
   };
   smb1?: {
-    enabled: boolean;
+    enabled?: boolean;
+    permission?: string;
   };
+}
+
+// Нормализованные данные безопасности для UI
+export interface NormalizedSecurityData {
+  defender: SecurityStatus;
+  firewall: SecurityStatus;
+  uac: SecurityStatus;
+  rdp: SecurityStatus;
+  bitlocker: SecurityStatus;
+  smb1: SecurityStatus;
+  lastUpdated: string;
 }
 
 export interface Finding {
