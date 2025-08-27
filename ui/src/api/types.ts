@@ -44,12 +44,13 @@ export interface TelemetryEvent {
   timestamp: string;
   severity: 'info' | 'low' | 'medium' | 'high' | 'critical';
   severity_ru?: string; // Добавлено для русской локализации
-  host?: HostInfo; // Изменено на optional для событий безопасности
-  agent?: AgentInfo; // Изменено на optional для событий безопасности
+  host?: HostInfo | string; // Поддержка как объекта, так и строки
+  agent?: AgentInfo | string; // Поддержка как объекта, так и строки
   
   // Поля для событий безопасности
   source?: string; // Источник события безопасности
   description?: string; // Описание события
+  data?: Record<string, any>; // Данные события
   
   // Optional fields based on event type
   process?: ProcessInfo;

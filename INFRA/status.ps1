@@ -22,7 +22,7 @@ try {
 Write-Host "Service Health:" -ForegroundColor Cyan
 $services = @(
     @{Name="OpenSearch"; URL="http://localhost:9200/_cluster/health"},
-    @{Name="OpenSearch UI"; URL="http://localhost:5601"},
+#    @{Name="OpenSearch UI"; URL="http://localhost:5601"},
     @{Name="Ingest API"; URL="http://localhost:8000/health"},
     @{Name="Dashboard UI"; URL="http://localhost:3000"}
 )

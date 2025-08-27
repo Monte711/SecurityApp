@@ -28,6 +28,7 @@ export const EnhancedEventsPage: React.FC = () => {
   const [selectedEvent, setSelectedEvent] = useState<TelemetryEvent | null>(null);
   const [showImport, setShowImport] = useState(false);
   const [viewMode, setViewMode] = useState<ViewMode>('table');
+  const [showBulkDelete, setShowBulkDelete] = useState(false);
   
   // Filters state
   const [filters, setFilters] = useState<EventFilters>({
@@ -90,10 +91,12 @@ export const EnhancedEventsPage: React.FC = () => {
       // Search filter
       if (filters.search) {
         const searchTerm = filters.search.toLowerCase();
+        const hostName = typeof event.host === 'string' ? event.host : 
+                        (event.host && typeof event.host === 'object' ? event.host.hostname : '');
         const searchableText = [
           event.event_id,
           event.event_type,
-          event.host?.hostname || event.source || '',
+          hostName || event.source || '',
           event.description || ''
         ].join(' ').toLowerCase();
         
@@ -189,11 +192,21 @@ export const EnhancedEventsPage: React.FC = () => {
   };
 
   const getHostName = (event: TelemetryEvent): string => {
+    // Сначала проверяем, если host это строка (как в новом API)
+    if (event.host && typeof event.host === 'string') {
+      return event.host;
+    }
+    // Затем проверяем, если host это объект (старый формат)
     if (event.host && typeof event.host === 'object' && event.host.hostname) {
       return event.host.hostname;
     }
+    // Проверяем поле source как fallback
     if (event.source && typeof event.source === 'string') {
       return event.source;
+    }
+    // Проверяем поле agent как еще один fallback
+    if (event.agent && typeof event.agent === 'string') {
+      return event.agent;
     }
     return 'Unknown Host';
   };
@@ -209,6 +222,97 @@ export const EnhancedEventsPage: React.FC = () => {
     } catch (error) {
       console.error('Ошибка удаления события:', error);
       alert('Ошибка при удалении события');
+    }
+  };
+
+  const handleBulkDelete = async (timeRange: string) => {
+    let confirmMessage = '';
+    let eventsToDelete: TelemetryEvent[] = [];
+    const now = Date.now();
+    
+    switch (timeRange) {
+      case '1h':
+        confirmMessage = 'Вы уверены, что хотите удалить все события за последний час?';
+        eventsToDelete = events.filter(event => {
+          const eventTime = new Date(event.timestamp).getTime();
+          return now - eventTime <= 60 * 60 * 1000;
+        });
+        break;
+      case '24h':
+        confirmMessage = 'Вы уверены, что хотите удалить все события за последние 24 часа?';
+        eventsToDelete = events.filter(event => {
+          const eventTime = new Date(event.timestamp).getTime();
+          return now - eventTime <= 24 * 60 * 60 * 1000;
+        });
+        break;
+      case '7d':
+        confirmMessage = 'Вы уверены, что хотите удалить все события за последнюю неделю?';
+        eventsToDelete = events.filter(event => {
+          const eventTime = new Date(event.timestamp).getTime();
+          return now - eventTime <= 7 * 24 * 60 * 60 * 1000;
+        });
+        break;
+      case '30d':
+        confirmMessage = 'Вы уверены, что хотите удалить все события за последний месяц?';
+        eventsToDelete = events.filter(event => {
+          const eventTime = new Date(event.timestamp).getTime();
+          return now - eventTime <= 30 * 24 * 60 * 60 * 1000;
+        });
+        break;
+      case 'all':
+        confirmMessage = 'Вы уверены, что хотите удалить ВСЕ события? Это действие необратимо!';
+        eventsToDelete = [...events];
+        break;
+      default:
+        return;
+    }
+
+    if (eventsToDelete.length === 0) {
+      alert(`Не найдено событий для удаления за указанный период.`);
+      return;
+    }
+
+    confirmMessage += `\n\nБудет удалено событий: ${eventsToDelete.length}`;
+    
+    if (!window.confirm(confirmMessage)) return;
+
+    try {
+      // Показываем индикатор загрузки
+      setLoading(true);
+      
+      // Удаляем события по одному (можно оптимизировать с batch API если есть)
+      let deletedCount = 0;
+      const errors: string[] = [];
+      
+      for (const event of eventsToDelete) {
+        try {
+          await apiClient.deleteEvent(event.event_id);
+          deletedCount++;
+        } catch (error) {
+          console.error(`Ошибка удаления события ${event.event_id}:`, error);
+          errors.push(event.event_id);
+        }
+      }
+      
+      // Обновляем локальное состояние, удаляя успешно удаленные события
+      setEvents(prev => prev.filter(event => 
+        !eventsToDelete.some(deleted => deleted.event_id === event.event_id) || 
+        errors.includes(event.event_id)
+      ));
+      
+      setShowBulkDelete(false);
+      
+      if (errors.length === 0) {
+        alert(`Успешно удалено ${deletedCount} событий.`);
+      } else {
+        alert(`Удалено ${deletedCount} из ${eventsToDelete.length} событий. ${errors.length} событий не удалось удалить.`);
+      }
+      
+    } catch (error) {
+      console.error('Ошибка массового удаления:', error);
+      alert('Произошла ошибка при массовом удалении событий');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -333,6 +437,13 @@ export const EnhancedEventsPage: React.FC = () => {
           >
             <Download className="h-4 w-4 mr-2" />
             Экспорт
+          </button>
+          <button
+            onClick={() => setShowBulkDelete(true)}
+            className="inline-flex items-center px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+          >
+            <Trash2 className="h-4 w-4 mr-2" />
+            Удалить все
           </button>
         </div>
       </div>
@@ -731,6 +842,88 @@ export const EnhancedEventsPage: React.FC = () => {
                 onChange={handleFileUpload}
                 className="w-full text-sm text-gray-500 dark:text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
               />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Bulk Delete Modal */}
+      {showBulkDelete && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Массовое удаление событий</h3>
+              <button
+                onClick={() => setShowBulkDelete(false)}
+                className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+            <div className="space-y-4">
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                Выберите период для удаления событий:
+              </p>
+              <div className="space-y-2">
+                <button
+                  onClick={() => handleBulkDelete('1h')}
+                  className="w-full text-left px-4 py-3 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 rounded-lg transition-colors"
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="text-gray-900 dark:text-white">Последний час</span>
+                    <span className="text-sm text-gray-500 dark:text-gray-400">
+                      {events.filter(e => Date.now() - new Date(e.timestamp).getTime() <= 60 * 60 * 1000).length} событий
+                    </span>
+                  </div>
+                </button>
+                <button
+                  onClick={() => handleBulkDelete('24h')}
+                  className="w-full text-left px-4 py-3 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 rounded-lg transition-colors"
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="text-gray-900 dark:text-white">Последние 24 часа</span>
+                    <span className="text-sm text-gray-500 dark:text-gray-400">
+                      {events.filter(e => Date.now() - new Date(e.timestamp).getTime() <= 24 * 60 * 60 * 1000).length} событий
+                    </span>
+                  </div>
+                </button>
+                <button
+                  onClick={() => handleBulkDelete('7d')}
+                  className="w-full text-left px-4 py-3 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 rounded-lg transition-colors"
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="text-gray-900 dark:text-white">Последняя неделя</span>
+                    <span className="text-sm text-gray-500 dark:text-gray-400">
+                      {events.filter(e => Date.now() - new Date(e.timestamp).getTime() <= 7 * 24 * 60 * 60 * 1000).length} событий
+                    </span>
+                  </div>
+                </button>
+                <button
+                  onClick={() => handleBulkDelete('30d')}
+                  className="w-full text-left px-4 py-3 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 rounded-lg transition-colors"
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="text-gray-900 dark:text-white">Последний месяц</span>
+                    <span className="text-sm text-gray-500 dark:text-gray-400">
+                      {events.filter(e => Date.now() - new Date(e.timestamp).getTime() <= 30 * 24 * 60 * 60 * 1000).length} событий
+                    </span>
+                  </div>
+                </button>
+                <button
+                  onClick={() => handleBulkDelete('all')}
+                  className="w-full text-left px-4 py-3 bg-red-50 dark:bg-red-900 hover:bg-red-100 dark:hover:bg-red-800 rounded-lg transition-colors border border-red-200 dark:border-red-700"
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="text-red-900 dark:text-red-100 font-medium">Все события</span>
+                    <span className="text-sm text-red-600 dark:text-red-400">
+                      {events.length} событий
+                    </span>
+                  </div>
+                  <div className="text-xs text-red-600 dark:text-red-400 mt-1">
+                    ⚠️ Необратимое действие!
+                  </div>
+                </button>
+              </div>
             </div>
           </div>
         </div>

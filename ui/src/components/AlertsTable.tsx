@@ -261,7 +261,9 @@ export const AlertsTable: React.FC = () => {
                     {event.event_id ? event.event_id.substring(0, 12) + '...' : 'N/A'}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
-                    {event.host?.hostname || event.source || 'Unknown Host'}
+                    {(typeof event.host === 'string' ? event.host : 
+                      (event.host && typeof event.host === 'object' ? event.host.hostname : null)) || 
+                     event.source || 'Unknown Host'}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
                     {event.event_type || 'Unknown Event'}
@@ -367,7 +369,11 @@ export const AlertsTable: React.FC = () => {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Хост источник</label>
-                  <p className="mt-1 text-sm text-gray-900 dark:text-white">{selectedEvent.host?.hostname || selectedEvent.source || 'Unknown Host'}</p>
+                  <p className="mt-1 text-sm text-gray-900 dark:text-white">
+                    {(typeof selectedEvent.host === 'string' ? selectedEvent.host : 
+                      (selectedEvent.host && typeof selectedEvent.host === 'object' ? selectedEvent.host.hostname : null)) || 
+                     selectedEvent.source || 'Unknown Host'}
+                  </p>
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Тип события</label>

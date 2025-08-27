@@ -21,7 +21,8 @@ docker-compose down --remove-orphans | Out-Null
 
 # Start core infrastructure
 Write-Host "Starting core infrastructure..." -ForegroundColor Cyan
-docker-compose up -d opensearch redis opensearch_dashboards ingest_api
+docker-compose up -d opensearch redis ingest_api
+# docker-compose up -d opensearch redis ingest_api opensearch_dashboards (убрали дашборд)
 
 # Wait for services
 Write-Host "Waiting for services to initialize..." -ForegroundColor Yellow
@@ -95,7 +96,7 @@ Write-Host "Available Services:" -ForegroundColor White
 Write-Host "  Main Dashboard:    http://localhost:3000" -ForegroundColor Cyan
 Write-Host "  API Documentation: http://localhost:8000/docs" -ForegroundColor Cyan
 Write-Host "  API Health:        http://localhost:8000/health" -ForegroundColor Cyan
-Write-Host "  OpenSearch UI:     http://localhost:5601" -ForegroundColor Cyan
+#Write-Host "  OpenSearch UI:     http://localhost:5601" -ForegroundColor Cyan
 
 Write-Host "`nNext Steps:" -ForegroundColor Yellow
 Write-Host "  1. Start agent:    agent\windows\uecp-agent.exe" -ForegroundColor Gray

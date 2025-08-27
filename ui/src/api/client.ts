@@ -155,10 +155,12 @@ class ApiClient {
         filteredEvents = filteredEvents.filter(e => e.event_type === filters.event_type);
       }
       if (filters?.host_id) {
-        filteredEvents = filteredEvents.filter(e => 
-          e.host?.hostname?.toLowerCase().includes(filters.host_id!.toLowerCase()) || 
-          e.source?.toLowerCase().includes(filters.host_id!.toLowerCase())
-        );
+        filteredEvents = filteredEvents.filter(e => {
+          const hostName = typeof e.host === 'string' ? e.host : 
+                          (e.host && typeof e.host === 'object' ? e.host.hostname : '');
+          return hostName?.toLowerCase().includes(filters.host_id!.toLowerCase()) || 
+                 e.source?.toLowerCase().includes(filters.host_id!.toLowerCase());
+        });
       }
       if (filters?.severity) {
         filteredEvents = filteredEvents.filter(e => e.severity === filters.severity);
@@ -313,7 +315,11 @@ class ApiClient {
     if (this.useMock) {
       // Update event status if target specified
       if (execution.target_host) {
-        const event = this.events.find(e => e.host?.hostname === execution.target_host);
+        const event = this.events.find(e => {
+          const hostName = typeof e.host === 'string' ? e.host : 
+                          (e.host && typeof e.host === 'object' ? e.host.hostname : '');
+          return hostName === execution.target_host;
+        });
         if (event) {
           event.status = 'action_requested';
         }

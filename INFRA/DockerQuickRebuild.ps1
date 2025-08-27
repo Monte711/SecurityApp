@@ -93,7 +93,8 @@ Write-Host "`nRestarting services..." -ForegroundColor Green
 Set-Location "$scriptPath"
 
 # Start infrastructure services
-docker-compose up -d opensearch redis opensearch_dashboards
+docker-compose up -d opensearch redis
+# docker-compose up -d opensearch redis ingest_api opensearch_dashboards (убрали дашборд)
 
 # Start rebuilt application services
 foreach ($module in $Modules) {
