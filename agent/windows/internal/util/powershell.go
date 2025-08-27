@@ -99,7 +99,7 @@ func (ps *PowerShellExecutor) GetFirewallStatus(ctx context.Context) (map[string
 			
 			foreach ($profile in $profiles) {
 				$result[$profile.Name] = @{
-					"Enabled" = $profile.Enabled
+					"Enabled" = [bool]$profile.Enabled
 					"DefaultInboundAction" = $profile.DefaultInboundAction.ToString()
 					"DefaultOutboundAction" = $profile.DefaultOutboundAction.ToString()
 				}
@@ -172,14 +172,38 @@ func (ps *PowerShellExecutor) GetRDPStatus(ctx context.Context) (map[string]inte
 func (ps *PowerShellExecutor) GetBitLockerStatus(ctx context.Context) (map[string]interface{}, error) {
 	script := `
 		try {
-			$volumes = Get-BitLockerVolume -ErrorAction Stop
+			# Попробуем использовать WMI напрямую
+			$volumes = Get-WmiObject -Namespace "Root\cimv2\security\microsoftvolumeencryption" -Class "Win32_EncryptableVolume" -ErrorAction Stop
 			$result = @{}
 			
 			foreach ($volume in $volumes) {
-				$result[$volume.MountPoint] = @{
-					"ProtectionStatus" = $volume.ProtectionStatus.ToString()
-					"EncryptionPercentage" = $volume.EncryptionPercentage
-					"VolumeStatus" = $volume.VolumeStatus.ToString()
+				$driveLetter = $volume.DriveLetter
+				if ($driveLetter) {
+					$protectionStatus = switch ($volume.ProtectionStatus) {
+						0 { "Unprotected" }
+						1 { "Protected" }
+						2 { "Unknown" }
+						default { "Unknown" }
+					}
+					
+					$result[$driveLetter] = @{
+						"ProtectionStatus" = $protectionStatus
+						"EncryptionPercentage" = if ($volume.EncryptionPercentage) { $volume.EncryptionPercentage } else { 0 }
+						"ConversionStatus" = if ($volume.ConversionStatus) { $volume.ConversionStatus } else { 0 }
+					}
+				}
+			}
+			
+			# Если WMI не дал результатов, попробуем manage-bde
+			if ($result.Count -eq 0) {
+				$manageOutput = & manage-bde.exe -status C: 2>$null
+				if ($LASTEXITCODE -eq 0) {
+					$isEncrypted = $manageOutput | Select-String "Protection Status:" | ForEach-Object { $_.Line -match "Protection On" }
+					$result["C:"] = @{
+						"ProtectionStatus" = if ($isEncrypted) { "Protected" } else { "Unprotected" }
+						"EncryptionPercentage" = 0
+						"ConversionStatus" = 0
+					}
 				}
 			}
 			

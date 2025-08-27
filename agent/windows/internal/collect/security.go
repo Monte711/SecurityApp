@@ -58,8 +58,19 @@ type RDPInfo struct {
 
 // BitLockerInfo содержит информацию о BitLocker
 type BitLockerInfo struct {
-	SystemDriveProtected bool   `json:"system_drive_protected"`
-	Permission           string `json:"permission,omitempty"`
+	SystemDriveProtected bool              `json:"system_drive_protected"`
+	Volumes              map[string]Volume `json:"volumes,omitempty"`
+	Permission           string            `json:"permission,omitempty"`
+	
+	// Обратная совместимость со старым API
+	Enabled              *bool             `json:"enabled,omitempty"`
+}
+
+// Volume представляет информацию о томе BitLocker
+type Volume struct {
+	ProtectionStatus      string  `json:"protection_status"`
+	EncryptionPercentage  float64 `json:"encryption_percentage"`
+	ConversionStatus      int     `json:"conversion_status,omitempty"`
 }
 
 // SMB1Info содержит информацию о SMBv1
@@ -111,9 +122,10 @@ func (c *Collector) collectSecurity(ctx context.Context) (*SecurityInfo, error) 
 	// Сбор информации о BitLocker
 	bitlocker, err := c.collectBitLockerInfo(ctx)
 	if err != nil {
-		log.Printf("Предупреждение: не удалось собрать информацию о BitLocker: %v", err)
+		log.Printf("Ошибка BitLocker: %v", err)
 		info.BitLocker = &BitLockerInfo{Permission: "denied"}
 	} else {
+		log.Printf("BitLocker собран успешно: %+v", bitlocker)
 		info.BitLocker = bitlocker
 	}
 
@@ -174,19 +186,31 @@ func (c *Collector) collectFirewallInfo(ctx context.Context) (*FirewallInfo, err
 	// Получаем статус профилей
 	if domainProfile, ok := firewallData["Domain"].(map[string]interface{}); ok {
 		if enabled, ok := domainProfile["Enabled"].(bool); ok {
-			firewall.Domain = &FirewallProfile{Enabled: enabled}
+			defaultInbound, _ := domainProfile["DefaultInboundAction"].(string)
+			firewall.Domain = &FirewallProfile{
+				Enabled:        enabled,
+				DefaultInbound: defaultInbound,
+			}
 		}
 	}
 
 	if privateProfile, ok := firewallData["Private"].(map[string]interface{}); ok {
 		if enabled, ok := privateProfile["Enabled"].(bool); ok {
-			firewall.Private = &FirewallProfile{Enabled: enabled}
+			defaultInbound, _ := privateProfile["DefaultInboundAction"].(string)
+			firewall.Private = &FirewallProfile{
+				Enabled:        enabled,
+				DefaultInbound: defaultInbound,
+			}
 		}
 	}
 
 	if publicProfile, ok := firewallData["Public"].(map[string]interface{}); ok {
 		if enabled, ok := publicProfile["Enabled"].(bool); ok {
-			firewall.Public = &FirewallProfile{Enabled: enabled}
+			defaultInbound, _ := publicProfile["DefaultInboundAction"].(string)
+			firewall.Public = &FirewallProfile{
+				Enabled:        enabled,
+				DefaultInbound: defaultInbound,
+			}
 		}
 	}
 
@@ -261,13 +285,47 @@ func (c *Collector) collectBitLockerInfo(ctx context.Context) (*BitLockerInfo, e
 		return nil, fmt.Errorf("недостаточно прав для проверки BitLocker")
 	}
 
-	// Проверяем диск C:
-	bitlocker := &BitLockerInfo{SystemDriveProtected: false}
-	if cDriveInfo, ok := bitlockerData["C:"].(map[string]interface{}); ok {
-		if status, ok := cDriveInfo["ProtectionStatus"].(string); ok {
-			bitlocker.SystemDriveProtected = (status == "On")
+	// Инициализируем структуру
+	bitlocker := &BitLockerInfo{
+		SystemDriveProtected: false,
+		Volumes:              make(map[string]Volume),
+	}
+
+	// Обрабатываем все найденные тома
+	encryptedVolumes := 0
+	totalVolumes := 0
+	
+	for mountPoint, volumeData := range bitlockerData {
+		if volumeInfo, ok := volumeData.(map[string]interface{}); ok {
+			totalVolumes++
+			protectionStatus, _ := volumeInfo["ProtectionStatus"].(string)
+			encryptionPercentage, _ := volumeInfo["EncryptionPercentage"].(float64)
+			conversionStatus, _ := volumeInfo["ConversionStatus"].(float64)
+
+			volume := Volume{
+				ProtectionStatus:     protectionStatus,
+				EncryptionPercentage: encryptionPercentage,
+				ConversionStatus:     int(conversionStatus),
+			}
+
+			bitlocker.Volumes[mountPoint] = volume
+
+			// Проверяем системный диск C:
+			if mountPoint == "C:" {
+				bitlocker.SystemDriveProtected = (protectionStatus == "Protected")
+			}
+			
+			// Считаем зашифрованные тома
+			if protectionStatus == "Protected" {
+				encryptedVolumes++
+			}
 		}
 	}
+
+	// Устанавливаем поле enabled для обратной совместимости
+	// true если хотя бы один том зашифрован
+	enabled := encryptedVolumes > 0
+	bitlocker.Enabled = &enabled
 
 	return bitlocker, nil
 }
