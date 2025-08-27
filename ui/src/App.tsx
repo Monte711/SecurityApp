@@ -1,10 +1,9 @@
 import React from 'react';
 import { HostDashboard } from './components/HostDashboard';
 import { Dashboard } from './components/Dashboard';
-import { AlertsTable } from './components/AlertsTable';
-import { SimpleEventsList } from './components/SimpleEventsList';
+import { EnhancedEventsPage } from './components/EnhancedEventsPage';
 import { ConfigPanel } from './components/ConfigPanel';
-import { Settings, Bell, Home, Activity, Monitor, Shield } from 'lucide-react';
+import { Settings, Bell, Home, Activity, Shield } from 'lucide-react';
 
 const App: React.FC = () => {
   const [activeTab, setActiveTab] = React.useState('hosts');
@@ -18,8 +17,7 @@ const App: React.FC = () => {
   const navigation = [
     { id: 'hosts', name: 'Управление хостами', icon: Shield },
     { id: 'dashboard', name: 'Панель управления', icon: Home },
-    { id: 'monitoring', name: 'Мониторинг', icon: Monitor },
-    { id: 'events', name: 'События (расширенные)', icon: Bell },
+    { id: 'events', name: 'События', icon: Bell },
     { id: 'analytics', name: 'Аналитика', icon: Activity },
     { id: 'settings', name: 'Настройки', icon: Settings },
   ];
@@ -31,9 +29,11 @@ const App: React.FC = () => {
       case 'dashboard':
         return <Dashboard />;
       case 'monitoring':
-        return <SimpleEventsList />;
+        // Redirect old monitoring links to events
+        setActiveTab('events');
+        return <EnhancedEventsPage />;
       case 'events':
-        return <AlertsTable />;
+        return <EnhancedEventsPage />;
       case 'analytics':
         return (
           <div className="text-center py-12">

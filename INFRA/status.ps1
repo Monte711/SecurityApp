@@ -10,7 +10,7 @@ try {
         Write-Host $containers -ForegroundColor White
     } else {
         Write-Host "No UECP containers running" -ForegroundColor Red
-        Write-Host "Run INFRA\uecp-agent.exe to start the platform" -ForegroundColor Yellow
+        Write-Host "Run agent\windows\uecp-agent.exe to start the platform" -ForegroundColor Yellow
         exit 0
     }
 } catch {
@@ -66,14 +66,13 @@ if ($agentProcesses) {
     }
 } else {
     Write-Host "  No agents running" -ForegroundColor Yellow
-    Write-Host "  Start agent with: .\start-agent.ps1" -ForegroundColor Gray
+    Write-Host "  Start agent with: agent\windows\uecp-agent.exe" -ForegroundColor Gray
 }
 
 Write-Host "`nManagement Commands:" -ForegroundColor White
 Write-Host "  .\start.ps1         - Start platform" -ForegroundColor Gray
 Write-Host "  .\stop.ps1          - Stop platform" -ForegroundColor Gray
-Write-Host "  .\start-agent.ps1   - Start data collection" -ForegroundColor Gray
-Write-Host "  .\test-data.ps1     - Send test event" -ForegroundColor Gray
+Write-Host "  agent\windows\uecp-agent.exe   - Start data collection" -ForegroundColor Gray
 
 Write-Host "`nDashboard URLs:" -ForegroundColor White
 Write-Host "  http://localhost:3000 - Main Dashboard" -ForegroundColor Cyan

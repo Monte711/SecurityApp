@@ -98,6 +98,6 @@ Write-Host "  API Health:        http://localhost:8000/health" -ForegroundColor 
 Write-Host "  OpenSearch UI:     http://localhost:5601" -ForegroundColor Cyan
 
 Write-Host "`nNext Steps:" -ForegroundColor Yellow
-Write-Host "  1. Start agent:    INFRA\uecp-agent.exe" -ForegroundColor Gray
+Write-Host "  1. Start agent:    agent\windows\uecp-agent.exe" -ForegroundColor Gray
 Write-Host "  2. Check status:   .\status.ps1" -ForegroundColor Gray
 Write-Host "  3. Stop platform:  .\stop.ps1" -ForegroundColor Gray
