@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Скрипт просмотра логов CyberSec Platform
+# Скрипт просмот    echo "  - opensearch_dashboards"" # Отключена логов CyberSec Platform
 # logs.sh - показывает логи всех сервисов
 
 set -e
@@ -27,7 +27,7 @@ if [ "$1" == "help" ] || [ "$1" == "-h" ] || [ "$1" == "--help" ]; then
     echo ""
     echo "Доступные сервисы:"
     echo "  - opensearch"
-    echo "  - opensearch_dashboards" 
+    #echo "  - opensearch_dashboards"
     echo "  - redis"
     echo "  - ingest_api"
     echo "  - ui"
@@ -52,7 +52,8 @@ while [[ $# -gt 0 ]]; do
             FOLLOW="-f"
             shift
             ;;
-        opensearch|opensearch_dashboards|redis|ingest_api|ui)
+        #opensearch|opensearch_dashboards|redis|ingest_api|ui)
+        opensearch|redis|ingest_api|ui)
             SERVICE="$1"
             shift
             ;;
@@ -84,9 +85,9 @@ else
         docker-compose -f docker-compose.yml logs --tail=10 opensearch | head -20
         echo ""
         
-        echo "📈 OpenSearch Dashboards:"
-        docker-compose -f docker-compose.yml logs --tail=10 opensearch_dashboards | head -20
-        echo ""
+        #echo "📈 OpenSearch Dashboards:"
+        #docker-compose -f docker-compose.yml logs --tail=10 opensearch_dashboards | head -20
+        #echo ""
         
         echo "🔴 Redis:"
         docker-compose -f docker-compose.yml logs --tail=10 redis | head -20

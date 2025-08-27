@@ -54,7 +54,7 @@ echo "🔍 Проверка готовности сервисов..."
 
 # Проверка OpenSearch
 if check_service "OpenSearch" "http://localhost:9200/_cluster/health"; then
-    echo "   📊 OpenSearch Dashboard: http://localhost:5601"
+    #echo "   📊 OpenSearch Dashboard: http://localhost:5601"
 else
     echo -e "${RED}❌ OpenSearch не запустился${NC}"
     exit 1
@@ -90,7 +90,7 @@ echo -e "${GREEN}🎉 Все сервисы успешно запущены!${NC
 echo ""
 echo "📋 Доступные эндпоинты:"
 echo "   • OpenSearch: http://localhost:9200"
-echo "   • OpenSearch Dashboards: http://localhost:5601"
+#echo "   • OpenSearch Dashboards: http://localhost:5601"
 echo "   • Ingest API: http://localhost:8000"
 echo "   • API Documentation: http://localhost:8000/docs"
 echo "   • Web UI: http://localhost:3000 (если включен)"
