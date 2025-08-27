@@ -3,7 +3,10 @@ package collect
 import (
 	"context"
 	"fmt"
+	"log"
 	"runtime"
+	"strconv"
+	"strings"
 
 	"github.com/shirou/gopsutil/v3/host"
 	"golang.org/x/sys/windows/registry"
@@ -51,11 +54,8 @@ func (c *Collector) collectSystemInfo(ctx context.Context) (*SystemInfo, error) 
 	info.UptimeSeconds = hostInfo.Uptime
 	
 	// Детализированная информация об ОС
-	info.OS = OSInfo{
-		Name:    getWindowsProductName(),
-		Version: hostInfo.PlatformVersion,
-		Build:   hostInfo.KernelVersion,
-	}
+	osInfo := getEnhancedWindowsInfo(hostInfo.PlatformVersion, hostInfo.KernelVersion)
+	info.OS = osInfo
 
 	return info, nil
 }
@@ -92,4 +92,90 @@ func getWindowsProductName() string {
 	}
 
 	return productName
+}
+
+// getEnhancedWindowsInfo получает улучшенную информацию о Windows с корректным определением версии
+func getEnhancedWindowsInfo(platformVersion, kernelVersion string) OSInfo {
+	// Получаем базовое название продукта из реестра
+	baseProductName := getWindowsProductName()
+	
+	// Извлекаем редакцию (Pro, Home, Enterprise и т.д.)
+	edition := extractWindowsEdition(baseProductName)
+	
+	// Определяем версию Windows по номеру билда
+	windowsVersion := determineWindowsVersionByBuild(kernelVersion)
+	
+	// Формируем итоговое название
+	var finalName string
+	if windowsVersion == "Неизвестная версия Windows" {
+		finalName = baseProductName
+		// Логируем для дальнейшей доработки
+		log.Printf("ПРЕДУПРЕЖДЕНИЕ: Неизвестная версия Windows. Build: %s, Platform: %s, Product: %s", 
+			kernelVersion, platformVersion, baseProductName)
+	} else {
+		if edition != "" {
+			finalName = fmt.Sprintf("%s %s (Build %s)", windowsVersion, edition, extractBuildNumber(kernelVersion))
+		} else {
+			finalName = fmt.Sprintf("%s (Build %s)", windowsVersion, extractBuildNumber(kernelVersion))
+		}
+	}
+	
+	return OSInfo{
+		Name:    finalName,
+		Version: platformVersion,
+		Build:   kernelVersion,
+	}
+}
+
+// determineWindowsVersionByBuild определяет версию Windows по номеру билда
+func determineWindowsVersionByBuild(kernelVersion string) string {
+	buildNumber := extractBuildNumber(kernelVersion)
+	if buildNumber == "" {
+		return "Неизвестная версия Windows"
+	}
+	
+	// Преобразуем в число для сравнения
+	build, err := strconv.Atoi(buildNumber)
+	if err != nil {
+		log.Printf("Не удалось преобразовать номер билда в число: %s", buildNumber)
+		return "Неизвестная версия Windows"
+	}
+	
+	// Применяем правила определения версии
+	if build >= 10240 && build <= 19045 {
+		return "Windows 10"
+	} else if build >= 22000 {
+		return "Windows 11"
+	} else {
+		log.Printf("Номер билда %d не попадает в известные диапазоны", build)
+		return "Неизвестная версия Windows"
+	}
+}
+
+// extractBuildNumber извлекает номер билда из строки версии ядра
+func extractBuildNumber(kernelVersion string) string {
+	// Примеры форматов: "10.0.26100.4946", "10.0.19045.5011"
+	parts := strings.Split(kernelVersion, ".")
+	if len(parts) >= 3 {
+		return parts[2] // Возвращаем третью часть (номер билда)
+	}
+	return ""
+}
+
+// extractWindowsEdition извлекает редакцию Windows из названия продукта
+func extractWindowsEdition(productName string) string {
+	// Удаляем "Windows 10", "Windows 11" и другие версии из названия
+	productName = strings.ReplaceAll(productName, "Windows 10", "")
+	productName = strings.ReplaceAll(productName, "Windows 11", "")
+	productName = strings.ReplaceAll(productName, "Windows", "")
+	
+	// Убираем лишние пробелы
+	edition := strings.TrimSpace(productName)
+	
+	// Если ничего не осталось, возвращаем пустую строку
+	if edition == "" {
+		return ""
+	}
+	
+	return edition
 }
