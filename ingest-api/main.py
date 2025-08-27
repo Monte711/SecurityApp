@@ -202,8 +202,15 @@ class GoRDPInfo(BaseModel):
     permission: Optional[str] = Field(None, description="Права доступа")
 
 class GoBitLockerInfo(BaseModel):
-    enabled: Optional[bool] = Field(None, description="BitLocker включен")
+    system_drive_protected: Optional[bool] = Field(None, description="Системный диск защищен BitLocker")
+    volumes: Optional[Dict[str, Dict[str, Any]]] = Field(None, description="Информация о томах")
     permission: Optional[str] = Field(None, description="Права доступа")
+    
+    # Обратная совместимость - поле enabled для старых агентов
+    enabled: Optional[bool] = Field(None, description="BitLocker включен (устаревшее поле)")
+    
+    class Config:
+        extra = "allow"  # Разрешить дополнительные поля
 
 class GoSMB1Info(BaseModel):
     enabled: Optional[bool] = Field(None, description="SMB1 включен")

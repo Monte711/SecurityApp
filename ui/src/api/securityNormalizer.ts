@@ -197,16 +197,59 @@ export class SecurityDataNormalizer {
     let details: Record<string, any> = {};
     let recommendations: string[] = [];
 
-    if (bitlockerInfo.enabled === true) {
-      status = 'enabled';
-      details.bitlocker = 'BitLocker включен';
-    } else if (bitlockerInfo.enabled === false) {
-      status = 'disabled';
-      details.bitlocker = 'BitLocker отключен';
-      recommendations.push('Включите шифрование BitLocker для защиты данных');
+    // Check if we have the new volume-based structure
+    if (bitlockerInfo.volumes && Array.isArray(bitlockerInfo.volumes)) {
+      let encryptedVolumes = 0;
+      let totalVolumes = bitlockerInfo.volumes.length;
+      
+      bitlockerInfo.volumes.forEach((volume: any, index: number) => {
+        const volumeKey = `volume_${index + 1}`;
+        if (volume.device_id) {
+          details[`${volumeKey}_device`] = `Диск: ${volume.device_id}`;
+        }
+        if (volume.size) {
+          details[`${volumeKey}_size`] = `Размер: ${volume.size}`;
+        }
+        if (volume.conversion_status) {
+          details[`${volumeKey}_status`] = `Статус: ${volume.conversion_status}`;
+          if (volume.conversion_status.includes('FullyEncrypted') || 
+              volume.conversion_status.includes('Encrypted')) {
+            encryptedVolumes++;
+          }
+        }
+        if (volume.protection_status) {
+          details[`${volumeKey}_protection`] = `Защита: ${volume.protection_status}`;
+        }
+      });
+
+      if (totalVolumes === 0) {
+        status = 'no_data';
+        details.bitlocker = 'Нет доступных дисков для шифрования';
+      } else if (encryptedVolumes === totalVolumes) {
+        status = 'enabled';
+        details.bitlocker = `Зашифровано ${encryptedVolumes} из ${totalVolumes} дисков`;
+      } else if (encryptedVolumes > 0) {
+        status = 'disabled';
+        details.bitlocker = `Зашифровано только ${encryptedVolumes} из ${totalVolumes} дисков`;
+        recommendations.push('Включите шифрование BitLocker для всех дисков');
+      } else {
+        status = 'disabled';
+        details.bitlocker = 'Ни один диск не зашифрован';
+        recommendations.push('Включите шифрование BitLocker для защиты данных');
+      }
     } else {
-      status = 'no_data';
-      details.bitlocker = 'Данные недоступны';
+      // Fallback to old structure
+      if (bitlockerInfo.enabled === true) {
+        status = 'enabled';
+        details.bitlocker = 'BitLocker включен';
+      } else if (bitlockerInfo.enabled === false) {
+        status = 'disabled';
+        details.bitlocker = 'BitLocker отключен';
+        recommendations.push('Включите шифрование BitLocker для защиты данных');
+      } else {
+        status = 'no_data';
+        details.bitlocker = 'Данные недоступны';
+      }
     }
 
     if (bitlockerInfo.permission) {

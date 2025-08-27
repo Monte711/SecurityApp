@@ -124,6 +124,14 @@ export interface SecurityData {
   bitlocker?: {
     enabled?: boolean;
     permission?: string;
+    volumes?: Array<{
+      device_id?: string;
+      size?: string;
+      conversion_status?: string;
+      protection_status?: string;
+      encryption_method?: string;
+      percentage?: number;
+    }>;
   };
   smb1?: {
     enabled?: boolean;
