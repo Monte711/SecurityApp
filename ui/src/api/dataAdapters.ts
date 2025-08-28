@@ -146,7 +146,8 @@ export class SecurityAdapter {
         uac: this.normalizeUAC(securitySource.uac),
         rdp: this.normalizeRDP(securitySource.rdp),
         bitlocker: this.normalizeBitlocker(securitySource.bitlocker),
-        smb1: this.normalizeSMB1(securitySource.smb1)
+        smb1: this.normalizeSMB1(securitySource.smb1),
+        windows_update: this.normalizeWindowsUpdate(rawData.windows_update)
       };
     } catch (error) {
       console.error('Error normalizing security data:', error);
@@ -257,6 +258,30 @@ export class SecurityAdapter {
     };
   }
 
+  private static normalizeWindowsUpdate(windowsUpdate: any) {
+    if (!windowsUpdate || typeof windowsUpdate !== 'object') {
+      return {
+        last_update_date: null,
+        update_service_status: 'unknown',
+        pending_updates: null,
+        permission: 'access_denied',
+        error_message: null
+      };
+    }
+
+    return {
+      last_update_date: this.safeStringOrNull(windowsUpdate.last_update_date),
+      update_service_status: this.safeString(windowsUpdate.update_service_status, 'unknown') || 'unknown',
+      pending_updates: typeof windowsUpdate.pending_updates === 'number' ? windowsUpdate.pending_updates : null,
+      permission: windowsUpdate.permission || 'no_data',
+      error_message: this.safeStringOrNull(windowsUpdate.error_message)
+    };
+  }
+
+  private static safeStringOrNull(value: any): string | null {
+    return (typeof value === 'string' && value.trim().length > 0) ? value : null;
+  }
+
   private static safeString(value: any, fallback: string | undefined): string | undefined {
     return (typeof value === 'string' && value.trim().length > 0) ? value : fallback;
   }
@@ -291,6 +316,13 @@ export class SecurityAdapter {
       smb1: {
         enabled: undefined,
         permission: 'no_data'
+      },
+      windows_update: {
+        last_update_date: undefined,
+        update_service_status: 'unknown',
+        pending_updates: undefined,
+        permission: 'no_data',
+        error_message: undefined
       }
     };
   }

@@ -33,6 +33,15 @@ type AgentInfo struct {
 	AgentVersion string `json:"agent_version"`
 }
 
+// WindowsUpdateInfo содержит информацию об обновлениях Windows
+type WindowsUpdateInfo struct {
+	LastUpdateDate      *string `json:"last_update_date"`       // ISO8601 UTC или null
+	UpdateServiceStatus string  `json:"update_service_status"`  // Running/Stopped/Disabled
+	PendingUpdates      *int    `json:"pending_updates"`        // количество или null
+	Permission          string  `json:"permission"`             // granted/denied/partial
+	ErrorMessage        *string `json:"error_message"`          // описание ошибки если есть
+}
+
 // collectSystemInfo собирает информацию о системе
 func (c *Collector) collectSystemInfo(ctx context.Context) (*SystemInfo, error) {
 	info := &SystemInfo{}

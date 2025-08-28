@@ -1,0 +1,43 @@
+﻿
+> docs\debug\host_posture_updates_examples\windows_update_section.txt:6767:                                                  "w
+indows_update":  {
+  docs\debug\host_posture_updates_examples\windows_update_section.txt:6768:                                                    
+                     "last_update_date":  "2025-08-27T21:00:00Z",
+  docs\debug\host_posture_updates_examples\windows_update_section.txt:6769:                                                    
+                     "update_service_status":  "Running",
+  docs\debug\host_posture_updates_examples\windows_update_section.txt:6770:                                                    
+                     "pending_updates":  2,
+  docs\debug\host_posture_updates_examples\windows_update_section.txt:6771:                                                    
+                     "permission":  "granted",
+  docs\debug\host_posture_updates_examples\windows_update_section.txt:6772:                                                    
+                     "error_message":  null
+  docs\debug\host_posture_updates_examples\windows_update_section.txt:6773:                                                    
+                 },
+  docs\debug\host_posture_updates_examples\windows_update_section.txt:6774:                                                  "f
+indings":  [
+  docs\debug\host_posture_updates_examples\windows_update_section.txt:6775:                                                    
+               {
+  docs\debug\host_posture_updates_examples\windows_update_section.txt:6776:                                                    
+                   "rule_id":  "FIREWALL_DISABLED",
+  docs\debug\host_posture_updates_examples\windows_update_section.txt:6777:                                                    
+                   "severity":  "high",
+  docs\debug\host_posture_updates_examples\windows_update_section.txt:6778:                                                    
+                   "message_ru":  "Внимание: профиль брандмауэра Private от
+  docs\debug\host_posture_updates_examples\windows_update_section.txt:6779:ключён",
+  docs\debug\host_posture_updates_examples\windows_update_section.txt:6780:                                                    
+                   "evidence":  "Профиль Private: enabled=false"
+  docs\debug\host_posture_updates_examples\windows_update_section.txt:6781:                                                    
+               },
+  docs\debug\host_posture_updates_examples\windows_update_section.txt:6782:                                                    
+               {
+  docs\debug\host_posture_updates_examples\windows_update_section.txt:6783:                                                    
+                   "rule_id":  "SMB1_ENABLED",
+  docs\debug\host_posture_updates_examples\windows_update_section.txt:6784:                                                    
+                   "severity":  "high",
+  docs\debug\host_posture_updates_examples\windows_update_section.txt:6785:                                                    
+                   "message_ru":  "Протокол SMBv1 включён (уязвим для атак)
+  docs\debug\host_posture_updates_examples\windows_update_section.txt:6786:",
+  docs\debug\host_posture_updates_examples\windows_update_section.txt:6787:                                                    
+                   "evidence":  "SMB1 enabled=true"
+
+

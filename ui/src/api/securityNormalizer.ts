@@ -2,20 +2,25 @@ import { SecurityData, NormalizedSecurityData, SecurityStatus, SecurityStatusTyp
 
 export class SecurityDataNormalizer {
   async getNormalizedHostSecurity(hostId: string): Promise<NormalizedSecurityData> {
-    // Получаем данные через dataAdapters
-    const { getHostSecurity } = await import('./dataAdapters');
-    const rawData = await getHostSecurity(hostId);
-    return this.normalizeSecurityData(rawData);
+    // Получаем полные данные события через API
+    const response = await fetch(`/api/host/${hostId}/posture/latest`);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    const fullData = await response.json();
+    return this.normalizeSecurityData(fullData);
   }
 
-  normalizeSecurityData(data: SecurityData): NormalizedSecurityData {
+  normalizeSecurityData(data: any): NormalizedSecurityData {
     return {
-      defender: this.getDefenderStatus(data),
-      firewall: this.getFirewallStatus(data),
-      uac: this.getUacStatus(data),
-      rdp: this.getRdpStatus(data),
-      bitlocker: this.getBitlockerStatus(data),
-      smb1: this.getSmb1Status(data),
+      defender: this.getDefenderStatus(data.security || {}),
+      firewall: this.getFirewallStatus(data.security || {}),
+      uac: this.getUacStatus(data.security || {}),
+      rdp: this.getRdpStatus(data.security || {}),
+      bitlocker: this.getBitlockerStatus(data.security || {}),
+      smb1: this.getSmb1Status(data.security || {}),
+      windowsUpdate: this.getWindowsUpdateStatus(data),
       lastUpdated: new Date().toISOString()
     };
   }
@@ -305,6 +310,94 @@ export class SecurityDataNormalizer {
     };
   }
 
+  private getWindowsUpdateStatus(data: any): SecurityStatus {
+    // Получаем данные из секции windows_update
+    const updateInfo = data.windows_update || {};
+    
+    let status: SecurityStatusType = 'unknown';
+    let details: Record<string, any> = {};
+    let recommendations: string[] = [];
+
+    // Анализ статуса службы обновлений
+    if (updateInfo.update_service_status === 'Running') {
+      status = 'enabled';
+      details.service = 'Служба обновлений запущена';
+    } else if (updateInfo.update_service_status === 'Stopped') {
+      status = 'disabled';
+      details.service = 'Служба обновлений остановлена';
+      recommendations.push('Запустите службу Windows Update');
+    } else if (updateInfo.update_service_status === 'Disabled') {
+      status = 'disabled';
+      details.service = 'Служба обновлений отключена';
+      recommendations.push('Включите службу Windows Update для получения обновлений безопасности');
+    } else {
+      status = 'no_data';
+      details.service = 'Статус службы неизвестен';
+    }
+
+    // Обработка даты последнего обновления
+    if (updateInfo.last_update_date) {
+      try {
+        const lastUpdate = new Date(updateInfo.last_update_date);
+        const now = new Date();
+        const daysSinceUpdate = Math.floor((now.getTime() - lastUpdate.getTime()) / (1000 * 60 * 60 * 24));
+        
+        details.lastUpdate = `Последнее обновление: ${lastUpdate.toLocaleDateString('ru-RU')}`;
+        details.daysSinceUpdate = `${daysSinceUpdate} дней назад`;
+        
+        if (daysSinceUpdate > 30) {
+          if (status === 'enabled') status = 'disabled';
+          recommendations.push('Критично! Система не обновлялась более 30 дней');
+        } else if (daysSinceUpdate > 7) {
+          recommendations.push('Проверьте наличие обновлений безопасности');
+        }
+      } catch (e) {
+        details.lastUpdate = 'Некорректная дата последнего обновления';
+      }
+    } else {
+      details.lastUpdate = 'Дата последнего обновления недоступна';
+      recommendations.push('Проверьте историю обновлений системы');
+    }
+
+    // Обработка ожидающих обновлений
+    if (updateInfo.pending_updates !== null && updateInfo.pending_updates !== undefined) {
+      if (updateInfo.pending_updates > 0) {
+        details.pendingUpdates = `Ожидают установки: ${updateInfo.pending_updates} обновлений`;
+        recommendations.push(`Установите ${updateInfo.pending_updates} ожидающих обновлений`);
+        if (status === 'enabled') status = 'disabled';
+      } else {
+        details.pendingUpdates = 'Нет ожидающих обновлений';
+      }
+    } else {
+      details.pendingUpdates = 'Данные об ожидающих обновлениях недоступны';
+    }
+
+    // Обработка уровня доступа
+    if (updateInfo.permission) {
+      details.permission = `Уровень доступа: ${updateInfo.permission}`;
+      if (updateInfo.permission === 'denied') {
+        if (status !== 'disabled') status = 'access_denied';
+        recommendations.push('Запустите агент с правами администратора для получения полной информации');
+      }
+    }
+
+    // Обработка ошибок
+    if (updateInfo.error_message) {
+      details.error = `Ошибка: ${updateInfo.error_message}`;
+      if (status === 'enabled') status = 'disabled';
+    }
+
+    return {
+      status,
+      displayName: 'Обновления Windows',
+      description: this.getStatusDescription(status, 'windowsUpdate'),
+      source: 'Agent',
+      lastUpdated: new Date().toISOString(),
+      details,
+      recommendations
+    };
+  }
+
   private getStatusDescription(status: SecurityStatusType, module: string): string {
     const descriptions: Record<SecurityStatusType, Record<string, string>> = {
       enabled: {
@@ -313,7 +406,8 @@ export class SecurityDataNormalizer {
         uac: 'Контроль учетных записей активен',
         rdp: 'Удаленный доступ отключен - система защищена',
         bitlocker: 'Диск зашифрован и защищен',
-        smb1: 'Устаревший протокол отключен - система защищена'
+        smb1: 'Устаревший протокол отключен - система защищена',
+        windowsUpdate: 'Система обновлений работает корректно'
       },
       disabled: {
         defender: 'Антивирус отключен - система уязвима',
@@ -321,7 +415,8 @@ export class SecurityDataNormalizer {
         uac: 'Контроль учетных записей отключен',
         rdp: 'Удаленный доступ включен - потенциальная угроза безопасности',
         bitlocker: 'Диск не зашифрован',
-        smb1: 'Устаревший протокол включен - критическая угроза безопасности'
+        smb1: 'Устаревший протокол включен - критическая угроза безопасности',
+        windowsUpdate: 'Проблемы с обновлениями - система уязвима'
       },
       no_data: {
         defender: 'Данные о состоянии антивируса недоступны',
@@ -329,7 +424,8 @@ export class SecurityDataNormalizer {
         uac: 'Данные о состоянии UAC недоступны',
         rdp: 'Данные о состоянии RDP недоступны',
         bitlocker: 'Данные о состоянии BitLocker недоступны',
-        smb1: 'Данные о состоянии SMB v1 недоступны'
+        smb1: 'Данные о состоянии SMB v1 недоступны',
+        windowsUpdate: 'Данные об обновлениях Windows недоступны'
       },
       access_denied: {
         defender: 'Нет прав для получения данных об антивирусе',
@@ -337,7 +433,8 @@ export class SecurityDataNormalizer {
         uac: 'Нет прав для получения данных о UAC',
         rdp: 'Нет прав для получения данных о RDP',
         bitlocker: 'Нет прав для получения данных о BitLocker',
-        smb1: 'Нет прав для получения данных о SMB v1'
+        smb1: 'Нет прав для получения данных о SMB v1',
+        windowsUpdate: 'Нет прав для получения данных об обновлениях'
       },
       unknown: {
         defender: 'Неизвестное состояние антивируса',
@@ -345,7 +442,8 @@ export class SecurityDataNormalizer {
         uac: 'Неизвестное состояние UAC',
         rdp: 'Неизвестное состояние RDP',
         bitlocker: 'Неизвестное состояние BitLocker',
-        smb1: 'Неизвестное состояние SMB v1'
+        smb1: 'Неизвестное состояние SMB v1',
+        windowsUpdate: 'Неизвестное состояние обновлений Windows'
       }
     };
 

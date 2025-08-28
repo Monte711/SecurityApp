@@ -21,15 +21,16 @@ func NewCollector(collectHashes bool) *Collector {
 
 // HostPostureData представляет полные данные о состоянии хоста
 type HostPostureData struct {
-	EventID   string        `json:"event_id"`
-	EventType string        `json:"event_type"`
-	Timestamp string        `json:"@timestamp"`
-	Host      *SystemInfo   `json:"host"`
-	Agent     *AgentInfo    `json:"agent"`
-	Inventory *InventoryInfo `json:"inventory"`
-	Security  *SecurityInfo `json:"security"`
-	Findings  []Finding     `json:"findings"`
-	Metadata  *MetadataInfo `json:"metadata"`
+	EventID       string             `json:"event_id"`
+	EventType     string             `json:"event_type"`
+	Timestamp     string             `json:"@timestamp"`
+	Host          *SystemInfo        `json:"host"`
+	Agent         *AgentInfo         `json:"agent"`
+	Inventory     *InventoryInfo     `json:"inventory"`
+	Security      *SecurityInfo      `json:"security"`
+	WindowsUpdate *WindowsUpdateInfo `json:"windows_update,omitempty"`
+	Findings      []Finding          `json:"findings"`
+	Metadata      *MetadataInfo      `json:"metadata"`
 }
 
 // InventoryInfo содержит инвентаризационные данные
@@ -93,6 +94,21 @@ func (c *Collector) CollectHostPosture(ctx context.Context) (*HostPostureData, e
 		return nil, err
 	}
 	data.Security = security
+
+	// Сбор информации об обновлениях Windows
+	windowsUpdate, err := c.collectWindowsUpdates(ctx)
+	if err != nil {
+		// Не прерываем сбор данных из-за ошибки получения информации об обновлениях
+		// Просто логируем ошибку и продолжаем
+		data.WindowsUpdate = &WindowsUpdateInfo{
+			UpdateServiceStatus: "unknown",
+			Permission:          "denied",
+		}
+		errorMsg := err.Error()
+		data.WindowsUpdate.ErrorMessage = &errorMsg
+	} else {
+		data.WindowsUpdate = windowsUpdate
+	}
 
 	return data, nil
 }
