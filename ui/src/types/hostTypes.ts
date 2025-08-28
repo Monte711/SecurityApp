@@ -137,6 +137,15 @@ export interface SecurityData {
     enabled?: boolean;
     permission?: string;
   };
+  windows_update?: WindowsUpdateInfo;
+}
+
+export interface WindowsUpdateInfo {
+  last_update_date?: string | null;        // ISO8601 UTC или null
+  update_service_status: string;           // Running/Stopped/Disabled/unknown
+  pending_updates?: number | null;         // количество или null
+  permission: string;                      // granted/denied/partial
+  error_message?: string | null;           // описание ошибки если есть
 }
 
 // Нормализованные данные безопасности для UI
@@ -147,6 +156,7 @@ export interface NormalizedSecurityData {
   rdp: SecurityStatus;
   bitlocker: SecurityStatus;
   smb1: SecurityStatus;
+  windowsUpdate: SecurityStatus;
   lastUpdated: string;
 }
 
@@ -181,6 +191,7 @@ export interface HostPostureEvent {
   telemetry: InventoryData; // Изменено с inventory на telemetry (согласно реальной структуре)
   inventory: InventoryData; // Реальная структура данных от агента
   security: SecurityData;
+  windows_update?: WindowsUpdateInfo; // Информация об обновлениях Windows
   findings: Finding[];
   metadata: Metadata;
 }

@@ -1,0 +1,546 @@
+﻿{
+    "agent-events-2025.08.28":  {
+                                    "mappings":  {
+                                                     "properties":  {
+                                                                        "agent":  {
+                                                                                      "properties":  {
+                                                                                                         "agent_id":  {
+                                                                                                                          "type":  "text",
+                                                                                                                          "fields":  {
+                                                                                                                                         "keyword":  {
+                                                                                                                                                         "type":  "keyword",
+                                                                                                                                                         "ignore_above":  256
+                                                                                                                                                     }
+                                                                                                                                     }
+                                                                                                                      },
+                                                                                                         "agent_version":  {
+                                                                                                                               "type":  "text",
+                                                                                                                               "fields":  {
+                                                                                                                                              "keyword":  {
+                                                                                                                                                              "type":  "keyword",
+                                                                                                                                                              "ignore_above":  256
+                                                                                                                                                          }
+                                                                                                                                          }
+                                                                                                                           }
+                                                                                                     }
+                                                                                  },
+                                                                        "agent_id":  {
+                                                                                         "type":  "text",
+                                                                                         "fields":  {
+                                                                                                        "keyword":  {
+                                                                                                                        "type":  "keyword",
+                                                                                                                        "ignore_above":  256
+                                                                                                                    }
+                                                                                                    }
+                                                                                     },
+                                                                        "event_id":  {
+                                                                                         "type":  "text",
+                                                                                         "fields":  {
+                                                                                                        "keyword":  {
+                                                                                                                        "type":  "keyword",
+                                                                                                                        "ignore_above":  256
+                                                                                                                    }
+                                                                                                    }
+                                                                                     },
+                                                                        "event_type":  {
+                                                                                           "type":  "text",
+                                                                                           "fields":  {
+                                                                                                          "keyword":  {
+                                                                                                                          "type":  "keyword",
+                                                                                                                          "ignore_above":  256
+                                                                                                                      }
+                                                                                                      }
+                                                                                       },
+                                                                        "findings":  {
+                                                                                         "properties":  {
+                                                                                                            "evidence":  {
+                                                                                                                             "type":  "text",
+                                                                                                                             "fields":  {
+                                                                                                                                            "keyword":  {
+                                                                                                                                                            "type":  "keyword",
+                                                                                                                                                            "ignore_above":  256
+                                                                                                                                                        }
+                                                                                                                                        }
+                                                                                                                         },
+                                                                                                            "message_ru":  {
+                                                                                                                               "type":  "text",
+                                                                                                                               "fields":  {
+                                                                                                                                              "keyword":  {
+                                                                                                                                                              "type":  "keyword",
+                                                                                                                                                              "ignore_above":  256
+                                                                                                                                                          }
+                                                                                                                                          }
+                                                                                                                           },
+                                                                                                            "rule_id":  {
+                                                                                                                            "type":  "text",
+                                                                                                                            "fields":  {
+                                                                                                                                           "keyword":  {
+                                                                                                                                                           "type":  "keyword",
+                                                                                                                                                           "ignore_above":  256
+                                                                                                                                                       }
+                                                                                                                                       }
+                                                                                                                        },
+                                                                                                            "severity":  {
+                                                                                                                             "type":  "text",
+                                                                                                                             "fields":  {
+                                                                                                                                            "keyword":  {
+                                                                                                                                                            "type":  "keyword",
+                                                                                                                                                            "ignore_above":  256
+                                                                                                                                                        }
+                                                                                                                                        }
+                                                                                                                         }
+                                                                                                        }
+                                                                                     },
+                                                                        "format_type":  {
+                                                                                            "type":  "text",
+                                                                                            "fields":  {
+                                                                                                           "keyword":  {
+                                                                                                                           "type":  "keyword",
+                                                                                                                           "ignore_above":  256
+                                                                                                                       }
+                                                                                                       }
+                                                                                        },
+                                                                        "host":  {
+                                                                                     "properties":  {
+                                                                                                        "host_id":  {
+                                                                                                                        "type":  "text",
+                                                                                                                        "fields":  {
+                                                                                                                                       "keyword":  {
+                                                                                                                                                       "type":  "keyword",
+                                                                                                                                                       "ignore_above":  256
+                                                                                                                                                   }
+                                                                                                                                   }
+                                                                                                                    },
+                                                                                                        "hostname":  {
+                                                                                                                         "type":  "text",
+                                                                                                                         "fields":  {
+                                                                                                                                        "keyword":  {
+                                                                                                                                                        "type":  "keyword",
+                                                                                                                                                        "ignore_above":  256
+                                                                                                                                                    }
+                                                                                                                                    }
+                                                                                                                     },
+                                                                                                        "os":  {
+                                                                                                                   "properties":  {
+                                                                                                                                      "build":  {
+                                                                                                                                                    "type":  "text",
+                                                                                                                                                    "fields":  {
+                                                                                                                                                                   "keyword":  {
+                                                                                                                                                                                   "type":  "keyword",
+                                                                                                                                                                                   "ignore_above":  256
+                                                                                                                                                                               }
+                                                                                                                                                               }
+                                                                                                                                                },
+                                                                                                                                      "name":  {
+                                                                                                                                                   "type":  "text",
+                                                                                                                                                   "fields":  {
+                                                                                                                                                                  "keyword":  {
+                                                                                                                                                                                  "type":  "keyword",
+                                                                                                                                                                                  "ignore_above":  256
+                                                                                                                                                                              }
+                                                                                                                                                              }
+                                                                                                                                               },
+                                                                                                                                      "version":  {
+                                                                                                                                                      "type":  "text",
+                                                                                                                                                      "fields":  {
+                                                                                                                                                                     "keyword":  {
+                                                                                                                                                                                     "type":  "keyword",
+                                                                                                                                                                                     "ignore_above":  256
+                                                                                                                                                                                 }
+                                                                                                                                                                 }
+                                                                                                                                                  }
+                                                                                                                                  }
+                                                                                                               },
+                                                                                                        "uptime_seconds":  {
+                                                                                                                               "type":  "long"
+                                                                                                                           }
+                                                                                                    }
+                                                                                 },
+                                                                        "host_info":  {
+                                                                                          "properties":  {
+                                                                                                             "host_id":  {
+                                                                                                                             "type":  "text",
+                                                                                                                             "fields":  {
+                                                                                                                                            "keyword":  {
+                                                                                                                                                            "type":  "keyword",
+                                                                                                                                                            "ignore_above":  256
+                                                                                                                                                        }
+                                                                                                                                        }
+                                                                                                                         },
+                                                                                                             "hostname":  {
+                                                                                                                              "type":  "text",
+                                                                                                                              "fields":  {
+                                                                                                                                             "keyword":  {
+                                                                                                                                                             "type":  "keyword",
+                                                                                                                                                             "ignore_above":  256
+                                                                                                                                                         }
+                                                                                                                                         }
+                                                                                                                          },
+                                                                                                             "os":  {
+                                                                                                                        "properties":  {
+                                                                                                                                           "build":  {
+                                                                                                                                                         "type":  "text",
+                                                                                                                                                         "fields":  {
+                                                                                                                                                                        "keyword":  {
+                                                                                                                                                                                        "type":  "keyword",
+                                                                                                                                                                                        "ignore_above":  256
+                                                                                                                                                                                    }
+                                                                                                                                                                    }
+                                                                                                                                                     },
+                                                                                                                                           "name":  {
+                                                                                                                                                        "type":  "text",
+                                                                                                                                                        "fields":  {
+                                                                                                                                                                       "keyword":  {
+                                                                                                                                                                                       "type":  "keyword",
+                                                                                                                                                                                       "ignore_above":  256
+                                                                                                                                                                                   }
+                                                                                                                                                                   }
+                                                                                                                                                    },
+                                                                                                                                           "version":  {
+                                                                                                                                                           "type":  "text",
+                                                                                                                                                           "fields":  {
+                                                                                                                                                                          "keyword":  {
+                                                                                                                                                                                          "type":  "keyword",
+                                                                                                                                                                                          "ignore_above":  256
+                                                                                                                                                                                      }
+                                                                                                                                                                      }
+                                                                                                                                                       }
+                                                                                                                                       }
+                                                                                                                    },
+                                                                                                             "uptime_seconds":  {
+                                                                                                                                    "type":  "long"
+                                                                                                                                }
+                                                                                                         }
+                                                                                      },
+                                                                        "index_name":  {
+                                                                                           "type":  "text",
+                                                                                           "fields":  {
+                                                                                                          "keyword":  {
+                                                                                                                          "type":  "keyword",
+                                                                                                                          "ignore_above":  256
+                                                                                                                      }
+                                                                                                      }
+                                                                                       },
+                                                                        "indexed_at":  {
+                                                                                           "type":  "date"
+                                                                                       },
+                                                                        "inventory":  {
+                                                                                          "properties":  {
+                                                                                                             "autoruns":  {
+                                                                                                                              "properties":  {
+                                                                                                                                                 "registry":  {
+                                                                                                                                                                  "properties":  {
+                                                                                                                                                                                     "name":  {
+                                                                                                                                                                                                  "type":  "text",
+                                                                                                                                                                                                  "fields":  "@{keyword=}"
+                                                                                                                                                                                              },
+                                                                                                                                                                                     "path":  {
+                                                                                                                                                                                                  "type":  "text",
+                                                                                                                                                                                                  "fields":  "@{keyword=}"
+                                                                                                                                                                                              },
+                                                                                                                                                                                     "root":  {
+                                                                                                                                                                                                  "type":  "text",
+                                                                                                                                                                                                  "fields":  "@{keyword=}"
+                                                                                                                                                                                              },
+                                                                                                                                                                                     "value":  {
+                                                                                                                                                                                                   "type":  "text",
+                                                                                                                                                                                                   "fields":  "@{keyword=}"
+                                                                                                                                                                                               }
+                                                                                                                                                                                 }
+                                                                                                                                                              },
+                                                                                                                                                 "scheduled_tasks":  {
+                                                                                                                                                                         "properties":  {
+                                                                                                                                                                                            "action":  {
+                                                                                                                                                                                                           "type":  "text",
+                                                                                                                                                                                                           "fields":  "@{keyword=}"
+                                                                                                                                                                                                       },
+                                                                                                                                                                                            "run_as":  {
+                                                                                                                                                                                                           "type":  "text",
+                                                                                                                                                                                                           "fields":  "@{keyword=}"
+                                                                                                                                                                                                       },
+                                                                                                                                                                                            "status":  {
+                                                                                                                                                                                                           "type":  "text",
+                                                                                                                                                                                                           "fields":  "@{keyword=}"
+                                                                                                                                                                                                       },
+                                                                                                                                                                                            "task_name":  {
+                                                                                                                                                                                                              "type":  "text",
+                                                                                                                                                                                                              "fields":  "@{keyword=}"
+                                                                                                                                                                                                          },
+                                                                                                                                                                                            "trigger":  {
+                                                                                                                                                                                                            "type":  "text",
+                                                                                                                                                                                                            "fields":  "@{keyword=}"
+                                                                                                                                                                                                        }
+                                                                                                                                                                                        }
+                                                                                                                                                                     },
+                                                                                                                                                 "services_auto":  {
+                                                                                                                                                                       "properties":  {
+                                                                                                                                                                                          "display_name":  {
+                                                                                                                                                                                                               "type":  "text",
+                                                                                                                                                                                                               "fields":  "@{keyword=}"
+                                                                                                                                                                                                           },
+                                                                                                                                                                                          "name":  {
+                                                                                                                                                                                                       "type":  "text",
+                                                                                                                                                                                                       "fields":  "@{keyword=}"
+                                                                                                                                                                                                   },
+                                                                                                                                                                                          "path":  {
+                                                                                                                                                                                                       "type":  "text",
+                                                                                                                                                                                                       "fields":  "@{keyword=}"
+                                                                                                                                                                                                   },
+                                                                                                                                                                                          "start_mode":  {
+                                                                                                                                                                                                             "type":  "text",
+                                                                                                                                                                                                             "fields":  "@{keyword=}"
+                                                                                                                                                                                                         },
+                                                                                                                                                                                          "state":  {
+                                                                                                                                                                                                        "type":  "text",
+                                                                                                                                                                                                        "fields":  "@{keyword=}"
+                                                                                                                                                                                                    }
+                                                                                                                                                                                      }
+                                                                                                                                                                   },
+                                                                                                                                                 "startup_folders":  {
+                                                                                                                                                                         "properties":  {
+                                                                                                                                                                                            "file":  {
+                                                                                                                                                                                                         "type":  "text",
+                                                                                                                                                                                                         "fields":  "@{keyword=}"
+                                                                                                                                                                                                     },
+                                                                                                                                                                                            "location":  {
+                                                                                                                                                                                                             "type":  "text",
+                                                                                                                                                                                                             "fields":  "@{keyword=}"
+                                                                                                                                                                                                         },
+                                                                                                                                                                                            "target":  {
+                                                                                                                                                                                                           "type":  "text",
+                                                                                                                                                                                                           "fields":  "@{keyword=}"
+                                                                                                                                                                                                       }
+                                                                                                                                                                                        }
+                                                                                                                                                                     }
+                                                                                                                                             }
+                                                                                                                          },
+                                                                                                             "processes":  {
+                                                                                                                               "properties":  {
+                                                                                                                                                  "cmdline":  {
+                                                                                                                                                                  "type":  "text",
+                                                                                                                                                                  "fields":  {
+                                                                                                                                                                                 "keyword":  {
+                                                                                                                                                                                                 "type":  "keyword",
+                                                                                                                                                                                                 "ignore_above":  256
+                                                                                                                                                                                             }
+                                                                                                                                                                             }
+                                                                                                                                                              },
+                                                                                                                                                  "exe_path":  {
+                                                                                                                                                                   "type":  "text",
+                                                                                                                                                                   "fields":  {
+                                                                                                                                                                                  "keyword":  {
+                                                                                                                                                                                                  "type":  "keyword",
+                                                                                                                                                                                                  "ignore_above":  256
+                                                                                                                                                                                              }
+                                                                                                                                                                              }
+                                                                                                                                                               },
+                                                                                                                                                  "name":  {
+                                                                                                                                                               "type":  "text",
+                                                                                                                                                               "fields":  {
+                                                                                                                                                                              "keyword":  {
+                                                                                                                                                                                              "type":  "keyword",
+                                                                                                                                                                                              "ignore_above":  256
+                                                                                                                                                                                          }
+                                                                                                                                                                          }
+                                                                                                                                                           },
+                                                                                                                                                  "pid":  {
+                                                                                                                                                              "type":  "long"
+                                                                                                                                                          },
+                                                                                                                                                  "ppid":  {
+                                                                                                                                                               "type":  "long"
+                                                                                                                                                           },
+                                                                                                                                                  "username":  {
+                                                                                                                                                                   "type":  "text",
+                                                                                                                                                                   "fields":  {
+                                                                                                                                                                                  "keyword":  {
+                                                                                                                                                                                                  "type":  "keyword",
+                                                                                                                                                                                                  "ignore_above":  256
+                                                                                                                                                                                              }
+                                                                                                                                                                              }
+                                                                                                                                                               }
+                                                                                                                                              }
+                                                                                                                           }
+                                                                                                         }
+                                                                                      },
+                                                                        "metadata":  {
+                                                                                         "properties":  {
+                                                                                                            "collector":  {
+                                                                                                                              "type":  "text",
+                                                                                                                              "fields":  {
+                                                                                                                                             "keyword":  {
+                                                                                                                                                             "type":  "keyword",
+                                                                                                                                                             "ignore_above":  256
+                                                                                                                                                         }
+                                                                                                                                         }
+                                                                                                                          },
+                                                                                                            "schema_version":  {
+                                                                                                                                   "type":  "text",
+                                                                                                                                   "fields":  {
+                                                                                                                                                  "keyword":  {
+                                                                                                                                                                  "type":  "keyword",
+                                                                                                                                                                  "ignore_above":  256
+                                                                                                                                                              }
+                                                                                                                                              }
+                                                                                                                               }
+                                                                                                        }
+                                                                                     },
+                                                                        "received_at":  {
+                                                                                            "type":  "date"
+                                                                                        },
+                                                                        "security":  {
+                                                                                         "properties":  {
+                                                                                                            "bitlocker":  {
+                                                                                                                              "properties":  {
+                                                                                                                                                 "enabled":  {
+                                                                                                                                                                 "type":  "boolean"
+                                                                                                                                                             },
+                                                                                                                                                 "system_drive_protected":  {
+                                                                                                                                                                                "type":  "boolean"
+                                                                                                                                                                            },
+                                                                                                                                                 "volumes":  {
+                                                                                                                                                                 "properties":  {
+                                                                                                                                                                                    "C:":  {
+                                                                                                                                                                                               "properties":  "@{encryption_percentage=; protection_status=}"
+                                                                                                                                                                                           },
+                                                                                                                                                                                    "D:":  {
+                                                                                                                                                                                               "properties":  "@{encryption_percentage=; protection_status=}"
+                                                                                                                                                                                           }
+                                                                                                                                                                                }
+                                                                                                                                                             }
+                                                                                                                                             }
+                                                                                                                          },
+                                                                                                            "defender":  {
+                                                                                                                             "properties":  {
+                                                                                                                                                "antivirus_enabled":  {
+                                                                                                                                                                          "type":  "boolean"
+                                                                                                                                                                      },
+                                                                                                                                                "engine_version":  {
+                                                                                                                                                                       "type":  "text",
+                                                                                                                                                                       "fields":  {
+                                                                                                                                                                                      "keyword":  {
+                                                                                                                                                                                                      "type":  "keyword",
+                                                                                                                                                                                                      "ignore_above":  256
+                                                                                                                                                                                                  }
+                                                                                                                                                                                  }
+                                                                                                                                                                   },
+                                                                                                                                                "realtime_enabled":  {
+                                                                                                                                                                         "type":  "boolean"
+                                                                                                                                                                     },
+                                                                                                                                                "signature_age_days":  {
+                                                                                                                                                                           "type":  "long"
+                                                                                                                                                                       }
+                                                                                                                                            }
+                                                                                                                         },
+                                                                                                            "firewall":  {
+                                                                                                                             "properties":  {
+                                                                                                                                                "domain":  {
+                                                                                                                                                               "properties":  {
+                                                                                                                                                                                  "default_inbound":  {
+                                                                                                                                                                                                          "type":  "text",
+                                                                                                                                                                                                          "fields":  "@{keyword=}"
+                                                                                                                                                                                                      },
+                                                                                                                                                                                  "enabled":  {
+                                                                                                                                                                                                  "type":  "boolean"
+                                                                                                                                                                                              }
+                                                                                                                                                                              }
+                                                                                                                                                           },
+                                                                                                                                                "private":  {
+                                                                                                                                                                "properties":  {
+                                                                                                                                                                                   "default_inbound":  {
+                                                                                                                                                                                                           "type":  "text",
+                                                                                                                                                                                                           "fields":  "@{keyword=}"
+                                                                                                                                                                                                       },
+                                                                                                                                                                                   "enabled":  {
+                                                                                                                                                                                                   "type":  "boolean"
+                                                                                                                                                                                               }
+                                                                                                                                                                               }
+                                                                                                                                                            },
+                                                                                                                                                "public":  {
+                                                                                                                                                               "properties":  {
+                                                                                                                                                                                  "default_inbound":  {
+                                                                                                                                                                                                          "type":  "text",
+                                                                                                                                                                                                          "fields":  "@{keyword=}"
+                                                                                                                                                                                                      },
+                                                                                                                                                                                  "enabled":  {
+                                                                                                                                                                                                  "type":  "boolean"
+                                                                                                                                                                                              }
+                                                                                                                                                                              }
+                                                                                                                                                           }
+                                                                                                                                            }
+                                                                                                                         },
+                                                                                                            "rdp":  {
+                                                                                                                        "properties":  {
+                                                                                                                                           "enabled":  {
+                                                                                                                                                           "type":  "boolean"
+                                                                                                                                                       }
+                                                                                                                                       }
+                                                                                                                    },
+                                                                                                            "smb1":  {
+                                                                                                                         "properties":  {
+                                                                                                                                            "enabled":  {
+                                                                                                                                                            "type":  "boolean"
+                                                                                                                                                        }
+                                                                                                                                        }
+                                                                                                                     },
+                                                                                                            "uac":  {
+                                                                                                                        "properties":  {
+                                                                                                                                           "enabled":  {
+                                                                                                                                                           "type":  "boolean"
+                                                                                                                                                       }
+                                                                                                                                       }
+                                                                                                                    }
+                                                                                                        }
+                                                                                     },
+                                                                        "severity":  {
+                                                                                         "type":  "text",
+                                                                                         "fields":  {
+                                                                                                        "keyword":  {
+                                                                                                                        "type":  "keyword",
+                                                                                                                        "ignore_above":  256
+                                                                                                                    }
+                                                                                                    }
+                                                                                     },
+                                                                        "timestamp":  {
+                                                                                          "type":  "date"
+                                                                                      },
+                                                                        "user_agent":  {
+                                                                                           "type":  "text",
+                                                                                           "fields":  {
+                                                                                                          "keyword":  {
+                                                                                                                          "type":  "keyword",
+                                                                                                                          "ignore_above":  256
+                                                                                                                      }
+                                                                                                      }
+                                                                                       },
+                                                                        "windows_update":  {
+                                                                                               "properties":  {
+                                                                                                                  "last_update_date":  {
+                                                                                                                                           "type":  "date"
+                                                                                                                                       },
+                                                                                                                  "pending_updates":  {
+                                                                                                                                          "type":  "long"
+                                                                                                                                      },
+                                                                                                                  "permission":  {
+                                                                                                                                     "type":  "text",
+                                                                                                                                     "fields":  {
+                                                                                                                                                    "keyword":  {
+                                                                                                                                                                    "type":  "keyword",
+                                                                                                                                                                    "ignore_above":  256
+                                                                                                                                                                }
+                                                                                                                                                }
+                                                                                                                                 },
+                                                                                                                  "update_service_status":  {
+                                                                                                                                                "type":  "text",
+                                                                                                                                                "fields":  {
+                                                                                                                                                               "keyword":  {
+                                                                                                                                                                               "type":  "keyword",
+                                                                                                                                                                               "ignore_above":  256
+                                                                                                                                                                           }
+                                                                                                                                                           }
+                                                                                                                                            }
+                                                                                                              }
+                                                                                           }
+                                                                    }
+                                                 }
+                                }
+}

@@ -216,6 +216,13 @@ class GoSMB1Info(BaseModel):
     enabled: Optional[bool] = Field(None, description="SMB1 включен")
     permission: Optional[str] = Field(None, description="Права доступа")
 
+class GoWindowsUpdateInfo(BaseModel):
+    last_update_date: Optional[str] = Field(None, description="Дата последнего обновления в ISO8601 UTC")
+    update_service_status: Optional[str] = Field(None, description="Статус службы обновлений")
+    pending_updates: Optional[int] = Field(None, description="Количество ожидающих обновлений")
+    permission: Optional[str] = Field(None, description="Уровень доступа к данным")
+    error_message: Optional[str] = Field(None, description="Сообщение об ошибке")
+
 class GoSecurityInfo(BaseModel):
     defender: Optional[GoDefenderInfo] = Field(None, description="Windows Defender")
     firewall: Optional[GoFirewallInfo] = Field(None, description="Брандмауэр Windows")
@@ -242,6 +249,7 @@ class HostPostureEvent(BaseModel):
     agent: GoAgentInfo = Field(..., description="Информация об агенте")
     inventory: Optional[GoInventoryInfo] = Field(None, description="Инвентарь")
     security: Optional[GoSecurityInfo] = Field(None, description="Безопасность")
+    windows_update: Optional[GoWindowsUpdateInfo] = Field(None, description="Информация об обновлениях Windows")
     findings: Optional[List[GoFinding]] = Field(None, description="Находки")
     metadata: Optional[GoMetadataInfo] = Field(None, description="Метаданные")
 

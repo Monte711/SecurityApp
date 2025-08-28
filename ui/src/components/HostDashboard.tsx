@@ -3,7 +3,7 @@ import { HostsSidebar } from './HostsSidebar';
 import { HostSummaryCard } from './HostSummaryCard';
 import { ProcessesTable } from './ProcessesTable';
 import { AutorunsTable } from './AutorunsTable';
-import { SecurityCards } from './SecurityCards';
+import { SecurityAccordion } from './security/SecurityAccordion';
 import { FindingsTable } from './FindingsTable';
 import { RawJsonModal } from './RawJsonModal';
 import { 
@@ -59,7 +59,7 @@ export const HostDashboard: React.FC<HostDashboardProps> = ({ className = '' }) 
       case 'autoruns':
         return <AutorunsTable hostId={selectedHostId} />;
       case 'security':
-        return <SecurityCards hostId={selectedHostId} />;
+        return <SecurityAccordion hostId={selectedHostId} />;
       case 'findings':
         return <FindingsTable hostId={selectedHostId} />;
       case 'raw':

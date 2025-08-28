@@ -170,6 +170,15 @@ class SecuritySettings(BaseModel):
     smb1: Optional[Dict[str, Any]] = Field(None, description="Статус SMB1")
 
 
+class WindowsUpdateInfo(BaseModel):
+    """Информация об обновлениях Windows"""
+    last_update_date: Optional[datetime] = Field(None, description="Дата последнего обновления в ISO8601 UTC")
+    update_service_status: str = Field(..., description="Статус службы обновлений (Running/Stopped/Disabled/unknown)")
+    pending_updates: Optional[int] = Field(None, description="Количество ожидающих обновлений или null")
+    permission: str = Field(..., description="Уровень доступа к данным (granted/denied/partial)")
+    error_message: Optional[str] = Field(None, description="Сообщение об ошибке при сборе данных")
+
+
 class InventoryData(BaseModel):
     """Данные инвентаризации"""
     processes: List[ProcessInfo] = Field(default_factory=list, description="Список процессов")
@@ -199,6 +208,7 @@ class HostPostureEvent(BaseEvent):
     host: HostInfo = Field(..., description="Информация о хосте")
     inventory: InventoryData = Field(..., description="Данные инвентаризации")
     security: SecuritySettings = Field(..., description="Настройки безопасности")
+    windows_update: Optional[WindowsUpdateInfo] = Field(None, description="Информация об обновлениях Windows")
     findings: List[SecurityFinding] = Field(default_factory=list, description="Результаты анализа безопасности")
 
 
