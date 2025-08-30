@@ -18,31 +18,35 @@ import (
 
 // Config представляет конфигурацию агента
 type Config struct {
-	IngestURL       string `json:"ingest_url"`
-	AgentID         string `json:"agent_id"`
-	AgentVersion    string `json:"agent_version"`
-	CollectHashes   bool   `json:"collect_hashes"`
-	RunMode         string `json:"run_mode"`
-	IntervalSeconds int    `json:"interval_seconds"`
-	SpoolDir        string `json:"spool_dir"`
-	LogFile         string `json:"log_file"`
-	LogLevel        string `json:"log_level"`
-	TimeoutSeconds  int    `json:"timeout_seconds"`
+	IngestURL                 string `json:"ingest_url"`
+	AgentID                   string `json:"agent_id"`
+	AgentVersion              string `json:"agent_version"`
+	CollectHashes             bool   `json:"collect_hashes"`
+	RunMode                   string `json:"run_mode"`
+	IntervalSeconds           int    `json:"interval_seconds"`
+	SpoolDir                  string `json:"spool_dir"`
+	LogFile                   string `json:"log_file"`
+	LogLevel                  string `json:"log_level"`
+	TimeoutSeconds            int    `json:"timeout_seconds"`
+	CollectionTimeoutSeconds  int    `json:"collection_timeout_seconds"`
+	SendTimeoutSeconds        int    `json:"send_timeout_seconds"`
 }
 
 // defaultConfig возвращает конфигурацию по умолчанию
 func defaultConfig() *Config {
 	return &Config{
-		IngestURL:       "http://localhost:8000/ingest",
-		AgentID:         "win-agent-001",
-		AgentVersion:    "0.1.0",
-		CollectHashes:   false,
-		RunMode:         "once",
-		IntervalSeconds: 900,
-		SpoolDir:        `C:\ProgramData\UECP\spool`,
-		LogFile:         `C:\ProgramData\UECP\logs\agent.log`,
-		LogLevel:        "info",
-		TimeoutSeconds:  10,
+		IngestURL:                 "http://localhost:8000/ingest",
+		AgentID:                   "win-agent-001",
+		AgentVersion:              "0.1.0",
+		CollectHashes:             false,
+		RunMode:                   "once",
+		IntervalSeconds:           900,
+		SpoolDir:                  `C:\ProgramData\UECP\spool`,
+		LogFile:                   `C:\ProgramData\UECP\logs\agent.log`,
+		LogLevel:                  "info",
+		TimeoutSeconds:            10,
+		CollectionTimeoutSeconds:  120,
+		SendTimeoutSeconds:        60,
 	}
 }
 
@@ -78,7 +82,7 @@ func main() {
 	collector := collect.NewCollector(config.CollectHashes)
 	recommender := recommend.NewEngine()
 	spoolStore := store.NewSpoolStore(config.SpoolDir)
-	sender := transport.NewSender(config.IngestURL, time.Duration(config.TimeoutSeconds)*time.Second)
+	sender := transport.NewSender(config.IngestURL, time.Duration(config.SendTimeoutSeconds)*time.Second)
 
 	// Определение режима запуска
 	runOnce := *once || config.RunMode == "once"
@@ -133,13 +137,14 @@ func setupLogging(logFile string) error {
 func performCollection(collector *collect.Collector, recommender *recommend.Engine, 
 	sender *transport.Sender, spoolStore *store.SpoolStore, config *Config, outputFile string) error {
 	
-	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(config.TimeoutSeconds)*time.Second)
-	defer cancel()
+	// Отдельный таймаут для сбора данных
+	collectCtx, collectCancel := context.WithTimeout(context.Background(), time.Duration(config.CollectionTimeoutSeconds)*time.Second)
+	defer collectCancel()
 
 	log.Println("Начинается сбор данных о состоянии хоста...")
 
 	// Сбор данных о хосте
-	hostData, err := collector.CollectHostPosture(ctx)
+	hostData, err := collector.CollectHostPosture(collectCtx)
 	if err != nil {
 		return fmt.Errorf("ошибка сбора данных о хосте: %w", err)
 	}
@@ -167,12 +172,16 @@ func performCollection(collector *collect.Collector, recommender *recommend.Engi
 		}
 	}
 
+	// Отдельный таймаут для отправки данных
+	sendCtx, sendCancel := context.WithTimeout(context.Background(), time.Duration(config.SendTimeoutSeconds)*time.Second)
+	defer sendCancel()
+
 	// Попытка отправки через API
-	if err := sender.SendHostPosture(ctx, hostData); err != nil {
+	if err := sender.SendHostPosture(sendCtx, hostData); err != nil {
 		log.Printf("Не удалось отправить данные через API: %v", err)
 		
 		// Сохранение в спул для повторной отправки
-		if spoolErr := spoolStore.Store(ctx, hostData); spoolErr != nil {
+		if spoolErr := spoolStore.Store(context.Background(), hostData); spoolErr != nil {
 			log.Printf("Ошибка сохранения в спул: %v", spoolErr)
 		} else {
 			log.Println("Данные сохранены в спул для повторной отправки")
@@ -182,15 +191,21 @@ func performCollection(collector *collect.Collector, recommender *recommend.Engi
 	}
 
 	// Попытка отправки накопленных данных из спула
-	events, err := spoolStore.GetPendingEvents(ctx)
+	events, err := spoolStore.GetPendingEvents(context.Background())
 	if err != nil {
 		log.Printf("Ошибка получения событий из спула: %v", err)
 	} else if len(events) > 0 {
 		log.Printf("Найдено %d событий в спуле, попытка отправки...", len(events))
 		for _, event := range events {
-			if err := sender.SendHostPosture(ctx, event.Data); err == nil {
-				spoolStore.RemoveEvent(ctx, event.ID)
+			// Отдельный таймаут для каждого события из спула
+			eventCtx, eventCancel := context.WithTimeout(context.Background(), time.Duration(config.SendTimeoutSeconds)*time.Second)
+			if err := sender.SendHostPosture(eventCtx, event.Data); err == nil {
+				spoolStore.RemoveEvent(context.Background(), event.ID)
+				log.Printf("Событие %s успешно отправлено из спула", event.ID)
+			} else {
+				log.Printf("Не удалось отправить событие %s из спула: %v", event.ID, err)
 			}
+			eventCancel()
 		}
 	}
 

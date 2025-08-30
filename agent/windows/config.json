@@ -8,6 +8,8 @@
   "spool_dir": "C:\\ProgramData\\UECP\\spool",
   "log_file": "C:\\ProgramData\\UECP\\logs\\agent.log",
   "log_level": "debug",
+  "collection_timeout_seconds": 120,
+  "send_timeout_seconds": 60,
   "timeout_seconds": 30,
   "auto_submit": true
 }
